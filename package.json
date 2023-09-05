@@ -1,0 +1,25 @@
+{
+  "name": "me",
+  "version": "1.0.0",
+  "description": "Personal blog and portfolio website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install-all": "npm i -ws --include-workspace-root",
+    "dev-front": "npm run dev -w front-end"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "private": "true",
+  "workspaces": [
+    "./back-end/*",
+    "cloud",
+    "front-end"
+  ],
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@tsconfig/node18": "^18.2.1"
+  }
+}
