@@ -57,7 +57,7 @@ jobs:
         run: |
           set -e
           aws s3 rm --recursive s3://${{ env.S3_HOSTING_BUCKET }}/${{ env.SAFE_SOURCE_NAME }}/
-          aws s3 sync ./front-end/.next/server/app/ s3://${{ env.S3_HOSTING_BUCKET }}/${{ env.SAFE_SOURCE_NAME }} --delete
+          aws s3 sync ./front-end/out/ s3://${{ env.S3_HOSTING_BUCKET }}/${{ env.SAFE_SOURCE_NAME }}
 
       - name: Invalidate CF distribution cache
         shell: bash

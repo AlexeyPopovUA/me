@@ -5,7 +5,9 @@ import emoji from "remark-emoji";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    //output: 'export',
+    reactStrictMode: true,
+    //output: "standalone",
+    output: 'export',
     images: {
         formats: ['image/avif', 'image/webp'],
     },

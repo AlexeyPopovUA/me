@@ -10,8 +10,11 @@ import {
     HttpVersion,
     SecurityPolicyProtocol,
     ViewerProtocolPolicy,
-    PriceClass, OriginAccessIdentity, FunctionCode,
-    Function as CFFunction, FunctionEventType
+    PriceClass,
+    OriginAccessIdentity,
+    FunctionCode,
+    Function as CFFunction,
+    FunctionEventType
 } from "aws-cdk-lib/aws-cloudfront";
 import {S3Origin} from "aws-cdk-lib/aws-cloudfront-origins";
 import {Certificate, CertificateValidation} from "aws-cdk-lib/aws-certificatemanager";
@@ -26,7 +29,7 @@ export class FrontEndHostingStack extends Stack {
         super(scope, id, props);
 
         const region = props.env?.region;
-        const project =  configuration.COMMON.project;
+        const project = configuration.COMMON.project;
 
         const s3Bucket = new Bucket(this, `${project}-origin-bucket`, {
             bucketName: `${project}-hosting`,
@@ -95,7 +98,8 @@ export class FrontEndHostingStack extends Stack {
                 viewerProtocolPolicy: ViewerProtocolPolicy.HTTPS_ONLY,
                 origin: new S3Origin(s3Bucket, {
                     originAccessIdentity: originAccessIdentity,
-                    originShieldRegion: region
+                    originShieldRegion: region,
+                    originPath: "/main"
                 }),
                 // CloudFront Functions
                 functionAssociations: [
