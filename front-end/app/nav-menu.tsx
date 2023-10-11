@@ -13,6 +13,9 @@ const NavMenu = () => (
         <Link href="/portfolio" className={itemCls}>
             Portfolio
         </Link>
+        <Link href="/resume" className={itemCls}>
+            Resume
+        </Link>
         <Link href="/contact" className={itemCls}>
             Contact
         </Link>
