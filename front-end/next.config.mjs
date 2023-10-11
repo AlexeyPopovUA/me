@@ -10,10 +10,10 @@ const nextConfig = {
     output: 'export',
     images: {
         formats: ['image/avif', 'image/webp'],
-    },
+    }/*,
     experimental: {
         appDir: true
-    }
+    }*/
 }
 
 const withMDX = createMDX({
