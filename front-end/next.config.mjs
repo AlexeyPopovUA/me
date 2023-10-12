@@ -5,15 +5,12 @@ import emoji from "remark-emoji";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    trailingSlash: true,
     reactStrictMode: true,
-    //output: "standalone",
     output: 'export',
     images: {
         formats: ['image/avif', 'image/webp'],
-    }/*,
-    experimental: {
-        appDir: true
-    }*/
+    }
 }
 
 const withMDX = createMDX({
