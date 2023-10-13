@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const itemCls = "select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground";
+const itemCls = "select-none space-y-1 rounded-md py-3 mr-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground";
 
 const NavMenu = () => (
     <nav className="px-4 py-4">
@@ -14,7 +14,7 @@ const NavMenu = () => (
             Portfolio
         </Link>
         <Link href="/resume" className={itemCls}>
-            Resume
+            CV
         </Link>
         <Link href="/contact" className={itemCls}>
             Contact
