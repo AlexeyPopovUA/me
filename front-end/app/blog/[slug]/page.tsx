@@ -1,8 +1,8 @@
-import {getArticlesSlugList, getPost, getPostData} from "@/lib/articles";
+import {getArticlesSlugs, getFullArticleContent} from "@/lib/articles";
 
 export async function generateStaticParams() {
-    const slugList = await getArticlesSlugList();
-    return Promise.all(slugList.map(slug => getPostData({slug})));
+    const allSlugs = await getArticlesSlugs();
+    return allSlugs.map(slug => ({slug}));
 }
 
 type StaticProps = {
@@ -12,11 +12,7 @@ type StaticProps = {
 }
 
 export default async function Post(props: StaticProps) {
-    //console.log("Post props", props);
-
-    const post = await getPost({slug: props.params.slug});
-
-    //console.log("Post data", post);
+    const post = await getFullArticleContent({slug: props.params.slug});
 
     return (
         <article className='prose prose-sm md:prose-base lg:prose-lg mx-auto p-4'>

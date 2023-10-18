@@ -1,5 +1,5 @@
 import remarkGfm from 'remark-gfm';
-import createMDX from '@next/mdx'
+import nextMDX from '@next/mdx'
 import images from "remark-images";
 import emoji from "remark-emoji";
 
@@ -13,7 +13,7 @@ const nextConfig = {
     }
 }
 
-const withMDX = createMDX({
+const withMDX = nextMDX({
     options: {
         // Configure pageExtensions to include md and mdx
         pageExtensions: ['ts', 'tsx', 'md', 'mdx'],

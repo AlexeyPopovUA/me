@@ -1,35 +1,35 @@
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import matter from 'gray-matter';
+import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
+import {PageSchema} from "@/content/pages/blog/schema";
+import {getFullPageContent} from "@/lib/articles";
 
+const pageSlug = "blog";
 
-async function getPost({slug}: { slug: string }) {
-    const markdownFile = await fs.readFile(path.join('pages', "blog", `article.mdx`), 'utf-8');
-
-    const {data: frontMatter, content} = matter(markdownFile);
+async function getPost() {
+    const {frontMatter, content} = await readFrontMatterWithContent<PageSchema>(getPagePathByDirName(pageSlug));
 
     return {
         frontMatter,
-        slug,
+        slug: "blog",
         content
     }
 }
 
 export async function generateMetadata({params}: any) {
-    const blog = await getPost(params);
+    const page = await getPost();
 
     return {
-        title: blog.frontMatter.title,
-        description: blog.frontMatter.description
+        title: page.frontMatter.title,
+        description: page.frontMatter.description
     }
 }
 
-export default async function Post({params}: any) {
-    const props = await getPost(params);
+export default async function Post(props: any) {
+    const page = await getFullPageContent({slug: pageSlug});
 
     return (
         <article className='prose prose-sm md:prose-base lg:prose-lg mx-auto p-4'>
-            <h1>{props.frontMatter.title}</h1>
+            <h1>{page.title}</h1>
+            <div dangerouslySetInnerHTML={{__html: page.contentHtml}}/>
         </article>
     );
 }

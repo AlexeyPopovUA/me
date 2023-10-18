@@ -1,11 +1,8 @@
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import matter from 'gray-matter';
+import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
+import {PageSchema} from "@/content/pages/resume/schema";
 
 async function getPost({slug}: { slug: string }) {
-    const markdownFile = await fs.readFile(path.join('pages', "resume", `article.mdx`), 'utf-8');
-
-    const {data: frontMatter, content} = matter(markdownFile);
+    const {frontMatter, content} = await readFrontMatterWithContent<PageSchema>(getPagePathByDirName("resume"));
 
     return {
         frontMatter,
@@ -15,11 +12,11 @@ async function getPost({slug}: { slug: string }) {
 }
 
 export async function generateMetadata({params}: any) {
-    const blog = await getPost(params);
+    const page = await getPost(params);
 
     return {
-        title: blog.frontMatter.title,
-        description: blog.frontMatter.description
+        title: page.frontMatter.title,
+        description: page.frontMatter.description
     }
 }
 
