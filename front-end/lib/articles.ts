@@ -23,6 +23,7 @@ export async function getFullArticleContent({slug}: { slug: string }) {
 
     return {
         ...matterResult.frontMatter,
+        content: matterResult.content,
         contentHtml,
         slug
     }
