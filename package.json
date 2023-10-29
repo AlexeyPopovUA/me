@@ -17,8 +17,6 @@
     "cloud",
     "front-end"
   ],
-  "dependencies": {
-  },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.1"
   }
