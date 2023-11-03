@@ -1,0 +1,440 @@
+---
+title: Serving environment-specific configurations to web applications
+slug: serving-environment-specific-configurations-to-web-applications
+date: 03-07-23
+draft: false
+description: Runtime configuration service is one of the ways of delivery of configuration objects to web applications, that doesn't require configuration to be a part of the application code itself. It decouples the build and runtime environments.
+---
+
+## Why
+
+Web applications are not just a single URL. When a product is being developed and maintained, it usually has multiple environments. For example, there can be different environments such as production, acceptance, testing, development, early preview, beta, etc. Each environment has its own URL and may require different service endpoints, API keys, and feature configurations. These settings need to be saved and included with the application, depending on the specific environment. In this article, we will explore various ways of storing and delivering these configurations. We will also look at the “runtime configuration” option as an example. This approach doesn’t require configuration to be a part of the application itself; configuration can exist in a separate service. It decouples the build and runtime environments.
+
+## Ways to deliver configurations to web applications
+
+There are three typical solutions used in web development to deliver environment-specific configurations:
+
+* Build time configurations
+* Deployment time configurations
+* Runtime configurations
+
+Build time configuration is usually stored in the code or CI/CD platform. It is applied during the build time and becomes part of the JavaScript bundle. Basically, bundlers replace string templates and environment variables with configuration values by the given environment. See [Webpack Define Plugin](https://webpack.js.org/plugins/define-plugin/)
+
+Pros:
+
+* Simplicity (only build system configuration is needed)
+* Configuration is always available
+
+Cons:
+
+* In order to change configuration, you have to re-run the complete CI/CD pipeline
+* Runtime changes are not possible without an extra service
+
+Deployment time configuration is stored in the deployment platform. It is applied during the deployment time. So, the build process does not depend on the environment, but the deployment does. See Octopus Deploy platform.
+
+Pros:
+
+* It is still simple
+* Configuration could be updated by just a re-deployment
+* Build artifacts could be re-used in different environments or during configuration change re-deployment
+
+Cons:
+
+* May require an extra deployment platform (depends on the CI/CD platform possibilities)
+* Runtime changes are not possible
+* Configuration requires application resources cache invalidation on the hosting side and client side as well
+
+Runtime configuration is stored in a storage like a database. It is applied during the application load. The configuration service typically “knows who is asking” or a requestor can ask for a specific configuration based on business logic, device, location, locale, internal state, etc. See LaunchDarkly platform.
+
+Pros:
+
+* Build artifacts can be re-used between environments
+* There is no need to invalidate hosting and client caches when configuration is updated, so the hosting cache can have a longer TTL (time to leave)
+* There is no need to touch CI/CD
+* Opens new opportunities (will be discussed)
+
+Cons:
+
+* Extra service or platform should be added to existing team workflows
+* Affects application loading time
+* Configuration service availability question becomes important
+
+This approach also opens a lot of possibilities, for instance:
+
+* Frequent configuration change without re-running application CI/CD
+* Runtime configuration change via web sockets
+* A/B testing
+* Relatively simple maintenance of big configurations
+* Configuration inheritance
+
+My favorite option is the “Runtime configuration”. I like it because it is easy to use for teams that need to manage applications with different environments, conduct experiments, and use feature toggles. It also separates the different stages of delivering an application, such as building, deploying, and running it. Let’s take a look at one of the many ways to design and implement such a system.
+
+## Implementation of runtime configuration service
+
+### Requirements for the service
+
+Lets consider the next basic requirements for a configuration service:
+
+* Service returns a specific configuration by detected environment or falls back to a default one
+* Configuration is a JSON
+* Service uses default "Origin" or "Referer" request headers to detect “who is asking”
+* Service returns configurations also by a key for non-browser applications
+* Service response is cached and compressed on the hosting side with 1 hour of default TTL (time to leave)
+* Environment domain names of request origin should be validated, so we don’t serve anything for the unauthorized websites (naive security, I know 😉 )
+
+Let’s also take the next optional requirement to make this trivial service more interesting:
+
+* Configurations support inheritance
+* Service response contains requestor data like country and postal code if available
+* Dynamic requestor data (country and postal code) does not affect the hosting cache strategy
+
+### Example web application requirements
+
+For the demonstration of service we need an actual consumer web application. Next requirements will be taken for it:
+
+* our web app is a simple index.html file that renders environment-specific content
+* the same index.html is re-used across all environments on the hosting side
+* application has a human-readable domain structure
+* each environment is a subdomain of config-demo.examples.oleksiipopov.com
+
+### System overview
+
+Taking all requirements into consideration one can imagine the next diagram of serving environment-specific configurations to web clients based on the environment domain names. Visitors, domain parts and configurations are color coded for convenience. Note, that the rendered web content also will use correspondent colors later.
+Example of serving environment-specific configurations
+
+Imagine that we have a web app with multiple environments:
+
+* main.dev.config-demo.examples.oleksiipopov.com
+* feature-123.dev.config-demo.examples.oleksiipopov.com
+* special.dev.config-demo.examples.oleksiipopov.com
+* prod.config-demo.examples.oleksiipopov.com
+* acc.config-demo.examples.oleksiipopov.com
+
+If no special configuration is needed for an environment (*.dev.config-demo.examples.oleksiipopov.com), the "default" fallback configuration should be served. If something is supposed to be different, then the separate environment config will be used.
+
+Configuration inheritance simplifies the maintenance efforts. You don’t have to synchronize dozens of big similar JSONs when you inherit the repeated parts.
+
+### Service implementation
+
+AWS design for such configuration service system can be next
+AWS design for the configuration service
+
+Configurations could be stored in any database or a file storage. Dynamo DB is selected because of 2 reasons:
+
+* convenient editor right inside the AWS console
+* a simple table without auto scaling and backup costs a bit more than nothing
+
+Configuration service lambda does the main job here. It has 2 routes in API:
+
+* /edge (requires “Origin” request header to be present and whitelisted)
+* /by-key?environment=<key> (requires the environment key to be present and whitelisted)
+
+API Gateway proxies requests from CloudFront to Lambda. Theoretically, API Gateway and Lambda combination is enough, but we need a good cheap caching and low latency like CDNs provide.
+
+CloudFront acts as a content delivery network (CDN) that operates in multiple regions. It has a fast response time and uses efficient caching mechanisms at both the edge and origin levels. Furthermore, it adds extra information to the requests and responses, such as headers like “Cloudfront-Viewer-Country” and “Cloudfront-Viewer-City”. These headers are useful when you want to centrally manage application configurations that are based on the viewer’s location.
+
+The source code of the service and its hosting can be found here: https://github.com/AlexeyPopovUA/configuration-service.
+
+### Web example application implementation
+
+I have also made a basic website that demonstrates how a configuration service can alter the appearance of the same web page in various environments. There is a single index.html file that displays a square. The square’s color is determined by the configuration service. The service’s configuration change depending on the environment, including the “color” setting. This means that when the website loads, the square will appear in different colors depending on the environment. If the service is unable to resolve the configuration or environment is not in a white list, an error message will be shown on a dark red background.
+
+The source code of the example web app and it’s hosting can be found here: https://github.com/AlexeyPopovUA/configuration-service-examples.
+
+AWS design of the example web app can be omitted for simplicity.
+
+So, the application:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex"> <!-- Ask crawlers not to index the page -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<div class="flex justify-center items-center h-screen">
+    <div class="square w-[25vw] h-[25vw] min-w-[350px] min-h-[350px] flex justify-center items-center text-white p-4 border-4 border-slate-800">
+        <p id="response-text"></p>
+    </div>
+</div>
+
+<script>
+    const responseEl = document.getElementById('response-text');
+    const squareEl = responseEl.closest(".square");
+    // Make GET request to the specified URL
+    fetch('https://configuration-service.examples.oleksiipopov.com/edge')
+        .then(response => response.json())
+        .then(data => {
+            console.log('data:', data);
+            responseEl.textContent = data.configuration.environment;
+            squareEl.classList.add(`bg-[${data.configuration.color}]`);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            responseEl.textContent = `${error.message}`;
+            squareEl.classList.add("bg-red-800");
+        });
+</script>
+</body>
+</html>
+```
+
+I made a hosting setup that serves one html file for all environments. When the application loads, the script uses the "color" property from the service response json and applies a matching color class to the square element. It also takes the name of the configuration and displays it inside.
+
+### Showtime!
+
+Now, let’s take a look at the environments.
+
+All Dev *.dev.config-demo.examples.oleksiipopov.com environments:
+
+[IMAGE!!!]
+
+https://feature-123.dev.config-demo.examples.oleksiipopov.com/index.html
+https://main.dev.config-demo.examples.oleksiipopov.com/index.html
+
+As visible from this screenshot, our application rendered a color-coded rectangle with matched environment name. Additionally, the application received custom response headers with data, detected by AWS:
+
+```text
+access-control-expose-headers: Content-Encoding,Content-Type,Cloudfront-Viewer-Country,Cloudfront-Viewer-City
+access-control-allow-origin: https://prod.config-demo.examples.oleksiipopov.com
+cloudfront-viewer-city: Amsterdam
+cloudfront-viewer-country: NL
+```
+
+A special Dev special.dev.config-demo.examples.oleksiipopov.com environment that has it’s own configuration:
+
+[IMAGE!!!]
+
+https://special.dev.config-demo.examples.oleksiipopov.com/index.html
+
+Acceptance environment acc.config-demo.examples.oleksiipopov.com:
+
+[IMAGE!!!]
+
+https://acc.config-demo.examples.oleksiipopov.com/index.html
+
+Production environment prod.config-demo.examples.oleksiipopov.com:
+
+[IMAGE!!!]
+
+https://prod.config-demo.examples.oleksiipopov.com/index.html
+
+Any random environment, which is not supported by our configuration service should fail with CORS error:
+
+[IMAGE!!!]
+
+https://random.config-demo.examples.oleksiipopov.com/index.html
+
+So the same application can look and behave differently on different environments. Isn’t it awesome?
+
+### Configurations data
+
+Lets see how the actual configuration objects look like. I’ve implemented the hierarchy exactly the way it is described on the diagram “Example of serving environment-specific configuration”. Inheritance is implemented via merging configurations based on "environment" and "extends" keys.
+
+Base
+
+```json
+{
+"environment": "base",
+"color": "#ffffff",
+"description": "Description of the \"base\" environment configuration",
+"from-base": 1
+}
+```
+
+Default (fallback configuration)
+
+```json
+{
+"environment": "default",
+"color": "#a680b8",
+"description": "Description of the \"default\" environment configuration",
+"extends": "base",
+"from-default": 1
+}
+```
+
+Special Dev
+
+```json
+{
+"environment": "special.dev.config-demo.examples.oleksiipopov.com",
+"color": "#ea6b66",
+"description": "Description of the \"special.dev.config-demo.examples.oleksiipopov.com\" environment configuration",
+"extends": "default"
+}
+```
+
+Acceptance
+
+```json
+{
+"environment": "acc.config-demo.examples.oleksiipopov.com",
+"color": "#ffb570",
+"description": "Description of the \"acc.config-demo.examples.oleksiipopov.com\" environment configuration",
+"extends": "base",
+"from-acc": 1
+}
+```
+
+Production
+
+```json
+{
+"environment": "prod.config-demo.examples.oleksiipopov.com",
+"color": "#67ab9f",
+"description": "Description of the \"prod.config-demo.examples.oleksiipopov.com\" environment configuration",
+"extends": "acc.config-demo.examples.oleksiipopov.com",
+"from-prod.config-demo": 1
+}
+```
+
+Please note, that each of these objects contain keys for inheritance demonstration: "from-base": 1, "from-default": 1, "from-acc": 1, "from-prod.config-demo": 1.
+
+So, the next responses arrive for correspondent environments:
+
+Default (with debug key "from-base": 1)
+
+```json
+{
+    "configuration": {
+        "environment": "default",
+        "description": "Description of the \"default\" environment configuration",
+        "from-base": 1,
+        "color": "#a680b8",
+        "from-default": 1,
+        "extends": "base"
+    }
+}
+```
+
+Special Dev (with debug keys "from-base": 1 and "from-default": 1)
+
+```json
+{
+    "configuration": {
+        "environment": "special.dev.config-demo.examples.oleksiipopov.com",
+        "description": "Description of the \"special.dev.config-demo.examples.oleksiipopov.com\" environment configuration",
+        "from-base": 1,
+        "color": "#ea6b66",
+        "from-default": 1,
+        "extends": "default"
+    }
+}
+```
+
+Acceptance (with debug keys "from-base": 1)
+
+```json
+{
+    "configuration": {
+        "environment": "acc.config-demo.examples.oleksiipopov.com",
+        "description": "Description of the \"acc.config-demo.examples.oleksiipopov.com\" environment configuration",
+        "from-base": 1,
+        "color": "#ffb570",
+        "from-acc": 1,
+        "extends": "base"
+    }
+}
+```
+
+Production (with debug keys "from-base": 1 and "from-acc": 1)
+
+```json
+{
+    "configuration": {
+        "environment": "prod.config-demo.examples.oleksiipopov.com",
+        "description": "Description of the \"prod.config-demo.examples.oleksiipopov.com\" environment configuration",
+        "from-base": 1,
+        "color": "#67ab9f",
+        "from-acc": 1,
+        "extends": "acc.config-demo.examples.oleksiipopov.com",
+        "from-prod.config-demo": 1
+    }
+}
+```
+
+And finally, the random environment that was not whitelisted got this:
+
+[IMAGE !!!]
+
+Our configuration allows us to inherit configurations and whitelist specific environments.
+
+### Getting environments by request parameter
+
+What about retrieving objects based on a search parameter? An extra request is available in our service – GET https://configuration-service.examples.oleksiipopov.com/by-key?environment=<key>, where key is the same thing as the Origin request header in previous examples.
+
+For a shorter URL and re-using of configuration objects purposes I’ve added a new environment name to our DB:*
+
+```json
+{
+    "environment": "production-by-key",
+    "extends": "prod.config-demo.examples.oleksiipopov.com"
+}
+```
+
+It only extends our production environment for web. It is sort of alias.
+
+So, the GET request and response in cURL will look like this
+
+```curl
+curl -X GET --location "https://configuration-service.examples.oleksiipopov.com/by-key?environment=production-by-key"
+```
+
+Response headers
+
+```text
+HTTP/2 200
+server: CloudFront
+content-type: application/json; charset=utf-8
+content-length: 287
+date: Mon, 03 Jul 2023 18:24:23 GMT
+access-control-expose-headers: Content-Encoding,Content-Type,Cloudfront-Viewer-Country,Cloudfront-Viewer-City
+x-powered-by: Express
+access-control-allow-origin: https://prod.config-demo.examples.oleksiipopov.com
+vary: Origin
+age: 385
+cloudfront-viewer-city: Amsterdam
+cloudfront-viewer-country: NL
+x-cache: Hit from cloudfront
+```
+
+Response payload
+
+```json
+{
+    "configuration": {
+        "environment": "production-by-key",
+        "description": "Description of the \"prod.config-demo.examples.oleksiipopov.com\" environment configuration",
+        "from-base": 1,
+        "color": "#67ab9f",
+        "from-acc": 1,
+        "extends": "prod.config-demo.examples.oleksiipopov.com",
+        "from-prod.config-demo": 1
+    }
+}
+```
+
+As you can see, the "production-by-key" environment extends "prod.config-demo.examples.oleksiipopov.com" and has all inherited "from-*" debugging keys, including the "from-prod.config-demo": 1.
+
+In case of non-existent or non-white listed keys our service returns 403 (Forbidden).
+
+## That’s it
+
+I hope you liked the idea of providing configuration based on the environment of the requester. The proposed implementation is a simple solution that has already shown its effectiveness in a few real-world projects.
+
+There is always room for making things better. For example:
+
+* Ability to white list domains and environments in real time
+* Supporting multiple projects
+* Using web-sockets to deliver feature flags in real time
+* Authorization support
+* Inheritance model
+* Configuration data as a code
+* etc
+
+Please share your ideas about this. Have you ever tried or applied similar solutions? I would be glad to know.

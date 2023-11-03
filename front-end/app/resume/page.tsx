@@ -24,7 +24,7 @@ export default async function Post({params}: any) {
     const props = await getPost(params);
 
     return (
-        <article className='prose prose-sm md:prose-base lg:prose-lg mx-auto p-4'>
+        <article className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4'>
             <h1>{props.frontMatter.title}</h1>
         </article>
     );

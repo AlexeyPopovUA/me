@@ -27,7 +27,7 @@ export default async function Post(props: any) {
     const page = await getFullPageContent({slug: pageSlug});
 
     return (
-        <article className='prose prose-sm md:prose-base lg:prose-lg mx-auto p-4'>
+        <article className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4'>
             <h1>{page.title}</h1>
             <div dangerouslySetInnerHTML={{__html: page.contentHtml}}/>
         </article>
