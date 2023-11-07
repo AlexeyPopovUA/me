@@ -5,7 +5,7 @@ const itemCls = "select-none rounded-md py-3 px-3 leading-none no-underline outl
 const titleItemCls = "select-none rounded-md leading-none no-underline outline-none";
 
 const NavMenu = () => (
-    <nav className="px-4 py-4 flex flex-row">
+    <nav className="hidden sm:flex px-4 py-4 flex-row">
         <div className="flex items-center">
             <Link href="/" className={clsx(titleItemCls, "text-2xl")}>
                 Oleksii Popov
