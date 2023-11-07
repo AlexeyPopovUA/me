@@ -12,7 +12,7 @@ import "highlight.js/styles/github.css";
 
 export const ArticleContent = (props: PropsWithChildren<{}>) => {
     const mdPlugins = [
-        [emoji, {accessible: true, emoticon: true}]
+        [emoji, {accessible: true, emoticon: false}]
     ];
 
     const rehypePlugins = [
