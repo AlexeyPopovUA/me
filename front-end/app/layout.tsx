@@ -1,11 +1,12 @@
-import './globals.css'
 import type {Metadata} from 'next'
 import Head from 'next/head';
 import {Domine} from 'next/font/google'
-import NavMenuMobile from "@/components/ui/nav-menu-mobile";
-import NavMenu from "@/app/nav-menu";
+import NavMenuMobile from "@/components/nav-menu-mobile";
+import NavMenu from "@/components/nav-menu";
 
-const font = Domine({subsets: ['latin']})
+import './globals.css';
+
+const font = Domine({subsets: ['latin']});
 
 export const metadata: Metadata = {
     title: 'Oleksii Popov',
@@ -20,12 +21,12 @@ export default function RootLayout({
     return (
         <html lang="en">
         <Head>
-            <base href="/" />
+            <base href="/"/>
         </Head>
         <body className={font.className}>
         <header className="sticky w-full top-0 z-0 border-b bg-white">
             <NavMenu/>
-            <NavMenuMobile />
+            <NavMenuMobile/>
         </header>
 
         {children}

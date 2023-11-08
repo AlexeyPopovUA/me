@@ -1,5 +1,4 @@
 import {remark} from 'remark';
-import html from 'remark-html';
 import emoji from 'remark-emoji';
 import {
     getArticlePathByDirName,
@@ -10,21 +9,27 @@ import {
 } from "@/lib/files";
 import {ArticlesSchema} from "@/content/articles/articles-schema";
 
+export async function getArticleSEOContent({slug}: { slug: string }) {
+    const matterResult = await readFrontMatterWithContent<ArticlesSchema>(getArticlePathByDirName(slug));
+
+    return {
+        ...matterResult.frontMatter,
+        slug
+    }
+}
+
 export async function getFullArticleContent({slug}: { slug: string }) {
     const matterResult = await readFrontMatterWithContent<ArticlesSchema>(getArticlePathByDirName(slug));
 
     // Use remark to convert markdown into HTML string
     const processedContent = await remark()
         // @ts-ignore
-        .use(emoji, { accessible: true, emoticon: true })
-        .use(html)
+        .use(emoji, {accessible: true, emoticon: true})
         .process(matterResult.content);
-    const contentHtml = processedContent.toString();
 
     return {
         ...matterResult.frontMatter,
         content: matterResult.content,
-        contentHtml,
         slug
     }
 }
@@ -35,14 +40,12 @@ export async function getFullPageContent({slug}: { slug: string }) {
     // Use remark to convert markdown into HTML string
     const processedContent = await remark()
         // @ts-ignore
-        .use(emoji, { accessible: true, emoticon: true })
-        .use(html)
+        .use(emoji, {accessible: true, emoticon: true})
         .process(matterResult.content);
-    const contentHtml = processedContent.toString();
 
     return {
         ...matterResult.frontMatter,
-        contentHtml,
+        content: matterResult.content,
         slug
     }
 }

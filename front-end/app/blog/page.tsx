@@ -1,6 +1,9 @@
+import React from "react";
+
 import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
 import {PageSchema} from "@/content/pages/blog/schema";
 import {getFullPageContent} from "@/lib/articles";
+import {PageContent} from "@/components/page-content";
 
 const pageSlug = "blog";
 
@@ -9,7 +12,7 @@ async function getPost() {
 
     return {
         frontMatter,
-        slug: "blog",
+        slug: pageSlug,
         content
     }
 }
@@ -29,7 +32,7 @@ export default async function Post(props: any) {
     return (
         <article className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4'>
             <h1>{page.title}</h1>
-            <div dangerouslySetInnerHTML={{__html: page.contentHtml}}/>
+            <PageContent>{page.content}</PageContent>
         </article>
     );
 }

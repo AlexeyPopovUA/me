@@ -1,10 +1,19 @@
 import React from "react";
-import {getArticlesSlugs, getFullArticleContent} from "@/lib/articles";
-import {ArticleContent} from "@/components/ui/article-content";
+import {getArticleSEOContent, getArticlesSlugs, getFullArticleContent} from "@/lib/articles";
+import {ArticleContent} from "@/components/article-content";
 
 export async function generateStaticParams() {
     const allSlugs = await getArticlesSlugs();
     return allSlugs.map(slug => ({slug}));
+}
+
+export async function generateMetadata({params}: any) {
+    const post = await getArticleSEOContent({slug: params.slug});
+
+    return {
+        title: post.title,
+        description: post.description
+    }
 }
 
 type StaticProps = {

@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import LatestArticles from "@/app/latest-articles";
 
 export default function Home() {

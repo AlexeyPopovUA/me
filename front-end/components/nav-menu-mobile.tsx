@@ -46,21 +46,21 @@ const NavMenuMobile = () => {
             <a className="fixed top-0 right-3 hover:text-amber-500 text-7xl font-semibold duration-200 cursor-pointer bg-white"
                onClick={handleMenuClick}>&times;</a>
             <div className="flex grow-0 px-4 py-4">
-                <Link href="/" className={clsx(titleItemCls, "text-2xl")}>
+                <Link href="/" className={clsx(titleItemCls, "text-2xl")} onClick={handleMenuClick}>
                     Oleksii Popov
                 </Link>
             </div>
             <div className="flex flex-col grow justify-center text-center text-xl font-light space-y-9">
-                <Link href="/blog" className={itemCls}>
+                <Link href="/blog" className={itemCls} onClick={handleMenuClick}>
                     Blog
                 </Link>
-                <Link href="/portfolio" className={itemCls}>
+                <Link href="/portfolio" className={itemCls} onClick={handleMenuClick}>
                     Portfolio
                 </Link>
-                <Link href="/resume" className={itemCls}>
+                <Link href="/resume" className={itemCls} onClick={handleMenuClick}>
                     CV
                 </Link>
-                <Link href="/contact" className={itemCls}>
+                <Link href="/contact" className={itemCls} onClick={handleMenuClick}>
                     Contact
                 </Link>
             </div>
