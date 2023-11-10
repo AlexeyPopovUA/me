@@ -5,9 +5,9 @@ import {clsx} from "clsx";
 import Link from "next/link";
 
 const itemCls = "select-none hover:text-amber-500 duration-200";
-const titleItemCls = "select-none rounded-md leading-none no-underline outline-none";
+const titleItemCls = "select-none rounded-md leading-none no-underline outline-none text-2xl";
 
-const NavMenuMobile = () => {
+const NavMenuMobile = ({items}: { items: { title: string; link: string; }[] }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const handleMenuClick = useCallback(() => {
         setIsMenuOpen(open => !open);
@@ -23,9 +23,9 @@ const NavMenuMobile = () => {
     });
 
     return <>
-        <nav className="flex sm:hidden px-4 py-4 flex-row">
+        <nav className="flex sm:hidden p-4 flex-row">
             <div className="flex items-center">
-                <Link href="/" className={clsx(titleItemCls, "text-2xl")}>
+                <Link href="/" className={clsx(titleItemCls)}>
                     Oleksii Popov
                 </Link>
             </div>
@@ -43,26 +43,21 @@ const NavMenuMobile = () => {
             </div>
         </nav>
         <div className={menuCls}>
-            <a className="fixed top-0 right-3 hover:text-amber-500 text-7xl font-semibold duration-200 cursor-pointer bg-white"
-               onClick={handleMenuClick}>&times;</a>
-            <div className="flex grow-0 px-4 py-4">
-                <Link href="/" className={clsx(titleItemCls, "text-2xl")} onClick={handleMenuClick}>
-                    Oleksii Popov
-                </Link>
+            <div className="flex flex-row w-full items-center justify-center h-1/4">
+                    <Link href="/" className={clsx(titleItemCls, "block", "flex", "flex-col", "items-center")} onClick={handleMenuClick}>
+                        <div className="text-2xl mb-2">Oleksii Popov</div>
+                        <div className="text-xl text-gray-500">Software development blog</div>
+                    </Link>
             </div>
+            {isMenuOpen ?
+                <a className="fixed top-4 right-4 mr-4 flex-none hover:text-amber-500 text-5xl font-semibold duration-200 cursor-pointer bg-white"
+                   onClick={handleMenuClick}>&times;</a> : null}
+
             <div className="flex flex-col grow justify-center text-center text-xl font-light space-y-9">
-                <Link href="/blog" className={itemCls} onClick={handleMenuClick}>
-                    Blog
-                </Link>
-                <Link href="/portfolio" className={itemCls} onClick={handleMenuClick}>
-                    Portfolio
-                </Link>
-                <Link href="/resume" className={itemCls} onClick={handleMenuClick}>
-                    CV
-                </Link>
-                <Link href="/contact" className={itemCls} onClick={handleMenuClick}>
-                    Contact
-                </Link>
+                {items.map(item => (
+                    <Link href={item.link} key={item.title} className={itemCls}
+                          onClick={handleMenuClick}>{item.title}</Link>
+                ))}
             </div>
         </div>
     </>;

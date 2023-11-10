@@ -1,8 +1,8 @@
 import type {Metadata} from 'next'
 import Head from 'next/head';
 import {Domine} from 'next/font/google'
-import NavMenuMobile from "@/components/nav-menu-mobile";
-import NavMenu from "@/components/nav-menu";
+
+import TopNavigationMenu from "@/app/top-navigation-menu";
 
 import './globals.css';
 
@@ -25,8 +25,7 @@ export default function RootLayout({
         </Head>
         <body className={font.className}>
         <header className="sticky w-full top-0 z-0 border-b bg-white">
-            <NavMenu/>
-            <NavMenuMobile/>
+            <TopNavigationMenu/>
         </header>
 
         {children}
