@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "install-all": "npm i -ws --include-workspace-root",
-    "dev-front": "npm run dev -w front-end"
+    "dev-front": "npm run dev -w front-end",
+    "update-dependencies-all": "npm run -ws --include-workspace-root update-dependencies",
+    "update-dependencies": "npx npm-check-updates -u --packageFile package.json"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +20,6 @@
     "front-end"
   ],
   "devDependencies": {
-    "@tsconfig/node18": "^18.2.1"
+    "@tsconfig/node20": "^20.1.2"
   }
 }
