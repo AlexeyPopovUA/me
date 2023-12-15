@@ -1,6 +1,5 @@
 import LatestArticles from "@/app/latest-articles";
-import Image from "next/image";
-import {imageLoader} from "@/components/image/image-loader";
+import ProfileImage from "@/components/profile-image";
 
 export default function Home() {
     return (
@@ -9,7 +8,7 @@ export default function Home() {
                 <section>
                     <div className="flex flex-col sm:flex-row">
                         <div className="mr-4 flex flex-row  justify-center">
-                            <Image className="rounded-full border-4 border-amber-500" loader={imageLoader} src="/pages/home/me-w-square-bg.jpg" alt="My profile photo" width={300} height={500} />
+                            <ProfileImage />
                         </div>
                         <div className="flex flex-col justify-center">
                             <p className="mb-4 text-xl">Hi, I`&apos;m Oleksii Popov</p>
