@@ -4,4 +4,5 @@ export interface ArticlesSchema {
     date: string;
     draft?: boolean;
     description: string;
+    thumbnail: string;
 }
