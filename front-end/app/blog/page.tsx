@@ -31,7 +31,7 @@ export default async function Post(props: any) {
     const page = await getFullPageContent({slug: pageSlug});
 
     return (
-        <article className='container mx-auto px-12 py-8'>
+        <article className='container mx-auto px-4 sm:px-8 md:px-12 py-8'>
             <AllArticles />
         </article>
     );
