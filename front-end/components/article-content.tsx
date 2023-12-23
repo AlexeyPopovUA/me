@@ -1,6 +1,7 @@
 import React, {PropsWithChildren} from "react";
 import Markdown from "react-markdown";
 import emoji from "remark-emoji";
+import remarkUnwrapImages from "remark-unwrap-images";
 import {PluggableList} from "unified";
 import rehypeHighlight from "rehype-highlight";
 import langXml from 'highlight.js/lib/languages/xml';
@@ -12,7 +13,8 @@ import "highlight.js/styles/github.css";
 import MDXImage from "@/components/image/mdx-image";
 
 const mdPlugins: PluggableList = [
-    [emoji, {accessible: true, emoticon: false}]
+    [emoji, {accessible: true, emoticon: false}],
+    [remarkUnwrapImages]
 ];
 
 const rhPlugins: PluggableList = [

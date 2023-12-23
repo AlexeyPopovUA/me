@@ -1,5 +1,3 @@
-import {remark} from 'remark';
-import emoji from 'remark-emoji';
 import {
     getArticlePathByDirName,
     getArticlesBasePath,
@@ -21,12 +19,6 @@ export async function getArticleSEOContent({slug}: { slug: string }) {
 export async function getFullArticleContent({slug}: { slug: string }) {
     const matterResult = await readFrontMatterWithContent<ArticlesSchema>(getArticlePathByDirName(slug));
 
-    // Use remark to convert markdown into HTML string
-    const processedContent = await remark()
-        // @ts-ignore
-        .use(emoji, {accessible: true, emoticon: true})
-        .process(matterResult.content);
-
     return {
         ...matterResult.frontMatter,
         content: matterResult.content,
@@ -36,12 +28,6 @@ export async function getFullArticleContent({slug}: { slug: string }) {
 
 export async function getFullPageContent({slug}: { slug: string }) {
     const matterResult = await readFrontMatterWithContent<ArticlesSchema>(getPagePathByDirName(slug));
-
-    // Use remark to convert markdown into HTML string
-    const processedContent = await remark()
-        // @ts-ignore
-        .use(emoji, {accessible: true, emoticon: true})
-        .process(matterResult.content);
 
     return {
         ...matterResult.frontMatter,
