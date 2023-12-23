@@ -19,7 +19,7 @@ There are three typical solutions used in web development to deliver environment
 * Deployment time configurations
 * Runtime configurations
 
-Build time configuration is usually stored in the code or CI/CD platform. It is applied during the build time and becomes part of the JavaScript bundle. Basically, bundlers replace string templates and environment variables with configuration values by the given environment. See [Webpack Define Plugin](https://webpack.js.org/plugins/define-plugin/)
+**Build time configuration** is usually stored in the code or CI/CD platform. It is applied during the build time and becomes part of the JavaScript bundle. Basically, bundlers replace string templates and environment variables with configuration values by the given environment. See [Webpack Define Plugin](https://webpack.js.org/plugins/define-plugin/)
 
 Pros:
 
@@ -31,7 +31,7 @@ Cons:
 * In order to change configuration, you have to re-run the complete CI/CD pipeline
 * Runtime changes are not possible without an extra service
 
-Deployment time configuration is stored in the deployment platform. It is applied during the deployment time. So, the build process does not depend on the environment, but the deployment does. See Octopus Deploy platform.
+**Deployment time configuration** is stored in the deployment platform. It is applied during the deployment time. So, the build process does not depend on the environment, but the deployment does. See Octopus Deploy platform.
 
 Pros:
 
@@ -45,7 +45,7 @@ Cons:
 * Runtime changes are not possible
 * Configuration requires application resources cache invalidation on the hosting side and client side as well
 
-Runtime configuration is stored in a storage like a database. It is applied during the application load. The configuration service typically “knows who is asking” or a requestor can ask for a specific configuration based on business logic, device, location, locale, internal state, etc. See LaunchDarkly platform.
+**Runtime configuration** is stored in a storage like a database. It is applied during the application load. The configuration service typically “knows who is asking” or a requestor can ask for a specific configuration based on business logic, device, location, locale, internal state, etc. See LaunchDarkly platform.
 
 Pros:
 
@@ -78,7 +78,7 @@ Lets consider the next basic requirements for a configuration service:
 
 * Service returns a specific configuration by detected environment or falls back to a default one
 * Configuration is a JSON
-* Service uses default "Origin" or "Referer" request headers to detect “who is asking”
+* Service uses default `Origin` or `Referer` request headers to detect “who is asking”
 * Service returns configurations also by a key for non-browser applications
 * Service response is cached and compressed on the hosting side with 1 hour of default TTL (time to leave)
 * Environment domain names of request origin should be validated, so we don’t serve anything for the unauthorized websites (naive security, I know 😉 )
@@ -96,51 +96,53 @@ For the demonstration of service we need an actual consumer web application. Nex
 * our web app is a simple index.html file that renders environment-specific content
 * the same index.html is re-used across all environments on the hosting side
 * application has a human-readable domain structure
-* each environment is a subdomain of config-demo.examples.oleksiipopov.com
+* each environment is a subdomain of `config-demo.examples.oleksiipopov.com`
 
 ### System overview
 
 Taking all requirements into consideration one can imagine the next diagram of serving environment-specific configurations to web clients based on the environment domain names. Visitors, domain parts and configurations are color coded for convenience. Note, that the rendered web content also will use correspondent colors later.
-Example of serving environment-specific configurations
+
+![Example of serving environment-specific configurations](/articles/environment-configuration/load-time-cfg-overview.png "Example of serving environment-specific configurations")
 
 Imagine that we have a web app with multiple environments:
 
-* main.dev.config-demo.examples.oleksiipopov.com
-* feature-123.dev.config-demo.examples.oleksiipopov.com
-* special.dev.config-demo.examples.oleksiipopov.com
-* prod.config-demo.examples.oleksiipopov.com
-* acc.config-demo.examples.oleksiipopov.com
+* `main.dev.config-demo.examples.oleksiipopov.com`
+* `feature-123.dev.config-demo.examples.oleksiipopov.com`
+* `special.dev.config-demo.examples.oleksiipopov.com`
+* `prod.config-demo.examples.oleksiipopov.com`
+* `acc.config-demo.examples.oleksiipopov.com`
 
-If no special configuration is needed for an environment (*.dev.config-demo.examples.oleksiipopov.com), the "default" fallback configuration should be served. If something is supposed to be different, then the separate environment config will be used.
+If no special configuration is needed for an environment (`*.dev.config-demo.examples.oleksiipopov.com`), the `default` fallback configuration should be served. If something is supposed to be different, then the separate environment config will be used.
 
 Configuration inheritance simplifies the maintenance efforts. You don’t have to synchronize dozens of big similar JSONs when you inherit the repeated parts.
 
 ### Service implementation
 
 AWS design for such configuration service system can be next
-AWS design for the configuration service
+
+![AWS design for the configuration service](/articles/environment-configuration/configuration-service-aws.png "AWS design for the configuration service")
 
 Configurations could be stored in any database or a file storage. Dynamo DB is selected because of 2 reasons:
 
 * convenient editor right inside the AWS console
-* a simple table without auto scaling and backup costs a bit more than nothing
+* a simple table without auto-scaling and backup costs a bit more than nothing
 
 Configuration service lambda does the main job here. It has 2 routes in API:
 
-* /edge (requires “Origin” request header to be present and whitelisted)
-* /by-key?environment=<key> (requires the environment key to be present and whitelisted)
+* `/edge` (requires “Origin” request header to be present and whitelisted)
+* `/by-key?environment=<key>` (requires the environment key to be present and whitelisted)
 
 API Gateway proxies requests from CloudFront to Lambda. Theoretically, API Gateway and Lambda combination is enough, but we need a good cheap caching and low latency like CDNs provide.
 
 CloudFront acts as a content delivery network (CDN) that operates in multiple regions. It has a fast response time and uses efficient caching mechanisms at both the edge and origin levels. Furthermore, it adds extra information to the requests and responses, such as headers like “Cloudfront-Viewer-Country” and “Cloudfront-Viewer-City”. These headers are useful when you want to centrally manage application configurations that are based on the viewer’s location.
 
-The source code of the service and its hosting can be found here: https://github.com/AlexeyPopovUA/configuration-service.
+**The source code of the service and its hosting can be found here:** [https://github.com/AlexeyPopovUA/configuration-service](https://github.com/AlexeyPopovUA/configuration-servicem).
 
 ### Web example application implementation
 
 I have also made a basic website that demonstrates how a configuration service can alter the appearance of the same web page in various environments. There is a single index.html file that displays a square. The square’s color is determined by the configuration service. The service’s configuration change depending on the environment, including the “color” setting. This means that when the website loads, the square will appear in different colors depending on the environment. If the service is unable to resolve the configuration or environment is not in a white list, an error message will be shown on a dark red background.
 
-The source code of the example web app and it’s hosting can be found here: https://github.com/AlexeyPopovUA/configuration-service-examples.
+**The source code of the example web app and it’s hosting can be found here:** [https://github.com/AlexeyPopovUA/configuration-service-examples](https://github.com/AlexeyPopovUA/configuration-service-examples).
 
 AWS design of the example web app can be omitted for simplicity.
 
@@ -184,18 +186,15 @@ So, the application:
 </html>
 ```
 
-I made a hosting setup that serves one html file for all environments. When the application loads, the script uses the "color" property from the service response json and applies a matching color class to the square element. It also takes the name of the configuration and displays it inside.
+I made a hosting setup that serves one html file for all environments. When the application loads, the script uses the `color` property from the service response json and applies a matching color class to the square element. It also takes the name of the configuration and displays it inside.
 
 ### Showtime!
 
 Now, let’s take a look at the environments.
 
-All Dev *.dev.config-demo.examples.oleksiipopov.com environments:
+All Dev `*.dev.config-demo.examples.oleksiipopov.com` environments:
 
-[IMAGE!!!]
-
-https://feature-123.dev.config-demo.examples.oleksiipopov.com/index.html
-https://main.dev.config-demo.examples.oleksiipopov.com/index.html
+![All Dev environments](/articles/environment-configuration/default.png "https://feature-123.dev.config-demo.examples.oleksiipopov.com/index.html, https://main.dev.config-demo.examples.oleksiipopov.com/index.html")
 
 As visible from this screenshot, our application rendered a color-coded rectangle with matched environment name. Additionally, the application received custom response headers with data, detected by AWS:
 
@@ -206,162 +205,149 @@ cloudfront-viewer-city: Amsterdam
 cloudfront-viewer-country: NL
 ```
 
-A special Dev special.dev.config-demo.examples.oleksiipopov.com environment that has it’s own configuration:
+**A special Dev** `special.dev.config-demo.examples.oleksiipopov.com` environment that has its own configuration:
 
-[IMAGE!!!]
+![A special Dev environment](/articles/environment-configuration/special.png "https://special.dev.config-demo.examples.oleksiipopov.com/index.html")
 
-https://special.dev.config-demo.examples.oleksiipopov.com/index.html
+**Acceptance** environment `acc.config-demo.examples.oleksiipopov.com`:
 
-Acceptance environment acc.config-demo.examples.oleksiipopov.com:
+![Acceptance environment](/articles/environment-configuration/acc.png "https://acc.config-demo.examples.oleksiipopov.com/index.html")
 
-[IMAGE!!!]
+**Production** environment `prod.config-demo.examples.oleksiipopov.com`:
 
-https://acc.config-demo.examples.oleksiipopov.com/index.html
+![Production environment](/articles/environment-configuration/prod.png "https://prod.config-demo.examples.oleksiipopov.com/index.html")
 
-Production environment prod.config-demo.examples.oleksiipopov.com:
+**Any random** environment, which is not supported by our configuration service should fail with CORS error:
 
-[IMAGE!!!]
-
-https://prod.config-demo.examples.oleksiipopov.com/index.html
-
-Any random environment, which is not supported by our configuration service should fail with CORS error:
-
-[IMAGE!!!]
-
-https://random.config-demo.examples.oleksiipopov.com/index.html
+![Any random environment](/articles/environment-configuration/random.png "https://random.config-demo.examples.oleksiipopov.com/index.html")
 
 So the same application can look and behave differently on different environments. Isn’t it awesome?
 
 ### Configurations data
 
-Lets see how the actual configuration objects look like. I’ve implemented the hierarchy exactly the way it is described on the diagram “Example of serving environment-specific configuration”. Inheritance is implemented via merging configurations based on "environment" and "extends" keys.
+Let's see how the actual configuration objects look like. I’ve implemented the hierarchy exactly the way it is described on the diagram "Example of serving environment-specific configuration". Inheritance is implemented via merging configurations based on `environment` and `extends` keys.
 
-Base
+- Base
+    ```json
+    {
+        "environment": "base",
+        "color": "#ffffff",
+        "description": "Description of the \"base\" environment configuration",
+        "from-base": 1
+    }
+    ```
 
-```json
-{
-"environment": "base",
-"color": "#ffffff",
-"description": "Description of the \"base\" environment configuration",
-"from-base": 1
-}
-```
+- Default (fallback configuration)
+    ```json
+    {
+        "environment": "default",
+        "color": "#a680b8",
+        "description": "Description of the \"default\" environment configuration",
+        "extends": "base",
+        "from-default": 1
+    }
+    ```
 
-Default (fallback configuration)
+- Special Dev
+    ```json
+    {
+        "environment": "special.dev.config-demo.examples.oleksiipopov.com",
+        "color": "#ea6b66",
+        "description": "Description of the \"special.dev.config-demo.examples.oleksiipopov.com\" environment configuration",
+        "extends": "default"
+    }
+    ```
 
-```json
-{
-"environment": "default",
-"color": "#a680b8",
-"description": "Description of the \"default\" environment configuration",
-"extends": "base",
-"from-default": 1
-}
-```
+- Acceptance
+    ```json
+    {
+        "environment": "acc.config-demo.examples.oleksiipopov.com",
+        "color": "#ffb570",
+        "description": "Description of the \"acc.config-demo.examples.oleksiipopov.com\" environment configuration",
+        "extends": "base",
+        "from-acc": 1
+    }
+    ```
 
-Special Dev
-
-```json
-{
-"environment": "special.dev.config-demo.examples.oleksiipopov.com",
-"color": "#ea6b66",
-"description": "Description of the \"special.dev.config-demo.examples.oleksiipopov.com\" environment configuration",
-"extends": "default"
-}
-```
-
-Acceptance
-
-```json
-{
-"environment": "acc.config-demo.examples.oleksiipopov.com",
-"color": "#ffb570",
-"description": "Description of the \"acc.config-demo.examples.oleksiipopov.com\" environment configuration",
-"extends": "base",
-"from-acc": 1
-}
-```
-
-Production
-
-```json
-{
-"environment": "prod.config-demo.examples.oleksiipopov.com",
-"color": "#67ab9f",
-"description": "Description of the \"prod.config-demo.examples.oleksiipopov.com\" environment configuration",
-"extends": "acc.config-demo.examples.oleksiipopov.com",
-"from-prod.config-demo": 1
-}
-```
+- Production
+    ```json
+    {
+        "environment": "prod.config-demo.examples.oleksiipopov.com",
+        "color": "#67ab9f",
+        "description": "Description of the \"prod.config-demo.examples.oleksiipopov.com\" environment configuration",
+        "extends": "acc.config-demo.examples.oleksiipopov.com",
+        "from-prod.config-demo": 1
+    }
+    ```
 
 Please note, that each of these objects contain keys for inheritance demonstration: "from-base": 1, "from-default": 1, "from-acc": 1, "from-prod.config-demo": 1.
 
 So, the next responses arrive for correspondent environments:
 
-Default (with debug key "from-base": 1)
+- Default (with debug key "from-base": 1)
 
-```json
-{
-    "configuration": {
-        "environment": "default",
-        "description": "Description of the \"default\" environment configuration",
-        "from-base": 1,
-        "color": "#a680b8",
-        "from-default": 1,
-        "extends": "base"
+    ```json
+    {
+        "configuration": {
+            "environment": "default",
+            "description": "Description of the \"default\" environment configuration",
+            "from-base": 1,
+            "color": "#a680b8",
+            "from-default": 1,
+            "extends": "base"
+        }
     }
-}
-```
+    ```
 
-Special Dev (with debug keys "from-base": 1 and "from-default": 1)
+- Special Dev (with debug keys "from-base": 1 and "from-default": 1)
 
-```json
-{
-    "configuration": {
-        "environment": "special.dev.config-demo.examples.oleksiipopov.com",
-        "description": "Description of the \"special.dev.config-demo.examples.oleksiipopov.com\" environment configuration",
-        "from-base": 1,
-        "color": "#ea6b66",
-        "from-default": 1,
-        "extends": "default"
+    ```json
+    {
+        "configuration": {
+            "environment": "special.dev.config-demo.examples.oleksiipopov.com",
+            "description": "Description of the \"special.dev.config-demo.examples.oleksiipopov.com\" environment configuration",
+            "from-base": 1,
+            "color": "#ea6b66",
+            "from-default": 1,
+            "extends": "default"
+        }
     }
-}
-```
+    ```
 
-Acceptance (with debug keys "from-base": 1)
+- Acceptance (with debug keys "from-base": 1)
 
-```json
-{
-    "configuration": {
-        "environment": "acc.config-demo.examples.oleksiipopov.com",
-        "description": "Description of the \"acc.config-demo.examples.oleksiipopov.com\" environment configuration",
-        "from-base": 1,
-        "color": "#ffb570",
-        "from-acc": 1,
-        "extends": "base"
+    ```json
+    {
+        "configuration": {
+            "environment": "acc.config-demo.examples.oleksiipopov.com",
+            "description": "Description of the \"acc.config-demo.examples.oleksiipopov.com\" environment configuration",
+            "from-base": 1,
+            "color": "#ffb570",
+            "from-acc": 1,
+            "extends": "base"
+        }
     }
-}
-```
+    ```
 
-Production (with debug keys "from-base": 1 and "from-acc": 1)
+- Production (with debug keys "from-base": 1 and "from-acc": 1)
 
-```json
-{
-    "configuration": {
-        "environment": "prod.config-demo.examples.oleksiipopov.com",
-        "description": "Description of the \"prod.config-demo.examples.oleksiipopov.com\" environment configuration",
-        "from-base": 1,
-        "color": "#67ab9f",
-        "from-acc": 1,
-        "extends": "acc.config-demo.examples.oleksiipopov.com",
-        "from-prod.config-demo": 1
+    ```json
+    {
+        "configuration": {
+            "environment": "prod.config-demo.examples.oleksiipopov.com",
+            "description": "Description of the \"prod.config-demo.examples.oleksiipopov.com\" environment configuration",
+            "from-base": 1,
+            "color": "#67ab9f",
+            "from-acc": 1,
+            "extends": "acc.config-demo.examples.oleksiipopov.com",
+            "from-prod.config-demo": 1
+        }
     }
-}
-```
+    ```
 
 And finally, the random environment that was not whitelisted got this:
 
-[IMAGE !!!]
+![Console error for non-whitelisted environment](/articles/environment-configuration/console-error.png "Console error for non-whitelisted environment")
 
 Our configuration allows us to inherit configurations and whitelist specific environments.
 
