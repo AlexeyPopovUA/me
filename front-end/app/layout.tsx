@@ -1,8 +1,10 @@
+import React from "react";
 import type {Metadata} from 'next'
 import Head from 'next/head';
 import {Domine} from 'next/font/google'
 
-import TopNavigationMenu from "@/app/top-navigation-menu";
+import TopNavigationMenu from "@/components/navigation/top-navigation-menu";
+import Footer from "@/app/footer";
 
 import './globals.css';
 
@@ -27,8 +29,8 @@ export default function RootLayout({
         <header className="sticky w-full top-0 z-0 border-b bg-white">
             <TopNavigationMenu/>
         </header>
-
         {children}
+        <Footer/>
         </body>
         </html>
     )

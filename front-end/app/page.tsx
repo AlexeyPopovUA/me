@@ -1,5 +1,5 @@
 import LatestArticles from "@/app/latest-articles";
-import ProfileImage from "@/components/profile-image";
+import ProfileImage from "@/components/image/profile-image";
 
 export default function Home() {
     return (

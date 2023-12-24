@@ -1,5 +1,5 @@
-import NavMenu from "@/components/nav-menu";
-import NavMenuMobile from "@/components/nav-menu-mobile";
+import NavMenu from "@/components/navigation/nav-menu";
+import NavMenuMobile from "@/components/navigation/nav-menu-mobile";
 
 const menuItems = [
     {
