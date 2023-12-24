@@ -11,7 +11,7 @@ const AllArticles = async () => {
                 <Link className="hover:text-amber-600" href={`/blog/${article.slug}`} passHref
                       key={article.slug}>
                     <div
-                        className="flex flex-col items-stretch pb-4 border-b-2 border-solid border-gray-200 hover:text-amber-600"
+                        className="flex flex-col items-stretch pb-4 hover:text-amber-600"
                         key={article.slug}>
                         {article.thumbnail ?
                             <div className="flex flex-row mb-4"><BlogThumbnailImage src={article.thumbnail}
