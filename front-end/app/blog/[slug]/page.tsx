@@ -1,6 +1,7 @@
 import React from "react";
 import {getArticleSEOContent, getArticlesSlugs, getFullArticleContent} from "@/lib/articles";
 import {ArticleContent} from "@/components/article-content";
+import GoTop from "@/components/ScrollUpButton";
 
 export async function generateStaticParams() {
     const allSlugs = await getArticlesSlugs();
@@ -29,6 +30,7 @@ export default async function Post(props: StaticProps) {
         <article className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4'>
             <h1>{post.title}</h1>
             <ArticleContent>{post.content}</ArticleContent>
+            <GoTop/>
         </article>
     );
 }
