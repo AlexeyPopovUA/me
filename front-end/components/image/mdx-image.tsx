@@ -9,7 +9,6 @@ import ContentImage from "@/components/image/ContentImage";
  * @todo Add blur photo loader
  */
 const MDXImage = (props: any) => {
-    console.log("MDXImage -> next Image", props);
     // todo Set image size from MD width/height properties
     return (
         <figure>

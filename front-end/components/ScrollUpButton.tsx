@@ -8,7 +8,7 @@ const GoTop = () => {
 
     const handleBackToBlogClick = useCallback(() => {
         router.push("/blog");
-    }, []);
+    }, [router]);
 
     const handleUpClick = useCallback(() => {
         window.scrollTo({top: 0});
