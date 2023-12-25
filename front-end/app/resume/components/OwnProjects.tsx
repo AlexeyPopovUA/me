@@ -10,7 +10,7 @@ type Props = {
 const OwnProjects = (props: Props) => (
     <CVSection title="Own projects" cls="own-projects">
         {props.projects.map((project) => (
-            <div key={project.name} className="cv-list-item sm:grid sm:grid-cols-4 py-4">
+            <div key={project.name} className="cv-list-item sm:grid sm:grid-cols-4 py-2">
                 <div className="item-key pr-4 mb-2 font-bold">{project.name}</div>
                 <div className="item-value col-span-3">
                     {project.links.map((link) => (

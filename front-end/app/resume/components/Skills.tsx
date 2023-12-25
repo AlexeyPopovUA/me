@@ -9,7 +9,7 @@ type Props = {
 };
 
 const Skills = (props: Props) => (
-    <CVSection title="Skills" cls="skills pt-4">
+    <CVSection title="Skills" cls="skills">
         {props.skills.map((item) => (
             <div key={item.name} className="cv-list-item sm:grid sm:grid-cols-4 py-2">
                 <div className="col-start-1 col-span-1 pr-4 mb-2 font-bold">{item.name}</div>

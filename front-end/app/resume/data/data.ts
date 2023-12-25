@@ -7,8 +7,6 @@ export default {
         Website: { title: "oleksiipopov.com", url: "https://oleksiipopov.com" },
         LinkedIn: { title: "linkedin.com/in/oleksii-popov", url: "https://linkedin.com/in/oleksii-popov" },
         GitHub: { title: "github.com/AlexeyPopovUA", url: "https://github.com/AlexeyPopovUA" },
-        Blog: { title: "blog.oleksiipopov.com", url: "https://blog.oleksiipopov.com" },
-        Portfolio: { title: "blog.oleksiipopov.com/portfolio", url: "https://blog.oleksiipopov.com/portfolio" },
         Email: "opportunities@oleksiipopov.com",
         Address: "Klagenfurt-Villach area, Austria",
         Phone: "+31621548922"
@@ -190,29 +188,6 @@ export default {
             title: "Bachelor of Science (BSc)",
             date: "2005 - 2009",
             description: "Mechanical Engineering (Cryogenic technology)"
-        }
-    ],
-    additionalInfo: [
-        {
-            name: "Date of birth",
-            description: "02-04-1988"
-        },
-        {
-            name: "Marital status",
-            description: "Married"
-        },
-        {
-            name: "Children",
-            description: "2"
-        },
-        {
-            name: "Technical interests",
-            description:
-                "Static site generators. Infrastructure as a code. Isomorphic, progressive, full stack and highly loaded web applications.Design patterns. System design"
-        },
-        {
-            name: "Hobbies",
-            description: "Photography, travelling, hiking, programming, home lab (self-hosting)"
         }
     ],
     ownProjects: [

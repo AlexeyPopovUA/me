@@ -26,7 +26,7 @@ export default function RootLayout({
             <base href="/"/>
         </Head>
         <body className={font.className}>
-        <header className="sticky w-full top-0 z-0 border-b bg-white">
+        <header className="print:hidden sticky w-full top-0 z-0 border-b bg-white">
             <TopNavigationMenu/>
         </header>
         {children}

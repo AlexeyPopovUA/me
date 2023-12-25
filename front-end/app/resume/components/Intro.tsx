@@ -9,9 +9,7 @@ type Props = {
 
 const Intro = (props: Props) => (
     <CVSection title={props.intro.title} cls="intro">
-        <div className="py-4">
-            {props.intro.description.map(item => <p className="pb-2" key={item}>{item}</p>)}
-        </div>
+        {props.intro.description.map(item => <p className="pb-2" key={item}>{item}</p>)}
     </CVSection>
 );
 

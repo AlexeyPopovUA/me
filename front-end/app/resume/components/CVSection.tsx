@@ -7,8 +7,8 @@ export type CVSectionProps =  PropsWithChildren<{
 
 const CVSection = (props: CVSectionProps) => (
     <div className={`cv-section ${props.cls}`}>
-        <h2 className="cv-section-title py-2 text-center text-lg font-bold">{props.title}</h2>
-        <div className="cv-section-content container">{props.children}</div>
+        <h2 className="cv-section-title pb-2 text-center text-lg font-bold">{props.title}</h2>
+        <div className="cv-section-content">{props.children}</div>
     </div>
 );
 
