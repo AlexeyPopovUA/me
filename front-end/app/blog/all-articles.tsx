@@ -10,12 +10,11 @@ const AllArticles = async () => {
             {lastNArticles.map(article => (
                 <Link className="hover:text-amber-600" href={`/blog/${article.slug}`} passHref
                       key={article.slug}>
-                    <div
-                        className="flex flex-col items-stretch pb-4 hover:text-amber-600"
-                        key={article.slug}>
+                    <div className="flex flex-col items-stretch pb-4 hover:text-amber-600">
                         {article.thumbnail ?
-                            <div className="flex flex-row mb-4"><BlogThumbnailImage src={article.thumbnail}
-                                                                                    alt={"test"}/></div> : null}
+                            <div className="flex flex-row mb-4">
+                                <BlogThumbnailImage src={article.thumbnail} alt={article.title}/>
+                            </div> : null}
                         <div className="font-bold text-xl underline mb-2">{article.title}</div>
                         <div className="text-sm text-gray-600 mb-4">{article.date}</div>
                         <div className="text-md text-gray-600">{article.description}</div>
