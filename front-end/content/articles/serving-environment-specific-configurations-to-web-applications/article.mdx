@@ -353,7 +353,7 @@ Our configuration allows us to inherit configurations and whitelist specific env
 
 ### Getting environments by request parameter
 
-What about retrieving objects based on a search parameter? An extra request is available in our service – GET https://configuration-service.examples.oleksiipopov.com/by-key?environment=<key>, where key is the same thing as the Origin request header in previous examples.
+What about retrieving objects based on a search parameter? An extra request is available in our service – `GET https://configuration-service.examples.oleksiipopov.com/by-key?environment=<key>`, where key is the same thing as the `Origin` request header in previous examples.
 
 For a shorter URL and re-using of configuration objects purposes I’ve added a new environment name to our DB:*
 
@@ -406,9 +406,9 @@ Response payload
 }
 ```
 
-As you can see, the "production-by-key" environment extends "prod.config-demo.examples.oleksiipopov.com" and has all inherited "from-*" debugging keys, including the "from-prod.config-demo": 1.
+As you can see, the `production-by-key` environment extends `prod.config-demo.examples.oleksiipopov.com` and has all inherited `from-*` debugging keys, including the `"from-prod.config-demo": 1`.
 
-In case of non-existent or non-white listed keys our service returns 403 (Forbidden).
+In case of non-existent or non-white listed keys our service returns `403 (Forbidden)`.
 
 ## That’s it
 
@@ -416,7 +416,7 @@ I hope you liked the idea of providing configuration based on the environment of
 
 There is always room for making things better. For example:
 
-* Ability to white list domains and environments in real time
+* Ability to whitelist domains and environments in real time
 * Supporting multiple projects
 * Using web-sockets to deliver feature flags in real time
 * Authorization support
