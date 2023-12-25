@@ -13,7 +13,7 @@ const Header = (props: Props) => {
 
     return (
         <div className="flex flex-col items-center">
-            <h1 className="font-bold text-3xl">{props.user.name} {props.user.surname}</h1>
+            <h1>{props.user.name} {props.user.surname}</h1>
             <div className="text-xl text-center mb-4">{props.user.position}</div>
 
             <div className="flex flex-col sm:flex-row">

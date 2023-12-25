@@ -53,32 +53,20 @@ const History = (props: Props) => {
     return (
         <CVSection cls="history" title={`Work history (${getHumanizedDuration(totalDuration)})`}>
             {props.experience.map((item, index) => (
-                <section key={`${item.company}-${item.title}`} className={clsx("history-section", {
-                    "pb-4": index !== props.experience.length - 1
-                })}>
-                    <div className="cv-list-item sm:grid sm:grid-cols-4 py-2">
-                        <div className="item-key pr-4 pb-2">
-                            <div
-                                className="font-bold">{`${item.dateStart} - ${item.dateEnd ? item.dateEnd : "Now"}`}</div>
-                            <div>({historyDurationValues[index]})</div>
-                        </div>
-                        <div className="item-value col-start-2 col-span-3">
-                            <div className="title underline font-bold">{item.title}</div>
-                            <div className="company-name">{item.company}</div>
-                        </div>
-                        {item.stack && <div
-                            className="description col-start-2 col-span-3 bg-slate-100 py-2 pr-2 italic">{item.stack}</div>}
-                    </div>
-                    <div className="cv-list-item sm:grid sm:grid-cols-4">
-                        {Array.isArray(item.description) ? item.description.map((descr, i) => <div
-                                key={descr.slice(0, 20)}
-                                className={clsx("description col-start-2 col-span-3", {
-                                    "border-b": i !== item.description.length - 1,
-                                    "pb-2": i === 0,
-                                    "py-2": i !== 0
-                                })}>{descr}</div>) :
-                            <div className="description col-start-2 col-span-3 pb-2">{item.description}</div>}
-                    </div>
+                <section key={`${item.company}-${item.title}`} className="history-section flex flex-col gap-2">
+                    <h3 className="title">{item.title}</h3>
+                    <div className="company-name font-bold">{item.company}</div>
+                    <div
+                        className="font-bold">{`${item.dateStart} - ${item.dateEnd ? item.dateEnd : "Now"} (${historyDurationValues[index]})`}</div>
+                    {item.stack && <div
+                        className="description flex flex-row flex-wrap gap-2">{item.stack.split(", ").map(item =>
+                        <div key={item} className="inline py-1 px-1 rounded-md bg-slate-100">{item}</div>)}</div>}
+                    {Array.isArray(item.description) ? item.description.map((descr, i) => <div
+                            key={descr.slice(0, 20)}
+                            className={clsx("description flex flex-col gap-2", {
+                                "border-b": i !== item.description.length - 1
+                            })}>{descr}</div>) :
+                        <div className="description col-start-2 col-span-3 pb-2">{item.description}</div>}
                 </section>
             ))}
         </CVSection>

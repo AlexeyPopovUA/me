@@ -31,10 +31,6 @@ export async function generateMetadata({params}: any) {
     }
 }
 
-type Props = {
-    renderData: typeof data;
-};
-
 export default async function Post({params}: any) {
     const renderData = useMemo(() => data, []);
 

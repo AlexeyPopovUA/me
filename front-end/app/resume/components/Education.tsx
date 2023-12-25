@@ -10,14 +10,12 @@ type Props = {
 const Education = (props: Props) => (
     <CVSection title="Education" cls="history">
         {props.education.map((item) => (
-            <div key={`${item.company}-${item.title}`} className="cv-list-item sm:grid sm:grid-cols-4 py-2">
-                <div className="item-key pr-4 mb-2 font-bold">{item.date}</div>
-                <div className="item-value col-span-3">
-                    <div className="title underline mb-2 font-bold">{item.title}</div>
-                    <div className="company-name mb-2 italic">{item.company}</div>
-                    <div className="description mb-2">{item.description}</div>
-                </div>
-            </div>
+            <>
+                <h3 className="title">{item.title}</h3>
+                <div className="item-key pr-4 mb-2">{item.date}</div>
+                <div className="company-name mb-2 italic">{item.company}</div>
+                <div className="description">{item.description}</div>
+            </>
         ))}
     </CVSection>
 )
