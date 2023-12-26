@@ -1,11 +1,6 @@
-export interface ProjectsSchema {
-    title: string;
-    slug: string;
-    date: string;
-    draft?: boolean;
-    description: string;
-    thumbnail: string;
+import {CommonPostSchema} from "@/lib/posts";
 
+export interface ProjectsSchema extends CommonPostSchema {
     company: string;
     type: "employment" | "freelance" | "own";
     gallery: string[];

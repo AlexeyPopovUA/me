@@ -1,10 +1,11 @@
 import {
     getArticlePathByDirName,
     getArticlesBasePath,
-    getPagePathByDirName,
+    getPagePathByDirName, getProjectPathByDirName, getProjectsBasePath,
     listDirNames, readFrontMatter,
     readFrontMatterWithContent
 } from "@/lib/files";
+import {CommonPostSchema, PostType} from "@/lib/posts";
 import {ArticlesSchema} from "@/content/articles/articles-schema";
 
 export async function getArticleSEOContent({slug}: { slug: string }) {
@@ -73,12 +74,24 @@ export async function getLastArticles(cfg?: { limit?: number }) {
     return result;
 }
 
-export async function getAllArticles(cfg?: {  }) {
-    const articleDirs = await listDirNames(getArticlesBasePath());
+/*TODO Refactor*/
+export async function getAllPostsByType(cfg: { type: PostType }) {
+    let postDirs;
+    let getPostPath = getArticlePathByDirName;
+
+    if (cfg.type === "article") {
+        postDirs = await listDirNames(getArticlesBasePath());
+        getPostPath = getArticlePathByDirName;
+    } else if (cfg.type === "project") {
+        postDirs = await listDirNames(getProjectsBasePath());
+        getPostPath = getProjectPathByDirName;
+    } else {
+        throw `${cfg.type} is an unknown post type`;
+    }
 
     // read frontmatter data from all article files
-    const frontMatterList = await Promise.all(articleDirs
-        .map(dir => readFrontMatter<ArticlesSchema>(getArticlePathByDirName(dir))));
+    const frontMatterList = await Promise.all(postDirs
+        .map(dir => readFrontMatter<CommonPostSchema>(getPostPath(dir))));
 
     // filter out drafts
     let result = frontMatterList.filter(fm => !fm.draft);

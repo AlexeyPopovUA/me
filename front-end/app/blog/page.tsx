@@ -2,9 +2,7 @@ import React from "react";
 
 import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
 import {PageSchema} from "@/content/pages/blog/schema";
-import {getFullPageContent} from "@/lib/articles";
-import {PageContent} from "@/components/page-content";
-import AllArticles from "@/app/blog/all-articles";
+import AllPosts from "@/app/blog/all-posts";
 
 const pageSlug = "blog";
 
@@ -27,12 +25,10 @@ export async function generateMetadata({params}: any) {
     }
 }
 
-export default async function Post(props: any) {
-    const page = await getFullPageContent({slug: pageSlug});
-
+export default function Post() {
     return (
         <article className='container mx-auto px-4 sm:px-8 md:px-12 py-8'>
-            <AllArticles />
+            <AllPosts type="article" />
         </article>
     );
 }

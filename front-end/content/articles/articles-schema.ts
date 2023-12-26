@@ -1,8 +1,5 @@
-export interface ArticlesSchema {
-    title: string;
-    slug: string;
-    date: string;
-    draft?: boolean;
-    description: string;
-    thumbnail: string;
+import {CommonPostSchema} from "@/lib/posts";
+
+export interface ArticlesSchema extends CommonPostSchema {
+
 }

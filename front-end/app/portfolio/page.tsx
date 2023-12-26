@@ -1,7 +1,8 @@
+import React from "react";
+
 import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
 import {PageSchema} from "@/content/pages/portfolio/schema";
-import {PageContent} from "@/components/page-content";
-import {getFullPageContent} from "@/lib/articles";
+import AllPosts from "@/app/blog/all-posts";
 
 const pageSlug = "portfolio";
 
@@ -24,13 +25,10 @@ export async function generateMetadata({params}: any) {
     }
 }
 
-export default async function Post({params}: any) {
-    const page = await getFullPageContent({slug: pageSlug});
-
+export default function Post() {
     return (
-        <article className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4'>
-            <h1>{page.title}</h1>
-            <PageContent>{page.content}</PageContent>
+        <article className='container mx-auto px-4 sm:px-8 md:px-12 py-8'>
+            <AllPosts type="project" />
         </article>
     );
 }

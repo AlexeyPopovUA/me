@@ -3,6 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 
 export const baseArticleDir = "content/articles";
+export const baseProjectDir = "content/projects";
 export const basePageDir = "content/pages";
 export const baseArticleFileName = "article.mdx";
 export const basePageFileName = "article.mdx";
@@ -30,7 +31,9 @@ export const readFrontMatterWithContent = async <T extends { [p: string]: any }>
 }
 
 export const getArticlePathByDirName = (dirName: string) => path.resolve(path.join(baseArticleDir, dirName, baseArticleFileName));
+export const getProjectPathByDirName = (dirName: string) => path.resolve(path.join(baseProjectDir, dirName, baseArticleFileName));
 
 export const getPagePathByDirName = (slug: string) => path.resolve(path.join(basePageDir, slug, basePageFileName));
 export const getPagesBasePath = () => path.resolve(basePageDir);
 export const getArticlesBasePath = () => path.resolve(baseArticleDir);
+export const getProjectsBasePath = () => path.resolve(baseProjectDir);
