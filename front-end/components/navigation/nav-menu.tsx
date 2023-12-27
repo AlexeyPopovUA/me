@@ -1,8 +1,8 @@
 import Link from "next/link";
 import {clsx} from "clsx";
 
-const itemCls = "select-none rounded-md py-3 px-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground";
-const titleItemCls = "select-none rounded-md leading-none no-underline outline-none";
+const itemCls = "select-none py-3 px-3 no-underline hover:underline hover:text-amber-600 underline-offset-8";
+const titleItemCls = "select-none";
 
 const NavMenu = ({items}: { items: { title: string; link: string; }[] }) =>
     (

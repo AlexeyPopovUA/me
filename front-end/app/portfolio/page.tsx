@@ -2,7 +2,7 @@ import React from "react";
 
 import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
 import {PageSchema} from "@/content/pages/portfolio/schema";
-import AllPosts from "@/app/blog/all-posts";
+import AllPosts from "@/components/all-posts";
 
 const pageSlug = "portfolio";
 

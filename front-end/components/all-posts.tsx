@@ -1,6 +1,6 @@
 import Link from "next/link";
 import {getAllPostsByType} from "@/lib/articles";
-import ThumbnailImage from "@/app/blog/thumbnail-image";
+import ThumbnailImage from "@/components/image/thumbnail-image";
 import {PostType} from "@/lib/posts";
 
 const AllPosts = async (props: {type: PostType}) => {
@@ -9,7 +9,7 @@ const AllPosts = async (props: {type: PostType}) => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-24">
             {lastPosts.map(post => (
-                <Link className="hover:text-amber-600" href={`/blog/${post.slug}`} passHref
+                <Link className="hover:text-amber-600 hover:border-amber-500 border-2 rounded-md p-4" href={`/blog/${post.slug}`} passHref
                       key={post.slug}>
                     <div className="flex flex-col items-stretch pb-4 hover:text-amber-600">
                         {post.thumbnail ?
