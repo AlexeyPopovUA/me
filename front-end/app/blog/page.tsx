@@ -2,7 +2,7 @@ import React from "react";
 
 import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
 import {PageSchema} from "@/content/pages/blog/schema";
-import AllPosts from "@/components/all-posts";
+import AllPosts from "@/app/blog/all-posts";
 
 const pageSlug = "blog";
 
@@ -28,7 +28,7 @@ export async function generateMetadata({params}: any) {
 export default function Post() {
     return (
         <article className='container mx-auto px-4 sm:px-8 md:px-12 py-8'>
-            <AllPosts type="article" />
+            <AllPosts/>
         </article>
     );
 }

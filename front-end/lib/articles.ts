@@ -5,8 +5,8 @@ import {
     listDirNames, readFrontMatter,
     readFrontMatterWithContent
 } from "@/lib/files";
-import {CommonPostSchema, PostType} from "@/lib/posts";
 import {ArticlesSchema} from "@/content/articles/articles-schema";
+import {ProjectsSchema} from "@/content/projects/projects-schema";
 
 export async function getArticleSEOContent({slug}: { slug: string }) {
     const matterResult = await readFrontMatterWithContent<ArticlesSchema>(getArticlePathByDirName(slug));
@@ -74,24 +74,28 @@ export async function getLastArticles(cfg?: { limit?: number }) {
     return result;
 }
 
-/*TODO Refactor*/
-export async function getAllPostsByType(cfg: { type: PostType }) {
-    let postDirs;
-    let getPostPath = getArticlePathByDirName;
-
-    if (cfg.type === "article") {
-        postDirs = await listDirNames(getArticlesBasePath());
-        getPostPath = getArticlePathByDirName;
-    } else if (cfg.type === "project") {
-        postDirs = await listDirNames(getProjectsBasePath());
-        getPostPath = getProjectPathByDirName;
-    } else {
-        throw `${cfg.type} is an unknown post type`;
-    }
+export async function getAllArticles() {
+    const postDirs = await listDirNames(getArticlesBasePath());
 
     // read frontmatter data from all article files
     const frontMatterList = await Promise.all(postDirs
-        .map(dir => readFrontMatter<CommonPostSchema>(getPostPath(dir))));
+        .map(dir => readFrontMatter<ArticlesSchema>(getArticlePathByDirName(dir))));
+
+    // filter out drafts
+    let result = frontMatterList.filter(fm => !fm.draft);
+
+    // sort by date
+    result = result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    return result;
+}
+
+export async function getAllProjects() {
+    const postDirs = await listDirNames(getProjectsBasePath());
+
+    // read frontmatter data from all article files
+    const frontMatterList = await Promise.all(postDirs
+        .map(dir => readFrontMatter<ProjectsSchema>(getProjectPathByDirName(dir))));
 
     // filter out drafts
     let result = frontMatterList.filter(fm => !fm.draft);

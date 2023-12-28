@@ -10,15 +10,3 @@ export type CommonPostSchema = {
     description: string;
     thumbnail: string;
 }
-
-export const getPostLink = (type: PostType, slug: string) => {
-    if (availablePostTypes.includes(type)) {
-        if (type === "article") {
-            return `/blog/${slug}`;
-        } else {
-            return `/portfolio/${slug}`;
-        }
-    } else {
-        throw `${type} is not a supported post type`;
-    }
-}

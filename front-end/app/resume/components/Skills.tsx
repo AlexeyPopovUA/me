@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Fragment} from "react";
 import clsx from "clsx";
 
 import CVSection from "./CVSection";
@@ -11,7 +11,7 @@ type Props = {
 const Skills = (props: Props) => (
     <CVSection title="Skills" cls="skills">
         {props.skills.map((item) => (
-            <>
+            <Fragment key={item.name}>
                 <h3>{item.name}</h3>
                 {Array.isArray(item.description) ? item.description.map((descr, i) => <div
                         key={descr.slice(0, 20)}
@@ -19,7 +19,7 @@ const Skills = (props: Props) => (
                             "border-b": i !== item.description.length - 1
                         })}>{descr}</div>) :
                     <div className="description">{item.description}</div>}
-            </>
+            </Fragment>
         ))}
     </CVSection>
 )
