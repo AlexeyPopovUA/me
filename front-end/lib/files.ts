@@ -6,12 +6,13 @@ export const baseArticleDir = "content/articles";
 export const baseProjectDir = "content/projects";
 export const basePageDir = "content/pages";
 export const baseArticleFileName = "article.mdx";
+export const baseProjectFileName = "article.mdx";
 export const basePageFileName = "article.mdx";
 
 export const listDirNames = async (basePath: string) => {
-    const articleDirents = await fs.readdir(basePath, {withFileTypes: true, recursive: false});
+    const dirents = await fs.readdir(basePath, {withFileTypes: true, recursive: false});
 
-    return articleDirents
+    return dirents
         .filter(dirent => dirent.isDirectory())
         .map(dirent => dirent.name);
 }
@@ -31,7 +32,7 @@ export const readFrontMatterWithContent = async <T extends { [p: string]: any }>
 }
 
 export const getArticlePathByDirName = (dirName: string) => path.resolve(path.join(baseArticleDir, dirName, baseArticleFileName));
-export const getProjectPathByDirName = (dirName: string) => path.resolve(path.join(baseProjectDir, dirName, baseArticleFileName));
+export const getProjectPathByDirName = (dirName: string) => path.resolve(path.join(baseProjectDir, dirName, baseProjectFileName));
 
 export const getPagePathByDirName = (slug: string) => path.resolve(path.join(basePageDir, slug, basePageFileName));
 export const getPagesBasePath = () => path.resolve(basePageDir);

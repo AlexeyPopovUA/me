@@ -1,8 +1,11 @@
 import {
     getArticlePathByDirName,
     getArticlesBasePath,
-    getPagePathByDirName, getProjectPathByDirName, getProjectsBasePath,
-    listDirNames, readFrontMatter,
+    getPagePathByDirName,
+    getProjectPathByDirName,
+    getProjectsBasePath,
+    listDirNames,
+    readFrontMatter,
     readFrontMatterWithContent
 } from "@/lib/files";
 import {ArticlesSchema} from "@/content/articles/articles-schema";
@@ -17,6 +20,10 @@ export async function getArticleSEOContent({slug}: { slug: string }) {
     }
 }
 
+export async function getProjectSEOContent({slug}: { slug: string }) {
+    return await readFrontMatter<ProjectsSchema>(getProjectPathByDirName(slug));
+}
+
 export async function getFullArticleContent({slug}: { slug: string }) {
     const matterResult = await readFrontMatterWithContent<ArticlesSchema>(getArticlePathByDirName(slug));
 
@@ -25,6 +32,10 @@ export async function getFullArticleContent({slug}: { slug: string }) {
         content: matterResult.content,
         slug
     }
+}
+
+export async function getProjectData({slug}: { slug: string }) {
+    return await readFrontMatter<ProjectsSchema>(getProjectPathByDirName(slug))
 }
 
 export async function getFullPageContent({slug}: { slug: string }) {
@@ -48,9 +59,21 @@ export async function getArticlesSlugs() {
     const publicArtilesSlugs = frontMatterList.filter(fm => !fm.draft);
 
     // read real slug values from the frontmatter
-    const result = publicArtilesSlugs.map(fm => fm.slug);
+    return publicArtilesSlugs.map(fm => fm.slug);
+}
 
-    return result;
+export async function getProjectSlugs() {
+    const dirs = await listDirNames(getProjectsBasePath());
+
+    // read frontmatter data from all article files
+    const frontMatterList = await Promise.all(dirs
+        .map(dir => readFrontMatter<ProjectsSchema>(getProjectPathByDirName(dir))));
+
+    // filter out drafts
+    const publicProjectSlugs = frontMatterList.filter(fm => !fm.draft);
+
+    // read real slug values from the frontmatter
+    return publicProjectSlugs.map(fm => fm.slug);
 }
 
 export async function getLastArticles(cfg?: { limit?: number }) {
