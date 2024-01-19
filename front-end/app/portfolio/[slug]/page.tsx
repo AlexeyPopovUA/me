@@ -3,6 +3,7 @@ import {
     getProjectData, getProjectSEOContent,
     getProjectSlugs
 } from "@/lib/articles";
+import Gallery from "@/components/image/gallery";
 
 export async function generateStaticParams() {
     const allSlugs = await getProjectSlugs();
@@ -37,6 +38,8 @@ export default async function Post(props: StaticProps) {
             <div>{post.thumbnail}</div>
             <div>{post["main-features"]}</div>
             <div>{post["my-commitment"]}</div>
+            {/*<Experiment slideCfgs={post.gallery.map(imagePath => ({path: imagePath, width: 1000}))} />*/}
+            <Gallery images={post.gallery} />
         </article>
     );
 }
