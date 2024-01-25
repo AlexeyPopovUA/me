@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import {PostType} from "@/lib/posts";
 import ThumbnailImage from "@/components/image/thumbnail-image";
+import Tag from "@/components/primitive/Tag";
 
 export function PostCard(props: {
     type: PostType,
@@ -23,9 +24,9 @@ export function PostCard(props: {
             <div className="font-bold text-xl underline mb-2">{props.title}</div>
             {props.date ? <div className="text-sm text-gray-600 mb-4">{props.date}</div> : null}
             {props.tags ?
-                <div className="text-sm text-gray-600 mb-4 flex flex-row flex-wrap gap-2">{props.tags?.map(tag => <div
-                    key={tag}
-                    className="bg-accent p-2 rounded-md">{tag}</div>)}</div> : null}
+                <div className="text-sm text-gray-600 mb-4 flex flex-row flex-wrap gap-2">
+                    {props.tags?.map(tag => <Tag key={tag} item={tag}/>)}
+                </div> : null}
             <div className="text-md text-gray-600">{props.description}</div>
         </div>
     </Link>;

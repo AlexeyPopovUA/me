@@ -4,6 +4,7 @@ import clsx from "clsx";
 
 import CVSection from "./CVSection";
 import data from "../data/data";
+import Tag from "@/components/primitive/Tag";
 
 type Props = {
     experience: typeof data.experience;
@@ -60,10 +61,10 @@ const History = (props: Props) => {
                         className="font-bold">{`${item.dateStart} - ${item.dateEnd ? item.dateEnd : "Now"} (${historyDurationValues[index]})`}</div>
                     {item.stack && <div
                         className="description flex flex-row flex-wrap gap-2">{item.stack.split(", ").map(item =>
-                        <div key={item} className="inline py-1 px-1 rounded-md bg-slate-100">{item}</div>)}</div>}
+                        <Tag key={item} item={item}/>)}</div>}
                     {Array.isArray(item.description) ? item.description.map((descr, i) => <div
                             key={descr.slice(0, 20)}
-                            className={clsx("description flex flex-col gap-2", {
+                            className={clsx("flex flex-col gap-2", {
                                 "border-b": i !== item.description.length - 1
                             })}>{descr}</div>) :
                         <div className="description col-start-2 col-span-3 pb-2">{item.description}</div>}
