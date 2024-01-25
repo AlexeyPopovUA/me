@@ -34,7 +34,7 @@ export default async function Post(props: StaticProps) {
         <article className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4'>
             <h1>{post.title}</h1>
             <Gallery images={post.gallery}/>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 sm:gap-x-8 gap-y-2 sm:gap-y-10">
                 <ProjectSection headerText="Description">
                     {post.description}
                 </ProjectSection>
