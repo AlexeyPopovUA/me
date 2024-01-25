@@ -5,6 +5,7 @@ import {
 } from "@/lib/articles";
 import Gallery from "@/components/image/gallery";
 import Tag from "@/components/primitive/Tag";
+import {ProjectSection} from "@/app/portfolio/[slug]/project-section";
 
 export async function generateStaticParams() {
     const allSlugs = await getProjectSlugs();
@@ -32,16 +33,33 @@ export default async function Post(props: StaticProps) {
     return (
         <article className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4'>
             <h1>{post.title}</h1>
-            <div className="flex flex-row flex-wrap gap-2">
-                {post.technologies.map(item => <Tag key={item} item={item}/>)}
-            </div>
-            <div>{post.type}</div>
-            <div>{post.description}</div>
-            <div>{post.company}</div>
-            <div>{post.thumbnail}</div>
-            <div>{post["main-features"]}</div>
-            <div>{post["my-commitment"]}</div>
             <Gallery images={post.gallery}/>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-10">
+                <ProjectSection headerText="Description">
+                    {post.description}
+                </ProjectSection>
+                <ProjectSection headerText="Technologies">
+                    <div className="flex flex-row flex-wrap gap-2">
+                        {post.technologies.map(item => <Tag key={item} item={item}/>)}
+                    </div>
+                </ProjectSection>
+                <ProjectSection headerText="Main features">
+                    <ul>
+                        {post["main-features"].map(item => <li key={item}>{item}</li>)}
+                    </ul>
+                </ProjectSection>
+                <ProjectSection headerText="My commitment">
+                    <ul>
+                        {post["my-commitment"].map(item => <li key={item}>{item}</li>)}
+                    </ul>
+                </ProjectSection>
+                <ProjectSection headerText="Type">
+                    {post.type}
+                </ProjectSection>
+                <ProjectSection headerText="Company">
+                    {post.company}
+                </ProjectSection>
+            </div>
         </article>
     );
 }
