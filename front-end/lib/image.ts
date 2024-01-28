@@ -1,10 +1,9 @@
-import {Photo} from "react-photo-album";
+import type {Slide} from "yet-another-react-lightbox";
 
 const BASE_URL = "https://dqdoi2i9o4m2u.cloudfront.net";
 const BUCKET = "serverless-image-handler-image-source";
 const BASE_PATH = "me";
 const DEFAULT_IMAGE_QUALITY = 75;
-
 
 type Props = {
     src: string;
@@ -14,8 +13,8 @@ type Props = {
 };
 
 const getDefaultBucketProps = (src: string) => ({
-    "bucket": BUCKET,
-    "key": `${BASE_PATH}${src}`
+    bucket: BUCKET,
+    key: `${BASE_PATH}${src}`
 });
 
 const getDefaultImageFormatProps = (quality: number) => ({
@@ -84,9 +83,10 @@ export const getInsideImageURL = (props: Props) => {
     return encodePayloadForUrl(taskToEncode);
 }
 
-export const generateLBSlides = (images: string[]): Photo[] => {
+export const generateLBSlides = (images: string[]): Slide[] => {
     const width = 2048;
 
+    // TODO Why???
     // @ts-ignore
     return images.map((image) => ({
         src: getContainImageURL({src: image, quality: 85, width}),
