@@ -1,6 +1,6 @@
 import type {Slide} from "yet-another-react-lightbox";
 
-const BASE_URL = "https://dqdoi2i9o4m2u.cloudfront.net";
+const BASE_URL = "https://images.me.oleksiipopov.com";
 const BUCKET = "serverless-image-handler-image-source";
 const BASE_PATH = "me";
 const DEFAULT_IMAGE_QUALITY = 75;
