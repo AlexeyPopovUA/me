@@ -4,6 +4,7 @@ import {
     AllowedMethods,
     CacheCookieBehavior,
     CachedMethods,
+    CacheHeaderBehavior,
     CachePolicy,
     Distribution,
     HttpVersion,
@@ -37,6 +38,7 @@ export class ImageServiceProxyStack extends Stack {
 
         const cachePolicy = new CachePolicy(this, `${project}-cache-policy`, {
             cachePolicyName: `${project}-proxy-cache-policy`,
+            headerBehavior: CacheHeaderBehavior.allowList("Accept"),
             cookieBehavior: CacheCookieBehavior.none(),
             enableAcceptEncodingBrotli: true,
             enableAcceptEncodingGzip: true,
@@ -60,10 +62,10 @@ export class ImageServiceProxyStack extends Stack {
             ],
             defaultBehavior: {
                 allowedMethods: AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
-                cachePolicy: cachePolicy,
+                cachePolicy,
                 cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
                 compress: true,
-                viewerProtocolPolicy: ViewerProtocolPolicy.HTTPS_ONLY,
+                viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                 origin: new HttpOrigin(configuration.HOSTING.imageProxyOriginDomain, {
                     originShieldEnabled: true,
                     protocolPolicy: OriginProtocolPolicy.HTTPS_ONLY
