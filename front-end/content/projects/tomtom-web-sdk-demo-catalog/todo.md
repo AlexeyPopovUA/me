@@ -1,5 +1,5 @@
 # TODO List
 
-- [ ] Transfer WP content
-- [ ] Transfer all images
+- [x] Transfer WP content
+- [x] Transfer all images
 - [ ] Check all Links
