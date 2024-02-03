@@ -50,9 +50,9 @@ export class ImageServiceProxyStack extends Stack {
         const distribution = new Distribution(this, `${project}-proxy-distribution`, {
             // comment contains the distribution name
             comment: `${project}-main image proxy distribution`,
-            httpVersion: HttpVersion.HTTP2,
+            httpVersion: HttpVersion.HTTP2_AND_3,
             priceClass: PriceClass.PRICE_CLASS_ALL,
-            certificate: certificate,
+            certificate,
             enableIpv6: true,
             minimumProtocolVersion: SecurityPolicyProtocol.TLS_V1_2_2021,
             enableLogging: true,

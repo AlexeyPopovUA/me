@@ -70,15 +70,15 @@ export class FrontEndHostingStack extends Stack {
             cookieBehavior: CacheCookieBehavior.none(),
             enableAcceptEncodingBrotli: true,
             enableAcceptEncodingGzip: true,
-            minTtl: Duration.seconds(1),
+            minTtl: Duration.days(1),
             maxTtl: Duration.days(365),
-            defaultTtl: Duration.hours(24)
+            defaultTtl: Duration.days(30)
         });
 
         const distribution = new Distribution(this, `${project}-api-distribution`, {
             // comment contains the distribution name
             comment: `${project}-main configuration distribution`,
-            httpVersion: HttpVersion.HTTP2,
+            httpVersion: HttpVersion.HTTP2_AND_3,
             priceClass: PriceClass.PRICE_CLASS_100,
             certificate: certificate,
             enableIpv6: true,
