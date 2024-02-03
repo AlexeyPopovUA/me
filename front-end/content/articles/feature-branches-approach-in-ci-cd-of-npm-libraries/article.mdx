@@ -4,8 +4,75 @@ slug: feature-branches-approach-in-ci-cd-of-npm-libraries
 date: 09-03-23
 draft: false
 description: Implementation of feature branches approach in continuous integration and delivery of NPM packages
-thumbnail: "/articles/feature-branches-npm/feature branches for NPM modules.png"
+thumbnail: /articles/feature-branches-npm/feature-branches-for-NPM-modules.png
 tags:
     - CI/CD
     - NPM
 ---
+
+## Why
+
+During the development of NPM libraries, teams often need to test applications that consume these libraries. The development cycle usually involves parallel testing of the integrated library and application, either locally or via deployed testing environments. When testing locally, the `npm link` command can be used to create symlinks from the library to the consumer app’s *node_modules* directory. However, in deployed environments, builds are typically used that embed dependencies in bundles or copy them to the distribution location. This requires libraries to be released as versions.
+
+To avoid creating traditional final releases every time testing is required, while still being able to test libraries in a “work in progress” state on the deployed environments of consumer apps, a solution is needed. One possible solution is to use pre-release versions, such as alpha or beta versions, which can be published and installed in the consumer app’s deployed environment. This allows testing of the library in a work-in-progress state without the need for a full release. Another option is to use feature branches and continuous integration to automatically deploy the library to a testing environment whenever changes are made to the code. This allows for continuous testing and development without the need for manual release management.
+
+## How
+
+The solution to this challenge is the “feature branches” approach. This approach involves using branch-specific versions for “work in progress” Git branches and traditional releases for public distributions.
+
+To simplify the process, let’s consider using semantic versioning. In semantic versioning, main library versions follow a format like this: *v0.0.1*, *v2.4.12*, and so on. Semantic versioning also supports pre-release version formats that include a name. For example, a pre-release version might look like this: *v0.0.2-sunfish.0*, *v2.4.13-monkfish.5*, and so on. This means we can give our temporary releases custom names and increment their patch number.
+
+NPM supports this standard, and we can define the versions of our packages in the package.json file, like so:
+
+* fish-atlas-sdk@0.0.1
+* fish-atlas-sdk@0.0.2-sunfish.0
+* fish-atlas-sdk@2.4.13-monkfish.5
+
+We can also use the npm CLI to install package versions by their pre-release name, which we can call an “alias” for convenience, like this:
+
+```shell
+npm install --save fish-atlas-sdk@sunfish
+npm install --save fish-atlas-sdk@monkfish
+```
+
+To simplify development and maintenance, it’s a good practice to use npm versions defined as Git tags. You can create a Git tag with the corresponding version string format needed for NPM. This way, you will always be aware of which version corresponds to which commit.
+
+There are also multiple tools available that allow for Git-driven npm package versioning and even automatic version calculation. This convention we can use to make version generation predictable and automatic – [conventionalcommits.org](https://www.conventionalcommits.org/en/v1.0.0/#summary). Other tools such as [standard-version](https://www.npmjs.com/package/standard-version) or [release-please](https://github.com/googleapis/release-please) use it to simplify and implement the release procedures.
+
+The feature branches workflow in CI/CD will look like this:
+
+![CI/CD workflow for feature branches](/articles/feature-branches-npm/feature-branches-for-NPM-modules.png "CI/CD workflow for feature branches")
+
+The sunfish and monkfish are Git branches. The first one has a failed commit check, and the second succeeded and was merged to the main branch.
+Example
+
+I have used this approach in multiple projects. The implementation of it could be seen in the example library repository [https://github.com/AlexeyPopovUA/fish-atlas-sdk](https://github.com/AlexeyPopovUA/fish-atlas-sdk) which is published to NPM [https://www.npmjs.com/package/fish-atlas-sdk](https://www.npmjs.com/package/fish-atlas-sdk). This project was created for demo purpose.
+
+After the bootstrapping stage the version history looks like this:
+
+![fish-atlas-sdk npm versions right after the bootstrapping](/articles/feature-branches-npm/npm-version-history.webp "fish-atlas-sdk npm versions right after the bootstrapping")
+
+After that I’ve created several releases and created a couple of branches (“monkfish” and “sunfish“). The updated NPM version history looks like this:
+
+![The updated NPM version history](/articles/feature-branches-npm/npm-version-history-all.png "The updated NPM version history")
+
+The new branches triggered creation of new aliases for NPM packages and available as NPM distribution tags. As soon as we remove those branches, our ci/cd will remove aliases. Please note, that versions will stay forever, because registry is supposed to be immutable [according to npm maintainers](https://docs.npmjs.com/policies/unpublish).
+
+Have a look at *.github/workflows* directory of the project. It contains workflows that implement the idea described in this article.
+
+*.github/workflows/feature-branch-build.yml* workflow builds, tests and publishes aliased versions of library. *.github/workflows/release-tag-build.yml* workflow builds, tests and publishes regular versions.
+*.github/workflows/feature-branch-delete.yml* workflows removes distribution tags (aliases) from NPM.
+
+## Release algorithms
+
+**The regular release.** It happens on demand. Developer can decide when it is a good moment. He runs a release script locally while being on the latest main (stable) branch. This script runs the standard-version cli to calculate the next package version using commit message types since the previous version. Fixes and maintenance changes affect the patch number, features change the minor number, breaking changes bump the major one (see [conventionalcommits.org](https://www.conventionalcommits.org)). *package.json* and *package-lock.json* files will get a new "version" value. Then the new record in the changelog.md will be generated automatically. All changes will be committed by this tool and a new version Git tag is added. Then the release script pushes the new commit and the tag to the remote branch. *release-tag-build.yml* workflow detects changes and publishes the new NPM package with the new version to the registry.
+
+**The feature branch release.** It happens automatically. Developers work with their branches without bothering of creation of any releases for integration. All changes will be detected by the feature-branch-build.yml workflow. It creates a temporary local branch-specific version, taking into account next things: branch name, latest remote alias version for current branch in NPM registry, latest regular version in NPM registry. The applicable version will be applied locally. There is no need to commit branch-specific tags to Git. Then the workflow uses the standard-version cli to calculate the next pre-release version. Then the workflow publishes this package to NPM registry with a branch-specific distribution tag, which we call an “alias”.
+
+**Deletion.** Amount of aliases of NPM package may be overwhelming and grows very fast. We need to keep it clean. The “housekeeping” activities happen in the *feature-branch-delete.yml* workflow. Every time a branch gets deleted this workflow removes its NPM alias from the registry. So the amount of temporary aliases is always correspondent to amount of active Git branches.
+
+The example Git repository contains all necessary scripts and workflows. Implementation language and tools could be always chosen by developers who agree to maintain the system. The idea stays the same.
+
+## Conclusion
+
+In this article I have suggested and shared sources of a convenient approach for continuous integration of npm modules that supports feature branches. The continuous integration and deployment workflow for feature branches can be implemented using GitHub actions or any other platform of choice. Also, the *standard-version* cli could be replaced with any other tool that simplifies work with release management. The main idea is to show that it is possible, convenient and empowers developers to do their work and showcase it at any moment of time integrated into the consumer application.
