@@ -1,3 +1,5 @@
+import {MetadataRoute} from "next";
+
 import {
     getArticlePathByDirName,
     getArticlesBasePath,
@@ -10,6 +12,8 @@ import {
 } from "@/lib/files";
 import {ArticlesSchema} from "@/content/articles/articles-schema";
 import {ProjectsSchema} from "@/content/projects/projects-schema";
+
+export const BASE_URL = "https://me.oleksiipopov.com"
 
 export async function getArticleSEOContent({slug}: { slug: string }) {
     const matterResult = await readFrontMatterWithContent<ArticlesSchema>(getArticlePathByDirName(slug));
@@ -113,10 +117,26 @@ export async function getAllArticles() {
     return result;
 }
 
+export async function getAllArticleSitemapData(): Promise<MetadataRoute.Sitemap> {
+    const postDirs = await listDirNames(getArticlesBasePath());
+
+    // read frontmatter data from all article files
+    const frontMatterList = await Promise.all(postDirs
+        .map(dir => readFrontMatter<ArticlesSchema>(getArticlePathByDirName(dir))));
+
+    // filter out drafts
+    let result = frontMatterList.filter(fm => !fm.draft);
+
+    // sort by date
+    result = result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    return result.map(item => ({url: `${BASE_URL}/blog/${item.slug}`, lastModified: new Date(), priority: 0.5, changeFrequency: "weekly"}));
+}
+
 export async function getAllProjects() {
     const postDirs = await listDirNames(getProjectsBasePath());
 
-    // read frontmatter data from all article files
+    // read frontmatter data from all project files
     const frontMatterList = await Promise.all(postDirs
         .map(dir => readFrontMatter<ProjectsSchema>(getProjectPathByDirName(dir))));
 
@@ -127,4 +147,20 @@ export async function getAllProjects() {
     result = result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     return result;
+}
+
+export async function getAllProjectSitemapData(): Promise<MetadataRoute.Sitemap> {
+    const postDirs = await listDirNames(getProjectsBasePath());
+
+    // read frontmatter data from all project files
+    const frontMatterList = await Promise.all(postDirs
+        .map(dir => readFrontMatter<ArticlesSchema>(getProjectPathByDirName(dir))));
+
+    // filter out drafts
+    let result = frontMatterList.filter(fm => !fm.draft);
+
+    // sort by date
+    result = result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    return result.map(item => ({url: `${BASE_URL}/portfolio/${item.slug}`, lastModified: new Date(), priority: 0.5, changeFrequency: "monthly"}));
 }
