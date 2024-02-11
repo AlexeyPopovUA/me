@@ -11,7 +11,7 @@ export default function Home() {
                             <ProfileImage />
                         </div>
                         <div className="flex flex-col justify-center">
-                            <p className="mb-4 text-xl">Hi, I`&apos;m Oleksii Popov</p>
+                            <p className="mb-4 text-xl">Hi, I&apos;m Oleksii Popov</p>
                             <p className="mb-4">I develop full stack solutions with React, NodeJS, JavaScript, TypeScript and
                                 AWS</p>
                         </div>

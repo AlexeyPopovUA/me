@@ -4,7 +4,7 @@ import Link from "next/link";
 import {getProjectData, getProjectSEOContent, getProjectSlugs} from "@/lib/articles";
 import Gallery from "@/components/image/gallery";
 import Tag from "@/components/primitive/Tag";
-import {ProjectSection} from "@/app/portfolio/[slug]/project-section";
+import {ProjectSection} from "./project-section";
 
 export async function generateStaticParams() {
     const allSlugs = await getProjectSlugs();

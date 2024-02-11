@@ -1,6 +1,5 @@
 import React from "react";
 import type {Metadata} from 'next'
-import Head from 'next/head';
 import {Domine} from 'next/font/google'
 
 import TopNavigationMenu from "@/components/navigation/top-navigation-menu";
@@ -22,9 +21,6 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-        <Head>
-            <base href="/"/>
-        </Head>
         <body className={font.className}>
         <header className="print:hidden w-full border-b bg-white">
             <TopNavigationMenu/>
