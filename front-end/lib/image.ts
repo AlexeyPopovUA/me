@@ -29,10 +29,12 @@ const getDefaultImageFormatProps = (quality: number) => ({
     }
 });
 
-const encodePayloadForUrl = (configuration: {[key: string]: unknown}) => `${BASE_URL}/${btoa(JSON.stringify(configuration))}`;
+const encodePayloadForUrl = (configuration: {
+    [key: string]: unknown
+}) => `${BASE_URL}/${btoa(JSON.stringify(configuration))}`;
 
 export const getCoverImageURL = (props: Props) => {
-    const { src, width, height, quality = DEFAULT_IMAGE_QUALITY } = props;
+    const {src, width, height, quality = DEFAULT_IMAGE_QUALITY} = props;
 
     const taskToEncode = {
         ...getDefaultBucketProps(src),
@@ -50,7 +52,7 @@ export const getCoverImageURL = (props: Props) => {
 }
 
 export const getContainImageURL = (props: Props) => {
-    const { src, width, quality = DEFAULT_IMAGE_QUALITY } = props;
+    const {src, width, quality = DEFAULT_IMAGE_QUALITY} = props;
 
     const taskToEncode = {
         ...getDefaultBucketProps(src),
@@ -67,7 +69,7 @@ export const getContainImageURL = (props: Props) => {
 }
 
 export const getInsideImageURL = (props: Props) => {
-    const { src, width, quality = DEFAULT_IMAGE_QUALITY } = props;
+    const {src, width, quality = DEFAULT_IMAGE_QUALITY} = props;
 
     const taskToEncode = {
         ...getDefaultBucketProps(src),
@@ -97,3 +99,33 @@ export const generateLBSlides = (images: string[]): Slide[] => {
         })),
     }));
 };
+
+export const getContainBlurredImageURL = (props: { src: string }) => {
+
+    const taskToEncode = {
+        ...getDefaultBucketProps(props.src),
+        edits: {
+            png: {
+                quality: 20
+            },
+            resize: {
+                width: 10,
+                fit: "contain"
+            }
+        }
+    };
+
+    return encodePayloadForUrl(taskToEncode);
+}
+
+export const readImageAsBase64 = async (src: string) => {
+    const blob = await (await fetch(src)).arrayBuffer();
+    const url = Buffer.from(blob).toString("base64");
+
+    return `data:image/png;base64,${url}`;
+}
+
+export const readBlurredImageSrcPair = async ({src}: { src: string; }) => ({
+    src,
+    blurDataURL: await readImageAsBase64(getContainBlurredImageURL({src}))
+})
