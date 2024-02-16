@@ -13,7 +13,8 @@ const NavMenuMobile = ({items}: { items: { title: string; link: string; }[] }) =
         setIsMenuOpen(open => !open);
     }, []);
 
-    const menuCls = clsx("fixed top-0 z-90 flex flex-col justify-center items-center bg-white duration-500", {
+    const menuCls = clsx("fixed sm:hidden top-0     z-90 flex flex-col justify-center items-center bg-white duration-500", {
+        "left-[-40px]": !isMenuOpen,
         "w-screen": isMenuOpen,
         "h-screen": isMenuOpen,
         "opacity-100": isMenuOpen,
@@ -44,7 +45,7 @@ const NavMenuMobile = ({items}: { items: { title: string; link: string; }[] }) =
         </nav>
         <div className={menuCls}>
             <div className="flex flex-row w-full items-center justify-center h-1/4">
-                    <Link href="/" className={clsx(titleItemCls, "block", "flex", "flex-col", "items-center")} onClick={handleMenuClick}>
+                    <Link href="/" className={clsx(titleItemCls, "block", "flex", "flex-col", "items-center")}>
                         <div className="text-2xl mb-2">Oleksii Popov</div>
                         <div className="text-xl text-gray-500">Software development blog</div>
                     </Link>
