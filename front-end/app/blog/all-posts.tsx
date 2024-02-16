@@ -9,7 +9,7 @@ const AllPosts = async () => {
             {lastPosts.map(post =>
                 (
                     <PostCard key={post.slug} type="article" title={post.title} slug={post.slug}
-                              thumbnail={post.thumbnail} date={post.date} description={post.description}
+                              thumbnail={post.thumbnail} date={post.date.toDateString()} description={post.description}
                               link={`/blog/${post.slug}`} tags={post.tags}/>
                 ))}
         </div>

@@ -12,8 +12,11 @@ import {
 } from "@/lib/files";
 import {ArticlesSchema} from "@/content/articles/articles-schema";
 import {ProjectsSchema} from "@/content/projects/projects-schema";
+import {CommonPostSchema} from "@/lib/posts";
 
 export const BASE_URL = "https://me.oleksiipopov.com"
+
+const reverseTimeSorter = <T extends CommonPostSchema>(a: T, b: T) => b.date.getTime() - a.date.getTime();
 
 export async function getArticleSEOContent({slug}: { slug: string }) {
     const matterResult = await readFrontMatterWithContent<ArticlesSchema>(getArticlePathByDirName(slug));
@@ -91,7 +94,7 @@ export async function getLastArticles(cfg?: { limit?: number }) {
     let result = frontMatterList.filter(fm => !fm.draft);
 
     // sort by date
-    result = result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    result.sort(reverseTimeSorter);
 
     // take first N
     if (cfg && cfg.limit && cfg.limit > 0) {
@@ -112,7 +115,7 @@ export async function getAllArticles() {
     let result = frontMatterList.filter(fm => !fm.draft);
 
     // sort by date
-    result = result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    result.sort(reverseTimeSorter);
 
     return result;
 }
@@ -128,7 +131,7 @@ export async function getAllArticleSitemapData(): Promise<MetadataRoute.Sitemap>
     let result = frontMatterList.filter(fm => !fm.draft);
 
     // sort by date
-    result = result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    result.sort(reverseTimeSorter);
 
     return result.map(item => ({url: `${BASE_URL}/blog/${item.slug}`, lastModified: new Date(), priority: 0.5, changeFrequency: "weekly"}));
 }
@@ -144,7 +147,7 @@ export async function getAllProjects() {
     let result = frontMatterList.filter(fm => !fm.draft);
 
     // sort by date
-    result = result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    result.sort(reverseTimeSorter);
 
     return result;
 }
@@ -160,7 +163,7 @@ export async function getAllProjectSitemapData(): Promise<MetadataRoute.Sitemap>
     let result = frontMatterList.filter(fm => !fm.draft);
 
     // sort by date
-    result = result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    result.sort(reverseTimeSorter);
 
     return result.map(item => ({url: `${BASE_URL}/portfolio/${item.slug}`, lastModified: new Date(), priority: 0.5, changeFrequency: "monthly"}));
 }
