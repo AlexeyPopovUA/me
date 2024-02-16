@@ -16,7 +16,7 @@ const GalleryThumbnailImage = ({src, blurDataURL, alt, onClick}: Props) => <Imag
                                                                      loader={imageLoader}
                                                                      placeholder="blur"
                                                                      blurDataURL={blurDataURL}
-                                                                     width={700} height={330}
+                                                                     width={350} height={165}
                                                                      src={src}
                                                                      alt={alt}/>;
 
