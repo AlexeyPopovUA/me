@@ -8,7 +8,7 @@ const LatestArticles = async () => {
         <ul className="list-disc">
             {lastNArticles.map(article => (
                 <li className='font-bold underline' key={article.slug}>
-                    <Link href={`/blog/${article.slug}`} passHref key={article.slug}>{article.title}</Link>
+                    <Link href={`/blog/${article.slug}`} passHref key={article.slug} className="py-4">{article.title}</Link>
                 </li>
             ))}
         </ul>

@@ -29,8 +29,8 @@ export default async function Home() {
                                 AWS</p>
                         </div>
                     </div>
-                    <p className="mb-4">If you are curious about my CV, <Link className="font-bold"
-                                                                              href={"/resume"}>click here</Link>
+                    <p className="mb-4">If you are curious about my work experience, <Link className="font-bold"
+                                                                              href={"/resume"}>check the CV</Link>
                     </p>
                     <p className="mb-4">Some of work examples could be found in the <Link className="font-bold"
                                                                               href={"/portfolio"}>portfolio</Link>
