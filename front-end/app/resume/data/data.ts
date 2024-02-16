@@ -9,15 +9,14 @@ const data = {
         GitHub: { title: "github.com/AlexeyPopovUA", url: "https://github.com/AlexeyPopovUA" },
         Email: "opportunities@oleksiipopov.com",
         Address: "Klagenfurt-Villach area, Austria",
-        Phone: "+31621548922"
+        Phone: "+436765408426"
     },
     intro: {
         title: "Intro",
         description: [
-            "I am a skilled software developer with more than 11 years of experience in web technologies. I am passionate about developing user-friendly products and have a track record of designing and implementing full-stack solutions, combining frontend, cloud native, and backend areas. My expertise lies in the architecture and development of high-scale single page applications, UI libraries, and SDKs, as well as in the implementation of CI/CD, hosting and distribution solutions.",
+            "I am a skilled software developer with 12 years of experience in web technologies. I am passionate about developing user-friendly products and have a track record of designing and implementing full-stack solutions, combining frontend, cloud native, and backend areas. My expertise lies in the architecture and development of high-scale single page applications, UI libraries, and SDKs, as well as in the implementation of CI/CD, hosting and distribution solutions.",
             "I am proficient in TypeScript and JavaScript across all stacks and use them whenever possible. However, I am also experienced in maintaining projects in other languages such as Java and PHP.",
-            "I am enthusiastic about optimizing applications for improved runtime and faster loading speeds, both for existing projects and new ones.",
-            "I am dreaming about an opportunity to build a distributed, remote, asynchronous, and self-sufficient team around an exciting project."
+            "I am enthusiastic about optimizing applications for improved runtime and faster loading speeds, both for existing projects and new ones."
         ]
     },
     contacts: {
@@ -63,6 +62,12 @@ const data = {
     ],
     certificates: [
         {
+            company: "Udemy",
+            title: "Kubernetes for the Absolute Beginners - Hands-on",
+            date: "January 2024",
+            link: "https://www.udemy.com/certificate/UC-f1c86ecf-2f67-4cea-8a6d-8db5b7ffbd39/"
+        },
+        {
             company: "Coursera Course Certificates",
             title: "Data structures: Measuring and Optimizing Performance",
             date: "November 2015",
@@ -88,9 +93,10 @@ const data = {
             dateStart: "October 2023",
             dateEnd: "",
             description: [
-                "Front End development"
+                "Maintenance of the new Dynatrace Kubernetes web application",
+                "Maintenance of the automated tests"
             ],
-            stack: "React, Typescript, Docker, Kubernetes, NodeJS"
+            stack: "React, Typescript, Docker, Kubernetes, NodeJS, Java"
         },
         {
             company: "TomTom (Amsterdam, Netherlands)",
@@ -98,8 +104,8 @@ const data = {
             dateStart: "March 2021",
             dateEnd: "September 2023",
             description: [
-                "Designed and developed the core part of a new route planning single page application - https://plan.tomtom.com (public beta). It is a React PWA with pre-rendering, lazy loading, localization, hot module reloading etc",
-                "Started development of the new web SDK for TomTom public services and it's distribution infrastructure. ",
+                "Designed and developed the core part of a new route planning single page application - https://plan.tomtom.com. It is a React PWA with pre-rendering, lazy loading, localization, hot module reloading etc",
+                "Started development of the new web SDK for TomTom public services and it's distribution infrastructure",
                 "Designed and implemented a micro-frontend app for convenient exploration of numerous library demo apps",
                 "Implemented a microservice for authentication and it's infrastructure",
                 "Supported and improved AWS CI/CD system for https://plan.tomtom.com",

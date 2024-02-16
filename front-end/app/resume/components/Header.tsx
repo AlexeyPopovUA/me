@@ -9,7 +9,7 @@ type Props = {
 
 const Header = (props: Props) => {
     const websites = [props.user.Website, props.user.GitHub, props.user.LinkedIn];
-    const contacts = [props.user.Address, props.user.Email, props.user.Phone, `I speak ${props.contacts["I speak"]}`];
+    const contacts = [props.user.Address, props.user.Email, `I speak ${props.contacts["I speak"]}`];
 
     return (
         <div className="flex flex-col items-center">
