@@ -5,6 +5,7 @@ import {getProjectData, getProjectSEOContent, getProjectSlugs} from "@/lib/artic
 import Gallery from "@/components/image/gallery";
 import Tag from "@/components/primitive/Tag";
 import {ProjectSection} from "./project-section";
+import {readBlurredImageSrcPair} from "@/lib/image";
 
 export async function generateStaticParams() {
     const allSlugs = await getProjectSlugs();
@@ -27,10 +28,11 @@ type StaticProps = {
 
 export default async function Post(props: StaticProps) {
     const post = await getProjectData({slug: props.params.slug});
+    const imageCfgs = await Promise.all(post.gallery.map(image => readBlurredImageSrcPair({src: image})));
 
     return (<article className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4'>
             <h1>{post.title}</h1>
-            <Gallery images={post.gallery}/>
+            <Gallery imageCfgs={imageCfgs}/>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 sm:gap-x-8 gap-y-2 sm:gap-y-10">
                 <ProjectSection headerText="Description">
                     {post.description}

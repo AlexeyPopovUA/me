@@ -85,24 +85,22 @@ export const getInsideImageURL = (props: Props) => {
     return encodePayloadForUrl(taskToEncode);
 }
 
-export const generateLBSlides = (images: string[]): Slide[] => {
-    const width = 2048;
+export const generateLBSlides = (images: string[]) => {
+    const width = 2160;
+    const quality = 85;
 
-    // TODO Why???
-    // @ts-ignore
     return images.map((image) => ({
-        src: getContainImageURL({src: image, quality: 85, width}),
+        src: getContainImageURL({src: image, quality, width}),
         width,
-        srcSet: [2160, 1080, 640, 410, 344, 256].map((breakpoint) => ({
+        srcSet: [width, 1080, 640, 410, 344, 256].map((breakpoint) => ({
             width: breakpoint,
-            src: getContainImageURL({src: image, quality: 85, width: breakpoint})
+            src: getContainImageURL({src: image, quality, width: breakpoint})
         })),
     }));
 };
 
-export const getContainBlurredImageURL = (props: { src: string }) => {
-
-    const taskToEncode = {
+export const getContainBlurredImageURL = (props: { src: string }) =>
+    encodePayloadForUrl({
         ...getDefaultBucketProps(props.src),
         edits: {
             png: {
@@ -113,10 +111,7 @@ export const getContainBlurredImageURL = (props: { src: string }) => {
                 fit: "contain"
             }
         }
-    };
-
-    return encodePayloadForUrl(taskToEncode);
-}
+    })
 
 export const readImageAsBase64 = async (src: string) => {
     const blob = await (await fetch(src)).arrayBuffer();
@@ -125,7 +120,9 @@ export const readImageAsBase64 = async (src: string) => {
     return `data:image/png;base64,${url}`;
 }
 
+// @TODO Add output for final image URL
+// @TODO Add correspondence of src cropping method between the final image and the blurred one
 export const readBlurredImageSrcPair = async ({src}: { src: string; }) => ({
     src,
     blurDataURL: await readImageAsBase64(getContainBlurredImageURL({src}))
-})
+});

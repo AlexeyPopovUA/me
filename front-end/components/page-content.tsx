@@ -10,7 +10,8 @@ const mdPlugins: PluggableList = [
 ];
 
 const cmp = {
-    img: MDXImage
+    // Note, that MDXImage is a server component, therefore wrapped to match types
+    img: (props: any) => <MDXImage {...props} />
 };
 
 export const PageContent = (props: PropsWithChildren<any>) => <Markdown remarkPlugins={mdPlugins}

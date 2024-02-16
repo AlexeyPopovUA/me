@@ -1,6 +1,9 @@
+import React from "react";
+import Image from "next/image";
+
 import LatestArticles from "@/app/latest-articles";
-import ProfileImage from "@/components/image/profile-image";
 import {readBlurredImageSrcPair} from "@/lib/image";
+import {imageLoader} from "@/components/image/image-loader";
 
 export default async function Home() {
     const {src, blurDataURL} = await readBlurredImageSrcPair({src: "/pages/home/me-w-square-bg.jpg"});
@@ -11,7 +14,12 @@ export default async function Home() {
                 <section>
                     <div className="flex flex-col sm:flex-row">
                         <div className="mr-4 flex flex-row justify-center">
-                            <ProfileImage src={src} blurDataURL={blurDataURL}/>
+                            <Image className="rounded-full border-4 border-amber-500 aspect-square" loader={imageLoader}
+                                   placeholder="blur"
+                                   blurDataURL={blurDataURL}
+                                   quality={70}
+                                   width={300} height={300} src={src}
+                                   alt="My profile photo"/>;
                         </div>
                         <div className="flex flex-col justify-center">
                             <p className="mb-4 text-xl">Hi, I&apos;m Oleksii Popov</p>
