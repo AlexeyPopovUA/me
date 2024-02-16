@@ -16,10 +16,11 @@ export default async function Home() {
                         <div className="mr-4 flex flex-row justify-center">
                             <Image className="rounded-full border-4 border-amber-500 aspect-square" loader={imageLoader}
                                    placeholder="blur"
+                                   loading="eager"
                                    blurDataURL={blurDataURL}
                                    quality={70}
                                    width={300} height={300} src={src}
-                                   alt="My profile photo"/>;
+                                   alt="My profile photo"/>
                         </div>
                         <div className="flex flex-col justify-center">
                             <p className="mb-4 text-xl">Hi, I&apos;m Oleksii Popov</p>
