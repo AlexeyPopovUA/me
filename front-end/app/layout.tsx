@@ -1,17 +1,20 @@
 import React from "react";
 import type {Metadata} from 'next'
 import {Domine} from 'next/font/google'
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 import TopNavigationMenu from "@/components/navigation/top-navigation-menu";
 import Footer from "@/app/footer";
 
 import './globals.css';
 
+const NODE_ENV = process.env.NODE_ENV;
+
 const font = Domine({subsets: ['latin']});
 
 export const metadata: Metadata = {
     title: 'Oleksii Popov',
-    description: 'Personal portfolio and blog'
+    description: 'Personal portfolio and software development blog of Oleksii Popov'
 }
 
 export default function RootLayout({
@@ -28,6 +31,7 @@ export default function RootLayout({
         {children}
         <Footer/>
         </body>
+        {NODE_ENV === "production" ? <GoogleAnalytics gaId="G-DZVHV18EK4" /> : null}
         </html>
     )
 }
