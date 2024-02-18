@@ -1,6 +1,6 @@
 export interface PageSchema {
     title: string;
     slug: string;
-    date: string;
+    date: Date;
     description: string;
 }

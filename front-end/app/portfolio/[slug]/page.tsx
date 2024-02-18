@@ -6,6 +6,7 @@ import Gallery from "@/components/image/gallery";
 import Tag from "@/components/primitive/Tag";
 import {ProjectSection} from "./project-section";
 import {readBlurredImageSrcPair} from "@/lib/image";
+import content from "@/app/configuration/content";
 
 export async function generateStaticParams() {
     const allSlugs = await getProjectSlugs();
@@ -16,7 +17,8 @@ export async function generateMetadata({params}: any) {
     const post = await getProjectSEOContent({slug: params.slug});
 
     return {
-        title: post.title, description: post.description
+        title: `${post.title} - ${content.authorName}`,
+        description: post.description
     }
 }
 
@@ -34,6 +36,12 @@ export default async function Post(props: StaticProps) {
             <h1>{post.title}</h1>
             <Gallery imageCfgs={imageCfgs}/>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 sm:gap-x-8 gap-y-2 sm:gap-y-10">
+                <ProjectSection headerText="Type">
+                    {post.type}
+                </ProjectSection>
+                {post.company ? <ProjectSection headerText="Company">
+                    {post.company}
+                </ProjectSection> : null}
                 <ProjectSection headerText="Description">
                     {post.description}
                 </ProjectSection>
@@ -57,12 +65,6 @@ export default async function Post(props: StaticProps) {
                 </ProjectSection> : null}
                 {post.state ? <ProjectSection headerText="Project phase">
                     {post.state}
-                </ProjectSection> : null}
-                <ProjectSection headerText="Type">
-                    {post.type}
-                </ProjectSection>
-                {post.company ? <ProjectSection headerText="Company">
-                    {post.company}
                 </ProjectSection> : null}
             </div>
         </article>);

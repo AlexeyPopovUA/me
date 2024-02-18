@@ -1,10 +1,10 @@
 import {MetadataRoute} from 'next'
 
 import {
-    BASE_URL,
     getAllArticleSitemapData,
     getAllProjectSitemapData,
 } from "@/lib/articles";
+import environment from "@/app/configuration/environment";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const allArticlesPromise = getAllArticleSitemapData();
@@ -17,7 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         "blog",
         "portfolio",
         "resume"
-    ].map(page => ({url: `${BASE_URL}/${page}`, lastModified: new Date(), priority: 0.7, changeFrequency: "monthly"}));
+    ].map(page => ({url: `${environment.url}/${page}`, lastModified: new Date(), priority: 0.7, changeFrequency: "monthly"}));
 
     return [
         ...allPages,

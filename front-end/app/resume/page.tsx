@@ -9,6 +9,7 @@ import History from "@/app/resume/components/History";
 import OwnProjects from "@/app/resume/components/OwnProjects";
 import Education from "@/app/resume/components/Education";
 import data from "@/app/resume/data/data";
+import content from "@/app/configuration/content";
 
 const pageSlug = "resume";
 
@@ -26,7 +27,7 @@ export async function generateMetadata({params}: any) {
     const page = await getPost(params);
 
     return {
-        title: page.frontMatter.title,
+        title: `${page.frontMatter.title} - ${content.authorName}`,
         description: page.frontMatter.description
     }
 }

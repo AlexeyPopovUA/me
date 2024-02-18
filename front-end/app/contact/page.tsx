@@ -4,6 +4,7 @@ import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
 import {PageSchema} from "@/content/pages/contact/schema";
 import {getFullPageContent} from "@/lib/articles";
 import {PageContent} from "@/components/page-content";
+import content from "@/app/configuration/content";
 
 const pageSlug = "contact";
 
@@ -21,7 +22,7 @@ export async function generateMetadata({params}: any) {
     const page = await getPost();
 
     return {
-        title: page.frontMatter.title,
+        title: `${page.frontMatter.title} - ${content.authorName}`,
         description: page.frontMatter.description
     }
 }

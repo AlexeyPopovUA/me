@@ -12,11 +12,6 @@ const NODE_ENV = process.env.NODE_ENV;
 
 const font = Domine({subsets: ['latin']});
 
-export const metadata: Metadata = {
-    title: 'Oleksii Popov',
-    description: 'Personal portfolio and software development blog of Oleksii Popov'
-}
-
 export default function RootLayout({
                                        children,
                                    }: {

@@ -3,6 +3,7 @@ import React from "react";
 import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
 import {PageSchema} from "@/content/pages/portfolio/schema";
 import AllProjects from "@/app/portfolio/all-projects";
+import content from "@/app/configuration/content";
 
 const pageSlug = "portfolio";
 
@@ -20,7 +21,7 @@ export async function generateMetadata({params}: any) {
     const page = await getPost(params);
 
     return {
-        title: page.frontMatter.title,
+        title: `${page.frontMatter.title} - ${content.authorName}`,
         description: page.frontMatter.description
     }
 }

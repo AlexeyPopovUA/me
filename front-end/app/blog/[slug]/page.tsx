@@ -2,6 +2,7 @@ import React from "react";
 import {getArticleSEOContent, getArticlesSlugs, getFullArticleContent} from "@/lib/articles";
 import {ArticleContent} from "@/components/article-content";
 import GoTop from "@/components/ScrollUpButton";
+import content from "@/app/configuration/content";
 
 export async function generateStaticParams() {
     const allSlugs = await getArticlesSlugs();
@@ -12,7 +13,7 @@ export async function generateMetadata({params}: any) {
     const post = await getArticleSEOContent({slug: params.slug});
 
     return {
-        title: post.title,
+        title: `${post.title} - ${content.authorName}`,
         description: post.description
     }
 }
