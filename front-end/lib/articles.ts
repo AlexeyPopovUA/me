@@ -14,7 +14,7 @@ import {ArticlesSchema} from "@/content/articles/articles-schema";
 import {ProjectsSchema} from "@/content/projects/projects-schema";
 import {CommonPostSchema} from "@/lib/posts";
 
-export const BASE_URL = "https://me.oleksiipopov.com"
+export const BASE_URL = "https://oleksiipopov.com"
 
 const reverseTimeSorter = <T extends CommonPostSchema>(a: T, b: T) => b.date.getTime() - a.date.getTime();
 
