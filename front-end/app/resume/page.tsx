@@ -28,7 +28,8 @@ export async function generateMetadata({params}: any) {
 
     return {
         title: `${page.frontMatter.title} - ${content.authorName}`,
-        description: page.frontMatter.description
+        description: page.frontMatter.description,
+        keywords: page.frontMatter.keywords
     }
 }
 
