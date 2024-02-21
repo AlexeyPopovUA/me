@@ -11,7 +11,7 @@ import {PageSchema} from "@/content/pages/resume/schema";
 const pageSlug = "home";
 
 async function getPost({slug}: { slug: string }) {
-    const {frontMatter, content} = await readFrontMatterWithContent<PageSchema>(getPagePathByDirName(pageSlug));
+    const {frontMatter} = await readFrontMatterWithContent<PageSchema>(getPagePathByDirName(pageSlug));
 
     return {
         frontMatter,
