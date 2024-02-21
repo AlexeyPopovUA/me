@@ -13,6 +13,7 @@ import {
 import {ArticlesSchema} from "@/content/articles/articles-schema";
 import {ProjectsSchema} from "@/content/projects/projects-schema";
 import {CommonPostSchema} from "@/lib/posts";
+import {ensurePathSlash} from "@/lib/utils";
 import environment from "@/app/configuration/environment";
 
 const reverseTimeSorter = <T extends CommonPostSchema>(a: T, b: T) => b.date.getTime() - a.date.getTime();
@@ -132,7 +133,7 @@ export async function getAllArticleSitemapData(): Promise<MetadataRoute.Sitemap>
     // sort by date
     result.sort(reverseTimeSorter);
 
-    return result.map(item => ({url: `${environment.url}/blog/${item.slug}`, lastModified: new Date(), priority: 0.5, changeFrequency: "weekly"}));
+    return result.map(item => ({url: ensurePathSlash(`${environment.url}/blog/${item.slug}`), lastModified: new Date(), priority: 0.7, changeFrequency: "weekly"}));
 }
 
 export async function getAllProjects() {
@@ -164,5 +165,5 @@ export async function getAllProjectSitemapData(): Promise<MetadataRoute.Sitemap>
     // sort by date
     result.sort(reverseTimeSorter);
 
-    return result.map(item => ({url: `${environment.url}/portfolio/${item.slug}`, lastModified: new Date(), priority: 0.5, changeFrequency: "monthly"}));
+    return result.map(item => ({url: ensurePathSlash(`${environment.url}/portfolio/${item.slug}`), lastModified: new Date(), priority: 0.5, changeFrequency: "monthly"}));
 }

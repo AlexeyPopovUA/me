@@ -4,6 +4,7 @@ import {
     getAllArticleSitemapData,
     getAllProjectSitemapData,
 } from "@/lib/articles";
+import {ensurePathSlash} from "@/lib/utils";
 import environment from "@/app/configuration/environment";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -17,7 +18,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         "blog",
         "portfolio",
         "resume"
-    ].map(page => ({url: `${environment.url}/${page}`, lastModified: new Date(), priority: 0.7, changeFrequency: "monthly"}));
+    ].map(page =>
+        ({
+            url: `${environment.url}/${ensurePathSlash(page)}`,
+            lastModified: new Date(),
+            priority: 0.7,
+            changeFrequency: "weekly"
+        }));
 
     return [
         ...allPages,
