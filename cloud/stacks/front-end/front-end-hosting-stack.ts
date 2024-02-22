@@ -77,9 +77,9 @@ export class FrontEndHostingStack extends Stack {
 
         const distribution = new Distribution(this, `${project}-api-distribution`, {
             // comment contains the distribution name
-            comment: `${project}-main configuration distribution`,
+            comment: `${project}-main hosting distribution`,
             httpVersion: HttpVersion.HTTP2_AND_3,
-            priceClass: PriceClass.PRICE_CLASS_100,
+            priceClass: PriceClass.PRICE_CLASS_ALL,
             certificate: certificate,
             enableIpv6: true,
             minimumProtocolVersion: SecurityPolicyProtocol.TLS_V1_2_2021,
@@ -95,7 +95,7 @@ export class FrontEndHostingStack extends Stack {
                 cachePolicy: cachePolicy,
                 cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
                 compress: true,
-                viewerProtocolPolicy: ViewerProtocolPolicy.HTTPS_ONLY,
+                viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                 origin: new S3Origin(s3Bucket, {
                     originAccessIdentity: originAccessIdentity,
                     originShieldRegion: region,
