@@ -6,6 +6,7 @@ import configuration from "../cfg/configuration";
 import {ServiceStack} from '../stacks/service/service-stack';
 import {FrontEndHostingStack} from "../stacks/front-end/front-end-hosting-stack";
 import {ImageServiceProxyStack} from "../stacks/front-end/image-service-proxy-stack";
+import {OldBlogRedirectionStack} from "../stacks/front-end/old-blog-redirection-stack";
 
 const app = new App();
 
@@ -17,6 +18,13 @@ new ServiceStack(app, `${configuration.COMMON.project}-service`, {
 });
 
 new FrontEndHostingStack(app, `${configuration.COMMON.project}-front-end-hosting`, {
+    env: {
+        account: configuration.COMMON.account,
+        region: configuration.COMMON.region
+    }
+});
+
+new OldBlogRedirectionStack(app, `${configuration.COMMON.project}-old-blog-hosting`, {
     env: {
         account: configuration.COMMON.account,
         region: configuration.COMMON.region

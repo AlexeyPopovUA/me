@@ -9,6 +9,7 @@ export default {
         hostedZoneID: process.env?.HOSTED_ZONE_ID || "",
         hostedZoneName: "oleksiipopov.com",
         staticDomainName: "oleksiipopov.com",
+        oldBlogStaticDomainName: "blog.oleksiipopov.com",
         serviceDomainName: "service.oleksiipopov.com",
         imageProxyDomainName: "images.oleksiipopov.com",
         imageProxyOriginDomain: "dqdoi2i9o4m2u.cloudfront.net"
