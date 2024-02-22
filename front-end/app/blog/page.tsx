@@ -3,25 +3,27 @@ import React from "react";
 import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
 import {PageSchema} from "@/content/pages/blog/schema";
 import AllPosts from "@/app/blog/all-posts";
+import content from "@/app/configuration/content";
 
 const pageSlug = "blog";
 
-async function getPost() {
+async function getPost({slug}: { slug: string }) {
     const {frontMatter, content} = await readFrontMatterWithContent<PageSchema>(getPagePathByDirName(pageSlug));
 
     return {
         frontMatter,
-        slug: pageSlug,
+        slug,
         content
     }
 }
 
 export async function generateMetadata({params}: any) {
-    const page = await getPost();
+    const page = await getPost(params);
 
     return {
-        title: page.frontMatter.title,
-        description: page.frontMatter.description
+        title: `${page.frontMatter.title} - ${content.authorName}`,
+        description: page.frontMatter.description,
+        keywords: page.frontMatter.keywords
     }
 }
 

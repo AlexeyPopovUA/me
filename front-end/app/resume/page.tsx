@@ -33,7 +33,7 @@ export async function generateMetadata({params}: any) {
     }
 }
 
-export default async function Post({params}: any) {
+export default async function Post() {
     const renderData = useMemo(() => data, []);
 
     return (
