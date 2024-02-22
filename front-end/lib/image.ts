@@ -1,5 +1,3 @@
-import type {Slide} from "yet-another-react-lightbox";
-
 const BASE_URL = "https://images.oleksiipopov.com";
 const BUCKET = "serverless-image-handler-image-source";
 const BASE_PATH = "me";
@@ -33,24 +31,6 @@ const encodePayloadForUrl = (configuration: {
     [key: string]: unknown
 }) => `${BASE_URL}/${btoa(JSON.stringify(configuration))}`;
 
-export const getCoverImageURL = (props: Props) => {
-    const {src, width, height, quality = DEFAULT_IMAGE_QUALITY} = props;
-
-    const taskToEncode = {
-        ...getDefaultBucketProps(src),
-        edits: {
-            ...getDefaultImageFormatProps(quality),
-            resize: {
-                width,
-                height,
-                fit: "cover"
-            }
-        }
-    };
-
-    return encodePayloadForUrl(taskToEncode);
-}
-
 export const getContainImageURL = (props: Props) => {
     const {src, width, quality = DEFAULT_IMAGE_QUALITY} = props;
 
@@ -61,23 +41,6 @@ export const getContainImageURL = (props: Props) => {
             resize: {
                 width,
                 fit: "contain"
-            }
-        }
-    };
-
-    return encodePayloadForUrl(taskToEncode);
-}
-
-export const getInsideImageURL = (props: Props) => {
-    const {src, width, quality = DEFAULT_IMAGE_QUALITY} = props;
-
-    const taskToEncode = {
-        ...getDefaultBucketProps(src),
-        edits: {
-            ...getDefaultImageFormatProps(quality),
-            resize: {
-                width,
-                fit: "inside"
             }
         }
     };
