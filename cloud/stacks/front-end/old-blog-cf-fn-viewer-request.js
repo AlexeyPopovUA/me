@@ -8,7 +8,7 @@ var oldURLsMapping = {
     "/2023/07/03/serving-environment-specific-configurations-to-web-applications/": "https://oleksiipopov.com/blog/serving-environment-specific-configurations-to-web-applications/",
     "/2023/04/19/simple-static-web-hosting-aws-infrastructure-with-protected-dev-environment/": "https://oleksiipopov.com/blog/simple-static-web-hosting-aws-infrastructure-with-protected-dev-environment/",
     "/2023/03/09/feature-branches-approach-in-ci-cd-of-npm-libraries/": "https://oleksiipopov.com/blog/feature-branches-approach-in-ci-cd-of-npm-libraries/",
-    "otherwise": "https://oleksiipopov.com/404/"
+    "/": "https://oleksiipopov.com/"
 }
 
 function handler(event) {
@@ -57,7 +57,11 @@ function handler(event) {
         } else {
             return {
                 statusCode: 404,
-                statusDescription: "Page not found"
+                statusDescription: "Page not found",
+                body: {
+                    encoding: "text",
+                    data: "<!DOCTYPE html><html lang='en'><body><p>404 Error. Page not found</p></body></html>"
+                }
             };
         }
     }

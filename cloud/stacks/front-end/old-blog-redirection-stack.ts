@@ -58,7 +58,7 @@ export class OldBlogRedirectionStack extends Stack {
             defaultTtl: Duration.days(30)
         });
 
-        /*const distribution = new Distribution(this, `${project}-old-blog-distribution`, {
+        const distribution = new Distribution(this, `${project}-old-blog-distribution`, {
             // comment contains the distribution name
             comment: `${project}-main old-blog distribution`,
             httpVersion: HttpVersion.HTTP2_AND_3,
@@ -87,15 +87,15 @@ export class OldBlogRedirectionStack extends Stack {
                     }
                 ]
             }
-        });*/
+        });
 
-        // new CnameRecord(this, `${project}-record-cname-all`, {
-        //     recordName: `*.${configuration.HOSTING.oldBlogStaticDomainName}.`,
-        //     zone: hostedZone,
-        //     domainName: configuration.HOSTING.oldBlogStaticDomainName
-        // });
+        new CnameRecord(this, `${project}-record-cname-all`, {
+            recordName: `*.${configuration.HOSTING.oldBlogStaticDomainName}.`,
+            zone: hostedZone,
+            domainName: configuration.HOSTING.oldBlogStaticDomainName
+        });
 
-        /*new ARecord(this, `${project}-record-a`, {
+        new ARecord(this, `${project}-record-a`, {
             recordName: configuration.HOSTING.oldBlogStaticDomainName,
             zone: hostedZone,
             target: RecordTarget.fromAlias(new CloudFrontTarget(distribution))
@@ -105,6 +105,6 @@ export class OldBlogRedirectionStack extends Stack {
             recordName: configuration.HOSTING.oldBlogStaticDomainName,
             zone: hostedZone,
             target: RecordTarget.fromAlias(new CloudFrontTarget(distribution))
-        });*/
+        });
     }
 }
