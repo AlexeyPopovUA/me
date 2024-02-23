@@ -5,6 +5,7 @@ import {PageSchema} from "@/content/pages/contact/schema";
 import {getFullPageContent} from "@/lib/articles";
 import {PageContent} from "@/components/page-content";
 import content from "@/app/configuration/content";
+import {getOGImageURL} from "@/lib/image";
 
 const pageSlug = "contact";
 
@@ -18,15 +19,19 @@ async function getPost() {
     }
 }
 
-export async function generateMetadata({params}: any) {
+export async function generateMetadata() {
     const page = await getPost();
+    const ogImage = getOGImageURL({src: "/pages/home/me-w-square-bg.jpg"});
 
     return {
         title: `${page.frontMatter.title} - ${content.authorName}`,
         description: page.frontMatter.description,
         openGraph: {
             title: `${page.frontMatter.title} - ${content.authorName}`,
-            description: page.frontMatter.description
+            description: page.frontMatter.description,
+            images: [
+                ogImage
+            ]
         },
     }
 }

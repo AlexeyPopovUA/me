@@ -3,6 +3,7 @@ import {getArticleSEOContent, getArticlesSlugs, getFullArticleContent} from "@/l
 import {ArticleContent} from "@/components/article-content";
 import GoTop from "@/components/ScrollUpButton";
 import content from "@/app/configuration/content";
+import {getOGImageURL} from "@/lib/image";
 
 export async function generateStaticParams() {
     const allSlugs = await getArticlesSlugs();
@@ -11,14 +12,18 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({params}: any) {
     const post = await getArticleSEOContent({slug: params.slug});
+    const ogImage = getOGImageURL({src: post.thumbnail});
 
     return {
         title: `${post.title} - ${content.authorName}`,
         description: post.description,
         openGraph: {
             title: `${post.title} - ${content.authorName}`,
-            description: post.description
-        },
+            description: post.description,
+            images: [
+                ogImage
+            ]
+        }
     }
 }
 

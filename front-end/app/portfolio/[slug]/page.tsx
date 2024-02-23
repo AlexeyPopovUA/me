@@ -5,7 +5,7 @@ import {getProjectData, getProjectSEOContent, getProjectSlugs} from "@/lib/artic
 import Gallery from "@/components/image/gallery";
 import Tag from "@/components/primitive/Tag";
 import {ProjectSection} from "./project-section";
-import {readBlurredImageSrcPair} from "@/lib/image";
+import {getOGImageURL, readBlurredImageSrcPair} from "@/lib/image";
 import content from "@/app/configuration/content";
 
 export async function generateStaticParams() {
@@ -15,14 +15,18 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({params}: any) {
     const post = await getProjectSEOContent({slug: params.slug});
+    const ogImage = getOGImageURL({src: post.thumbnail});
 
     return {
         title: `${post.title} - ${content.authorName}`,
         description: post.description,
         openGraph: {
             title: `${post.title} - ${content.authorName}`,
-            description: post.description
-        },
+            description: post.description,
+            images: [
+                ogImage
+            ]
+        }
     }
 }
 

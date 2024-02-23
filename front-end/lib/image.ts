@@ -32,7 +32,7 @@ const encodePayloadForUrl = (configuration: {
 }) => `${BASE_URL}/${btoa(JSON.stringify(configuration))}`;
 
 export const getContainImageURL = (props: Props) => {
-    const {src, width, quality = DEFAULT_IMAGE_QUALITY} = props;
+    const {src, width, height, quality = DEFAULT_IMAGE_QUALITY} = props;
 
     const taskToEncode = {
         ...getDefaultBucketProps(src),
@@ -40,6 +40,28 @@ export const getContainImageURL = (props: Props) => {
             ...getDefaultImageFormatProps(quality),
             resize: {
                 width,
+                height,
+                fit: "contain"
+            }
+        }
+    };
+
+    return encodePayloadForUrl(taskToEncode);
+}
+
+type OGImageURLProps = {
+    src: string;
+};
+export const getOGImageURL = (props: OGImageURLProps) => {
+    const {src} = props;
+
+    const taskToEncode = {
+        ...getDefaultBucketProps(src),
+        edits: {
+            ...getDefaultImageFormatProps(90),
+            resize: {
+                width: 1200,
+                height: 630,
                 fit: "contain"
             }
         }

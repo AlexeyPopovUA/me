@@ -4,6 +4,7 @@ import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
 import {PageSchema} from "@/content/pages/portfolio/schema";
 import AllProjects from "@/app/portfolio/all-projects";
 import content from "@/app/configuration/content";
+import {getOGImageURL} from "@/lib/image";
 
 const pageSlug = "portfolio";
 
@@ -19,6 +20,7 @@ async function getPost({slug}: { slug: string }) {
 
 export async function generateMetadata({params}: any) {
     const page = await getPost(params);
+    const ogImage = getOGImageURL({src: "/pages/home/me-w-square-bg.jpg"});
 
     return {
         title: `${page.frontMatter.title} - ${content.authorName}`,
@@ -26,8 +28,10 @@ export async function generateMetadata({params}: any) {
         openGraph: {
             title: `${page.frontMatter.title} - ${content.authorName}`,
             description: page.frontMatter.description,
-                images: ['/og-image.png']
-        },
+            images: [
+                ogImage
+            ]
+        }
     }
 }
 
