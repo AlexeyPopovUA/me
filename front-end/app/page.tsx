@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import LatestArticles from "@/app/latest-articles";
-import {readBlurredImageSrcPair} from "@/lib/image";
+import {getContainImageURL, readBlurredImageSrcPair} from "@/lib/image";
 import {imageLoader} from "@/components/image/image-loader";
 import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
 import {PageSchema} from "@/content/pages/resume/schema";
@@ -21,6 +21,7 @@ async function getPost({slug}: { slug: string }) {
 
 export async function generateMetadata({params}: any) {
     const page = await getPost(params);
+    const ogImage = getContainImageURL({src: "/pages/home/me-w-square-bg.jpg", width: 1200, height: 630, quality: 80});
 
     return {
         title: page.frontMatter.title,
@@ -28,7 +29,10 @@ export async function generateMetadata({params}: any) {
         keywords: page.frontMatter.keywords,
         openGraph: {
             title: page.frontMatter.title,
-            description: page.frontMatter.description
+            description: page.frontMatter.description,
+            images: [
+                ogImage
+            ]
         },
     }
 }
