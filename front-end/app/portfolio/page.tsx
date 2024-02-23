@@ -22,7 +22,12 @@ export async function generateMetadata({params}: any) {
 
     return {
         title: `${page.frontMatter.title} - ${content.authorName}`,
-        description: page.frontMatter.description
+        description: page.frontMatter.description,
+        openGraph: {
+            title: `${page.frontMatter.title} - ${content.authorName}`,
+            description: page.frontMatter.description,
+                images: ['/og-image.png']
+        },
     }
 }
 

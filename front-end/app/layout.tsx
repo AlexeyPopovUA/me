@@ -5,12 +5,22 @@ import { GoogleAnalytics } from '@next/third-parties/google'
 
 import TopNavigationMenu from "@/components/navigation/top-navigation-menu";
 import Footer from "@/app/footer";
+import environment from "@/app/configuration/environment";
 
 import './globals.css';
 
 const NODE_ENV = process.env.NODE_ENV;
 
 const font = Domine({subsets: ['latin']});
+
+export async function generateMetadata() {
+    return {
+        metadataBase: new URL(environment.url),
+        alternates: {
+            canonical: '/'
+        }
+    }
+}
 
 export default function RootLayout({
                                        children,

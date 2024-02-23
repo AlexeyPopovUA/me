@@ -29,7 +29,11 @@ export async function generateMetadata({params}: any) {
     return {
         title: `${page.frontMatter.title} - ${content.authorName}`,
         description: page.frontMatter.description,
-        keywords: page.frontMatter.keywords
+        keywords: page.frontMatter.keywords,
+        openGraph: {
+            title: `${page.frontMatter.title} - ${content.authorName}`,
+            description: page.frontMatter.description
+        },
     }
 }
 
