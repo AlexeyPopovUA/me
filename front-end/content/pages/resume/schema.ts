@@ -3,5 +3,5 @@ export interface PageSchema {
     slug: string;
     date: Date;
     description: string;
-    keywords: string;
+    keywords: string[];
 }
