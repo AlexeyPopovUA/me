@@ -45,7 +45,7 @@ const NavMenuMobile = ({items}: { items: { title: string; link: string; }[] }) =
         </nav>
         <div className={menuCls}>
             <div className="flex flex-row w-full items-center justify-center h-1/4">
-                    <Link href="/" className={clsx(titleItemCls, "block", "flex", "flex-col", "items-center")}>
+                    <Link href="/" className={clsx(titleItemCls, "block", "flex", "flex-col", "items-center")} onClick={handleMenuClick}>
                         <div className="text-2xl mb-2">Oleksii Popov</div>
                         <div className="text-xl text-gray-500">Software development blog</div>
                     </Link>
