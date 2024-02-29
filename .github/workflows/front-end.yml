@@ -47,7 +47,7 @@ jobs:
         run: npm run build -w front-end
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: eu-west-1
           role-to-assume: ${{ vars.AWS_AUTH_ROLE }}
