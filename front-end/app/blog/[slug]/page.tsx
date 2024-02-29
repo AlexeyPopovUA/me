@@ -1,4 +1,5 @@
 import React from "react";
+
 import {getArticleSEOContent, getArticlesSlugs, getFullArticleContent} from "@/lib/articles";
 import {ArticleContent} from "@/components/article-content";
 import GoTop from "@/components/ScrollUpButton";
