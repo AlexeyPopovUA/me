@@ -16,13 +16,58 @@ keywords:
 
 ## Why
 
-Before learning about Next.js I was pretty much happy with Gatsby.js and the way it offered you support of responsive images for an exported static website. You should not think how and where those images are resized during the build. You simply get all processed images in the distribution directory after the build, which should be uploaded to the storage of static web hosting. That's it. Gatsby takes care of the rest - creation of resized versions, injecting image URLs with different sizes into HTML code, adding tiny blurred versions for loading state. Everything was fine until I realized, that Gatsby.js becomes less popular and looses the maintenance activity. Next.js became a standard for many web projects and often required in job vacancies. I planned to develop a new personal website, so decided to do it with Next.js and learn a new popular framework at the same time. The biggest surprise was, that you cannot get responsive images that easy in an exported static website. Either non-optimized images or remote ones have to be used.
+Before learning about Next.js I was pretty much happy with Gatsby.js and the way it offered you support of responsive images for an exported static website. You should not think how and where those images are optimized. You simply get all processed images in the distribution directory after the build, which should be uploaded to the storage of static web hosting. That's it. Gatsby takes care of the rest - creation of resized versions, injecting image URLs with different sizes into HTML code, adding tiny blurred versions for loading state.
+
+Next.js became a standard for many web projects and currently often required in job vacancies. I planned to develop a new personal website, so decided to do it with Next.js and learn a new popular framework at the same time. Next.js framework offers several types of build artifacts, supposed to work on a permanent Node.js
+server, edge, lambdas or CDN (static HTML). The biggest surprise was, that you cannot get responsive images that easy in an exported static website. Either non-optimized local images or remotely optimized ones have to be used.
 
 Long story short. This article offers one of many ways to get a self-hosted image optimization service that provides an exported static Next.js website with images and blurred versions of those.
 
 ## How
 
-The cheapest image optimization solution that I could completely control and reverse engineer in case of need was [Serverless Image Handler on AWS](https://aws.amazon.com/solutions/implementations/serverless-image-handler/), available in  [AWS Solutions Library](https://aws.amazon.com/solutions/).
+In case if you need a completely static website, mostly rendered on build time and partially on a client, then you typically use  the ```output: 'export'``` option of ```next.config.mjs``` configuration file. See [the details here](https://nextjs.org/docs/app/building-your-application/deploying/static-exports).  This mode has [restrictions](https://nextjs.org/docs/app/building-your-application/deploying/static-exports#unsupported-features), one of which is [unsupported image optimization](https://nextjs.org/docs/app/building-your-application/deploying/static-exports#image-optimization). Basically, either you use local pre-processed images or a remote optimization service. Images should be loaded with a custom "loader", which "knows" how to get a correct URL of an image, based on its size, quality and path. Obviously, maintaining multiple sizes of the same image locally in  a blog-like project is a nightmare. So, the remote optimization service is a way.
+
+One of the cheapest image optimization solutions, that is already implemented by someone else, and could be completely controlled and [reviewed](https://github.com/aws-solutions/serverless-image-handler/tree/main) by a developer, is [Serverless Image Handler on AWS](https://aws.amazon.com/solutions/implementations/serverless-image-handler/), available in  [AWS Solutions Library](https://aws.amazon.com/solutions/). It offers different image optimization and modification techniques. Resizing, cropping and automatic serving of WEBP, PNG and JPEG formats - are just a few possibilities of the service. Only the [Sharp](https://sharp.pixelplumbing.com/) library is the limit. Also, this is an open code solution, one can deploy to the personal AWS account, using Cloud Formation template. Image resizing agent is a lambda, but not a permanently running Node.js server, that makes it extremely cheap in case of properly setup hosting caching policy.
+
+Serverless Image Handler from AWS Solutions does not support assigning a custom domain name and set up many other things. It is basically an example of a solution, that is considered to be a good one. And it definitely is! So we need to apply a bit more effort and create own CloudFront distribution with Caching policy, Cache Control response headers and Content Security Policy and delegation of all request to the original distribution.
+
+As a bonus point, we will add tiny blurry versions of images to HTML files, so we have smth rendered on the page immediately, while browser is busy with loading a proper image taken from an image ```srcset```.
+
+## tl;dr Just show me the code!
+
+TODO GitHub repo
+TODO URL of the deployed static app
+
+## Example implementation
+
+
+
+### Image optimization service
+
+
+
+#### Service deployment and configuration
+
+
+
+#### Proxy CDN for a normal domain and caching control
+
+
+
+### Simple Next.js project
+
+
+
+#### Creation of a static website with Next.js
+
+
+
+#### Adding responsive images
+
+
+
+#### Using tiny blurred  images in HTML files
+
 
 
 ## Conclusion
