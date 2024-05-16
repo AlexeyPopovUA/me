@@ -20,7 +20,7 @@ export class DemoConstruct extends Construct {
 
         this.lambda = new NodejsFunction(this, `${props.project}-${props.name}-lambda`, {
             handler: "handler",
-            runtime: Runtime.NODEJS_18_X,
+            runtime: Runtime.NODEJS_20_X,
             entry: resolve(process.cwd(), "../back-end/demo/src/lambda.ts"),
             timeout: Duration.seconds(10),
             logRetention: RetentionDays.ONE_DAY,

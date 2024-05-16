@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/nodejs:18 as base-node
+FROM public.ecr.aws/lambda/nodejs:20 as base-node
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
