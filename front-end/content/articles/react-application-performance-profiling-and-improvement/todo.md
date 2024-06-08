@@ -1,5 +1,8 @@
 # TODO List
 
+## Hints
+* https://www.developerway.com/posts/i-tried-react-compiler
+
 - [ ] Idea of the article
     * test different component combinations with a local state handler with help of a test React18/NextJS14 static web app
     * see, what happens with React 19RC/NextJS 15RC and the new compiler
