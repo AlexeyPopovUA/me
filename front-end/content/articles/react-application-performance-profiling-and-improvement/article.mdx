@@ -32,6 +32,16 @@ Purpose of this article is to explore a tiny peace of this topic, dedicated to r
 
 React components could be combined in an app in form of tree for rendering:
 
+```mermaid
+flowchart TB;
+
+id1((ROOT)) --> A;
+A --> A1 --> A11
+id1((ROOT)) --> B --> B1 --> B11;
+B --> B2;
+B1 --> B12;
+B1 --> B13;
+```
 TODO Image of a component tree
 
 Many of these elements define nested ones as children or properties. Those can share common properties and state. The way we define the structure, defines the rendering scope and it's frequency. Lets review cases, which cause parts of an app to re-render:
@@ -40,7 +50,7 @@ Many of these elements define nested ones as children or properties. Those can s
 * Context changes
 * Hook changes
 
-In this article we will pay special attention to the first 2, that represent the influence of components composition on the rendering performance.
+In this article we will pay special attention to the simplest first 2, that represent the influence of components composition on the rendering performance.
 
 As a typical situation for all examples, we will consider a component, that contains local state and shared click handler. Click handler is supposed to modify the local state. This component also renders nested components. And this is what we want to check - what renders when the state changes and how to reduce these activities.
 
