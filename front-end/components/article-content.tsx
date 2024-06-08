@@ -7,17 +7,21 @@ import rehypeHighlight from "rehype-highlight";
 import langXml from 'highlight.js/lib/languages/xml';
 import langJson from 'highlight.js/lib/languages/json';
 import langPlaintext from 'highlight.js/lib/languages/plaintext';
+import rehypeRaw from "rehype-raw";
 
 import "highlight.js/styles/github.css";
 
 import MDXImage from "@/components/image/mdx-image";
+import {remarkMermaid} from "@/lib/RemarkMermaidPlugin";
 
 const mdPlugins: PluggableList = [
+    [remarkMermaid],
     [emoji, {accessible: true, emoticon: false}],
     [remarkUnwrapImages]
 ];
 
 const rhPlugins: PluggableList = [
+    [rehypeRaw],
     [rehypeHighlight, {languages: {http: langXml, json: langJson, plaintext: langPlaintext}}]
 ]
 
@@ -26,6 +30,8 @@ const cmp = {
     img: (props: any) => <MDXImage {...props} />
 };
 
-export const ArticleContent = (props: PropsWithChildren<any>) => <Markdown remarkPlugins={mdPlugins}
-                                                                           rehypePlugins={rhPlugins}
-                                                                           components={cmp}>{props.children}</Markdown>;
+export const ArticleContent = (props: PropsWithChildren<any>) => <>
+    <Markdown remarkPlugins={mdPlugins}
+              rehypePlugins={rhPlugins}
+              components={cmp}>{props.children}</Markdown>
+</>;

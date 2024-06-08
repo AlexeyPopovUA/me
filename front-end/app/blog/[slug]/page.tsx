@@ -5,6 +5,7 @@ import {ArticleContent} from "@/components/article-content";
 import GoTop from "@/components/ScrollUpButton";
 import content from "@/app/configuration/content";
 import {getOGImageURL} from "@/lib/image";
+import {MermaidInitializer} from "@/lib/RemarkMermaidPlugin";
 
 export async function generateStaticParams() {
     const allSlugs = await getArticlesSlugs();
@@ -43,6 +44,7 @@ export default async function Post(props: StaticProps) {
             <h1>{post.title}</h1>
             <ArticleContent>{post.content}</ArticleContent>
             <GoTop/>
+            <MermaidInitializer />
         </article>
     );
 }
