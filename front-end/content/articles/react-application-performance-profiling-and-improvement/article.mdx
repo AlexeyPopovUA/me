@@ -26,7 +26,7 @@ keywords:
 
 The topic of performance in web development is much wider than reflection of personal feelings. It is a complex of analytical and software development technics, that has a real influence on business metrics. If you need a proof, start from the article ["Why speed matters"](https://web.dev/learn/performance/why-speed-matters) from the Chrome Developer Relations team.
 
-Purpose of this article is to explore a tiny peace of this topic, dedicated to rendering of a React application of different components compositions. Lets check what causes application parts to re-render and what helps to reduce it. As a bonus section, we will see the impact of the latest release candidate React 19 and it's brand new compiler.
+Purpose of this article is to explore a tiny piece of this topic, dedicated to rendering of a React application of different components compositions. Let's check what causes application parts to re-render and what helps to reduce it. As a bonus section, we will see the impact of the latest release candidate React 19, and it's brand-new compiler.
 
 ## React components composition
 
@@ -42,9 +42,8 @@ B --> B2;
 B1 --> B12;
 B1 --> B13;
 ```
-TODO Image of a component tree
 
-Many of these elements define nested ones as children or properties. Those can share common properties and state. The way we define the structure, defines the rendering scope and it's frequency. Lets review cases, which cause parts of an app to re-render:
+Many of these elements define nested ones as children or properties. Those can share common properties and state. The way we define the structure, defines the rendering scope and it's frequency. Let's review cases, which cause parts of an app to re-render:
 * Parent renders
 * State changes
 * Context changes
@@ -63,6 +62,10 @@ So the next situations could be modelled:
 ## Web application with examples
 
 I have implemented a simple multi page NextJS application. Each page contains a components composition example.
+
+The typical example page consists of an ```<ExampleBox />``` container, that has local state. ExampleBox renders children, that may or may not take properties from their parent, like state, callbacks etc. One child has a handler that modifies the state and triggers re-rendering of ExampleBox.
+
+![Typical example page](/articles/react-performance/generic-page.png "Typical example page")
 
 ## Conclusion
 
