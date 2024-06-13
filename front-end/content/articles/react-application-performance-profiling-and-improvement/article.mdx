@@ -6,54 +6,133 @@ draft: true
 description: React application performance profiling and improvement
 thumbnail: /articles/feature-branches-npm/feature-branches-for-NPM-modules.png
 tags:
-    - React
-    - Performance
-    - Profiling
+  - React
+  - Performance
+  - Profiling
 keywords:
-    - React
-    - React 18
-    - React 19
-    - React compiler
-    - NextJS
-    - JavaScript
-    - TypeScript
-    - Performance
-    - Performance profiling
-    - Profiling
+  - React
+  - React 18
+  - React 19
+  - React compiler
+  - NextJS
+  - JavaScript
+  - TypeScript
+  - Performance
+  - Performance profiling
+  - Profiling
 ---
 
 ## Performance is a thing
 
-The topic of performance in web development is much wider than reflection of personal feelings. It is a complex of analytical and software development technics, that has a real influence on business metrics. If you need a proof, start from the article ["Why speed matters"](https://web.dev/learn/performance/why-speed-matters) from the Chrome Developer Relations team.
+The topic of performance in web development is much wider than reflection of personal feelings. It is a complex of
+analytical and software development technics, that has a real influence on business metrics. If you need a proof, have a
+look at the short article ["Why speed matters"](https://web.dev/learn/performance/why-speed-matters) from the Chrome
+Developer Relations team.
 
-Purpose of this article is to explore a tiny piece of this topic, dedicated to rendering of a React application of different components compositions. Let's check what causes application parts to re-render and what helps to reduce it. As a bonus section, we will see the impact of the latest release candidate React 19, and it's brand-new compiler.
+Purpose of this article is to explore a tiny piece of this topic, dedicated to rendering of a React application of
+different components compositions. Let's check what causes application parts to re-render and what helps to reduce it.
+As a bonus section, we will see the impact of the latest release candidate React 19, and it's brand-new compiler.
+
+## When performance improvement is necessary?
+
+### My application exists
+
+Before diving into this topic deeper, lets try to be honest with ourselves. Is performance the biggest issue now, or
+you're just bored?
+
+To help you find this out, I would ask you next questions:
+
+- Does your team have time to speak about performance, or they are completely swamped in other high priority issues?
+  Please, start from those. It is either too early or too late. You're probably burning already
+
+- Does it take seconds for your website hosting to serve the small index.html file? Please start from that
+
+- Is your page a big fat 50MB collection of html, scripts, styles and images? Please start from that
+
+We need to be practical. If the biggest performance issue of you web application is actually in its responsiveness
+during the visitor workflow, then this article might be useful.
+
+### I start a new one
+
+That's a luxury! Performance can be a permanent part of you thinking process, not necessary an emergency measure.
+Rendering effectiveness of React applications in particular is strongly dependent on its structure. So keeping it in
+mind, it is easier to avoid common problems.
+
+### Long story short
+
+Fixing React application structure may give you the biggest performance boost, if other problems have a smaller impact.
 
 ## React components composition
 
 React components could be combined in an app in form of tree for rendering:
 
 ```mermaid
-flowchart TB;
-
-id1((ROOT)) --> A;
-A --> A1 --> A11
-id1((ROOT)) --> B --> B1 --> B11;
-B --> B2;
-B1 --> B12;
-B1 --> B13;
+flowchart TB
+    idRoot((ROOT)) --> id((A));
+    id((A)) --> id1((A1)) --> id11((A11))
+    idRoot((ROOT)) --> idB((B))
+    idB((B)) --> idB1((B1))
+    idB((B)) --> idB2((B2));
+    idB1((B1)) --> idB11((B11));
+    idB1((B1)) --> idB12((B12));
+    idB1((B1)) --> idB13((B13));
 ```
 
-Many of these elements define nested ones as children or properties. Those can share common properties and state. The way we define the structure, defines the rendering scope and it's frequency. Let's review cases, which cause parts of an app to re-render:
+Many of these elements define nested ones as children or properties. Those can share common properties and state. The
+way we define the structure, defines the **rendering scope** and it's **frequency**. Let's review cases, which cause
+parts of an app to re-render:
+
 * Parent renders
 * State changes
 * Context changes
 * Hook changes
 
-In this article we will pay special attention to the simplest first 2, that represent the influence of components composition on the rendering performance.
+In this article we will pay special attention to the simplest first 2, that represent the influence of components
+composition on the rendering performance.
 
-As a typical situation for all examples, we will consider a component, that contains local state and shared click handler. Click handler is supposed to modify the local state. This component also renders nested components. And this is what we want to check - what renders when the state changes and how to reduce these activities.
+So, if parent renders, then it's children do it as well:
+
+```mermaid
+flowchart TB
+    classDef renders fill: #fbd89d, stroke: #f59e0b, stroke-width: 2px
+    idB1:::renders
+    idB11:::renders
+    idB12:::renders
+    idB13:::renders
+    idRoot((ROOT)) --> idA((A));
+    idA((A)) --> idA1((A1)) --> idA11((A11))
+    idRoot((ROOT)) --> idB((B))
+    idB((B)) --> idB1((B1 renders))
+    idB((B)) --> idB2((B2));
+    idB1((B1 renders)) -- render --> idB11((B11));
+    idB1((B1 renders)) -- render --> idB12((B12));
+    idB1((B1 renders)) -- render --> idB13((B13));
+```
+
+If component state changes, it renders:
+
+```mermaid
+flowchart TB
+    classDef renders fill: #fbd89d, stroke: #f59e0b, stroke-width: 2px, white-space: normal, text-align: center
+    idA1:::renders
+    idA1:::bla
+    idA11:::renders
+    idRoot((ROOT)) --> idA((A));
+    idA((A)) --> idA1((A1&nbspstate updated)) -- render --> idA11((A11))
+    idRoot((ROOT)) --> idB((B))
+    idB((B)) --> idB1((B1))
+    idB((B)) --> idB2((B2));
+    idB1((B1)) --> idB11((B11));
+    idB1((B1)) --> idB12((B12));
+    idB1((B1)) --> idB13((B13));
+```
+
+As a typical situation for all examples, we will consider a component, that contains local state and shared click
+handler. Click handler is supposed to modify the local state. This component also renders nested components. And this is
+what we want to check - what renders when the state changes and how to reduce these activities.
 
 So the next situations could be modelled:
+
 * re-rendering of siblings
 * sharing callbacks
 * sharing properties
@@ -63,9 +142,28 @@ So the next situations could be modelled:
 
 I have implemented a simple multi page NextJS application. Each page contains a components composition example.
 
-The typical example page consists of an ```<ExampleBox />``` container, that has local state. ExampleBox renders children, that may or may not take properties from their parent, like state, callbacks etc. One child has a handler that modifies the state and triggers re-rendering of ExampleBox.
+The typical example page consists of an ```<ExampleBox />``` container, that has local state. ExampleBox renders
+children, that may or may not take properties from their parent, like state, callbacks etc. One child has a handler that
+modifies the state and triggers re-rendering of ExampleBox. ```<StateDependentCounter />``` shows the state value. The
+purpose of click handler is to trigger rendering loop of ```<ExampleBox />``` and its children. Our main goal is to find
+out when and why children re-render and how to avoid it.
+
+Please note, that current demo just shows the basic use cases and in practice such cases don't need any performance
+improvements.
 
 ![Typical example page](/articles/react-performance/generic-page.png "Typical example page")
+
+Its simplified structure is
+
+```mermaid
+flowchart TB
+    classDef dashed stroke-dasharray: 5 5
+    idApp((App)):::dashed -.-> idRoot(Page)
+    idRoot(/render-siblings Page) --> idEx((ExampleBox));
+    idEx(ExampleBox) --> id1(StateDependentCounter)
+    idEx(ExampleBox) --> id2(ClickableItem)
+    idEx(ExampleBox) --> id3("React.memo(StateIndependent)")
+```
 
 ## Conclusion
 
