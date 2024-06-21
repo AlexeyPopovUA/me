@@ -1,7 +1,6 @@
 import {visit} from 'unist-util-visit'
 import Script from "next/script";
 
-// Custom plugin to transform mermaid code blocks
 export function remarkMermaid() {
     return transformer;
 
@@ -16,10 +15,8 @@ export function remarkMermaid() {
     }
 }
 
-export const MermaidInitializer = () => {
-    console.log("MermaidInitializer");
-
-    return <Script
+export const MermaidInitializer = () =>
+    <Script
         type="module"
         id="mermaid.initialize"
         strategy="lazyOnload"
@@ -31,4 +28,3 @@ export const MermaidInitializer = () => {
     `,
         }}
     />;
-}

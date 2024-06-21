@@ -1,18 +1,11 @@
-import React, {PropsWithChildren} from "react";
-import Markdown from "react-markdown";
-import emoji from "remark-emoji";
-import {PluggableList} from "unified";
+import {getPagePathByDirName} from "@/lib/files";
+import {getMdxDataByPath} from "@/lib/mdx-utils";
 
-import MDXImage from "@/components/image/mdx-image";
+type Params = {
+    slug: string;
+}
 
-const mdPlugins: PluggableList = [
-    [emoji, {accessible: true, emoticon: false}]
-];
-
-const cmp = {
-    // Note, that MDXImage is a server component, therefore wrapped to match types
-    img: (props: any) => <MDXImage {...props} />
+export const PageContent = async (props: Params) => {
+    const mdxData = await getMdxDataByPath({path: getPagePathByDirName(props.slug)});
+    return mdxData.content;
 };
-
-export const PageContent = (props: PropsWithChildren<any>) => <Markdown remarkPlugins={mdPlugins}
-                                                                        components={cmp}>{props.children}</Markdown>;

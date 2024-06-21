@@ -1,12 +1,12 @@
-const data = {
+const data = Object.seal({
     user: {
         name: "Oleksii",
         surname: "Popov",
         initials: "O.Y.",
         position: "Fullstack Software Engineer (React/NodeJS/TypeScript/AWS)",
-        Website: { title: "oleksiipopov.com", url: "https://oleksiipopov.com" },
-        LinkedIn: { title: "linkedin.com/in/oleksii-popov", url: "https://linkedin.com/in/oleksii-popov" },
-        GitHub: { title: "github.com/AlexeyPopovUA", url: "https://github.com/AlexeyPopovUA" },
+        Website: {title: "oleksiipopov.com", url: "https://oleksiipopov.com"},
+        LinkedIn: {title: "linkedin.com/in/oleksii-popov", url: "https://linkedin.com/in/oleksii-popov"},
+        GitHub: {title: "github.com/AlexeyPopovUA", url: "https://github.com/AlexeyPopovUA"},
         Email: "opportunities@oleksiipopov.com",
         Address: "Klagenfurt-Villach area, Austria",
         Phone: "+436765408426"
@@ -243,6 +243,6 @@ const data = {
             ]
         }
     ]
-};
+});
 
 export default data;

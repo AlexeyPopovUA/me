@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React from "react";
 
 import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
 import {PageSchema} from "@/content/pages/resume/schema";
@@ -8,40 +8,29 @@ import Skills from "@/app/resume/components/Skills";
 import History from "@/app/resume/components/History";
 import OwnProjects from "@/app/resume/components/OwnProjects";
 import Education from "@/app/resume/components/Education";
-import data from "@/app/resume/data/data";
-import content from "@/app/configuration/content";
+import renderData from "@/app/resume/data/data";
+import {content} from "@/app/configuration/content";
 
 const pageSlug = "resume";
 
-async function getPost({slug}: { slug: string }) {
-    const {frontMatter, content} = await readFrontMatterWithContent<PageSchema>(getPagePathByDirName(pageSlug));
-
-    return {
-        frontMatter,
-        slug,
-        content
-    }
-}
-
 export async function generateMetadata({params}: any) {
-    const page = await getPost(params);
+    const {frontMatter} = await readFrontMatterWithContent<PageSchema>(getPagePathByDirName(pageSlug));
 
     return {
-        title: `${page.frontMatter.title} - ${content.authorName}`,
-        description: page.frontMatter.description,
-        keywords: page.frontMatter.keywords,
+        title: `${frontMatter.title} - ${content.authorName}`,
+        description: frontMatter.description,
+        keywords: frontMatter.keywords,
         openGraph: {
-            title: `${page.frontMatter.title} - ${content.authorName}`,
-            description: page.frontMatter.description
+            title: `${frontMatter.title} - ${content.authorName}`,
+            description: frontMatter.description
         },
     }
 }
 
 export default async function Post() {
-    const renderData = useMemo(() => data, []);
-
     return (
-        <article className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4 print:p-0 print:pt-2'>
+        <article
+            className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4 print:p-0 print:pt-2'>
             <Header user={renderData.user} contacts={renderData.contacts}/>
             <Intro intro={renderData.intro}/>
             <Skills skills={renderData.skills}/>

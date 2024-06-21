@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import matter from "gray-matter";
+
+import {getMdxDataByPath} from "@/lib/mdx-utils";
 
 export const baseArticleDir = "content/articles";
 export const baseProjectDir = "content/projects";
@@ -17,24 +18,15 @@ export const listDirNames = async (basePath: string) => {
         .map(dirent => dirent.name);
 }
 
-export const readFrontMatter = async <T extends { [p: string]: any }>(articlePath: string) => {
-    const content = await fs.readFile(articlePath);
-    const {data: frontMatter} = matter(content, {excerpt: false});
-
-    return frontMatter as T;
-}
-
 export const readFrontMatterWithContent = async <T extends { [p: string]: any }>(articlePath: string) => {
-    const file = await fs.readFile(articlePath);
-    const {data: frontMatter, content} = matter(file, {excerpt: false});
+    const data = await getMdxDataByPath({path: articlePath});
 
-    return {frontMatter: frontMatter as T, content};
+    return {frontMatter: data.frontmatter as T, content: data.content};
 }
 
 export const getArticlePathByDirName = (dirName: string) => path.resolve(path.join(baseArticleDir, dirName, baseArticleFileName));
 export const getProjectPathByDirName = (dirName: string) => path.resolve(path.join(baseProjectDir, dirName, baseProjectFileName));
 
 export const getPagePathByDirName = (slug: string) => path.resolve(path.join(basePageDir, slug, basePageFileName));
-export const getPagesBasePath = () => path.resolve(basePageDir);
 export const getArticlesBasePath = () => path.resolve(baseArticleDir);
 export const getProjectsBasePath = () => path.resolve(baseProjectDir);

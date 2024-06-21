@@ -36,6 +36,8 @@ keywords:
   - workflow automation
 ---
 
+# Feature branches approach in CI/CD of NPM libraries
+
 ## Why
 
 During the development of NPM libraries, teams often need to test applications that consume these libraries. The development cycle usually involves parallel testing of the integrated library and application, either locally or via deployed testing environments. When testing locally, the `npm link` command can be used to create symlinks from the library to the consumer app’s *node_modules* directory. However, in deployed environments, builds are typically used that embed dependencies in bundles or copy them to the distribution location. This requires libraries to be released as versions.
@@ -78,7 +80,7 @@ After the bootstrapping stage the version history looks like this:
 
 ![fish-atlas-sdk npm versions right after the bootstrapping](/articles/feature-branches-npm/npm-version-history.webp "fish-atlas-sdk npm versions right after the bootstrapping")
 
-After that I’ve created several releases and created a couple of branches (“monkfish” and “sunfish“). The updated NPM version history looks like this:
+After that I’ve created several releases and created a couple of branches ("monkfish" and "sunfish"). The updated NPM version history looks like this:
 
 ![The updated NPM version history](/articles/feature-branches-npm/npm-version-history-all.png "The updated NPM version history")
 

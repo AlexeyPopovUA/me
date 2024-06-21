@@ -61,6 +61,8 @@ keywords:
     - Pre-rendering
 ---
 
+# Simple static web hosting AWS infrastructure with protected Dev environment
+
 ## Why
 
 When working on web app development projects, it’s often useful to have a separate environment where unfinished work can be previewed without being visible to the public. This is particularly important for companies who want to keep their work confidential and secure within their network, or for developers who want to give access to specific users on the internet. In this article, we’ll explore one of the ways to create a private web app environment and how it can benefit your development process.
@@ -79,8 +81,8 @@ Lets consider next URL requirements as minimal and sufficient:
 
 * The public production environment is available at [https://simple-hosting.examples.oleksiipopov.com](https://simple-hosting.examples.oleksiipopov.com)
 * The Dev environment is available privately at [https://dev.simple-hosting.examples.oleksiipopov.com](https://dev.simple-hosting.examples.oleksiipopov.com)
-* Feature branches are deployed to the destination path, corresponding to the URL-safe formatted git branch name. For instance, **https://dev.simple-hosting.examples.oleksiipopov.com/<branch-name>/**
-* Deployment happens with help of Github Actions
+* Feature branches are deployed to the destination path, corresponding to the URL-safe formatted git branch name. For instance, **https://dev.simple-hosting.examples.oleksiipopov.com/[branch-name]/**
+* Deployment happens with help of GitHub Actions
 * For simplicity, the Dev environment is protected by a firewall that has a white list of public ip ranges
 
 ## How

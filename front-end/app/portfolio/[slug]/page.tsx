@@ -6,23 +6,29 @@ import Gallery from "@/components/image/gallery";
 import Tag from "@/components/primitive/Tag";
 import {ProjectSection} from "./project-section";
 import {getOGImageURL, readBlurredImageSrcPair} from "@/lib/image";
-import content from "@/app/configuration/content";
+import {content} from "@/app/configuration/content";
+import {ArticleContainer} from "@/components/image/ArticleContainer";
 
 export async function generateStaticParams() {
     const allSlugs = await getProjectSlugs();
     return allSlugs.map(slug => ({slug}));
 }
 
-export async function generateMetadata({params}: any) {
-    const post = await getProjectSEOContent({slug: params.slug});
-    const ogImage = getOGImageURL({src: post.thumbnail});
+type StaticParams = Awaited<ReturnType<typeof generateStaticParams>>[number];
+type StaticProps = {
+    params: StaticParams;
+}
+
+export const generateMetadata = async (props: StaticProps) => {
+    const {frontMatter} = await getProjectSEOContent({slug: props.params.slug});
+    const ogImage = getOGImageURL({src: frontMatter.thumbnail});
 
     return {
-        title: `${post.title} - ${content.authorName}`,
-        description: post.description,
+        title: `${frontMatter.title} - ${content.authorName}`,
+        description: frontMatter.description,
         openGraph: {
-            title: `${post.title} - ${content.authorName}`,
-            description: post.description,
+            title: `${frontMatter.title} - ${content.authorName}`,
+            description: frontMatter.description,
             images: [
                 ogImage
             ]
@@ -30,50 +36,46 @@ export async function generateMetadata({params}: any) {
     }
 }
 
-type StaticProps = {
-    params: {
-        slug: string;
-    }
-}
-
 export default async function Post(props: StaticProps) {
-    const post = await getProjectData({slug: props.params.slug});
-    const imageCfgs = await Promise.all(post.gallery.map(image => readBlurredImageSrcPair({src: image})));
+    const {frontMatter} = await getProjectData({slug: props.params.slug});
+    const imageCfgs = await Promise.all(frontMatter.gallery.map(image => readBlurredImageSrcPair({src: image})));
 
-    return (<article className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4'>
-            <h1>{post.title}</h1>
+    return (
+        <ArticleContainer>
+            <h1>{frontMatter.title}</h1>
             <Gallery imageCfgs={imageCfgs}/>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 sm:gap-x-8 gap-y-2 sm:gap-y-10">
                 <ProjectSection headerText="Type">
-                    {post.type}
+                    {frontMatter.type}
                 </ProjectSection>
-                {post.company ? <ProjectSection headerText="Company">
-                    {post.company}
+                {frontMatter.company ? <ProjectSection headerText="Company">
+                    {frontMatter.company}
                 </ProjectSection> : null}
                 <ProjectSection headerText="Description">
-                    {post.description}
+                    {frontMatter.description}
                 </ProjectSection>
                 <ProjectSection headerText="Technologies">
                     <div className="flex flex-row flex-wrap gap-2">
-                        {post.technologies.map(item => <Tag key={item} item={item}/>)}
+                        {frontMatter.technologies.map(item => <Tag key={item} item={item}/>)}
                     </div>
                 </ProjectSection>
                 <ProjectSection headerText="Main features">
                     <ul>
-                        {post["main-features"].map(item => <li key={item}>{item}</li>)}
+                        {frontMatter["main-features"].map(item => <li key={item}>{item}</li>)}
                     </ul>
                 </ProjectSection>
                 <ProjectSection headerText="My commitment">
                     <ul>
-                        {post["my-commitment"].map(item => <li key={item}>{item}</li>)}
+                        {frontMatter["my-commitment"].map(item => <li key={item}>{item}</li>)}
                     </ul>
                 </ProjectSection>
-                {post.URL ? <ProjectSection headerText="Links">
-                    <Link href={post.URL}>{post.URL}</Link>
+                {frontMatter.URL ? <ProjectSection headerText="Links">
+                    <Link href={frontMatter.URL}>{frontMatter.URL}</Link>
                 </ProjectSection> : null}
-                {post.state ? <ProjectSection headerText="Project phase">
-                    {post.state}
+                {frontMatter.state ? <ProjectSection headerText="Project phase">
+                    {frontMatter.state}
                 </ProjectSection> : null}
             </div>
-        </article>);
+        </ArticleContainer>
+    );
 }

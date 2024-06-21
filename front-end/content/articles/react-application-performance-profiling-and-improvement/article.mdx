@@ -22,6 +22,8 @@ keywords:
   - Profiling
 ---
 
+# Why my React components re-render?
+
 ## Performance is a thing
 
 The topic of performance in web development is much wider than reflection of personal feelings. It is a complex of
@@ -68,14 +70,14 @@ React components could be combined in an app in form of tree for rendering:
 
 ```mermaid
 flowchart TB
-    idRoot((ROOT)) --> id((A));
-    id((A)) --> id1((A1)) --> id11((A11))
-    idRoot((ROOT)) --> idB((B))
-    idB((B)) --> idB1((B1))
-    idB((B)) --> idB2((B2));
-    idB1((B1)) --> idB11((B11));
-    idB1((B1)) --> idB12((B12));
-    idB1((B1)) --> idB13((B13));
+    idRoot((ROOT)) --- id((A));
+    id((A)) --- id1((A1)) --- id11((A11))
+    idRoot((ROOT)) --- idB((B))
+    idB((B)) --- idB1((B1))
+    idB((B)) --- idB2((B2));
+    idB1((B1)) --- idB11((B11));
+    idB1((B1)) --- idB12((B12));
+    idB1((B1)) --- idB13((B13));
 ```
 
 Many of these elements define nested ones as children or properties. Those can share common properties and state. The
@@ -99,14 +101,14 @@ flowchart TB
     idB11:::renders
     idB12:::renders
     idB13:::renders
-    idRoot((ROOT)) --> idA((A));
-    idA((A)) --> idA1((A1)) --> idA11((A11))
-    idRoot((ROOT)) --> idB((B))
-    idB((B)) --> idB1((B1 renders))
-    idB((B)) --> idB2((B2));
-    idB1((B1 renders)) -- render --> idB11((B11));
-    idB1((B1 renders)) -- render --> idB12((B12));
-    idB1((B1 renders)) -- render --> idB13((B13));
+    idRoot((ROOT)) --- idA((A));
+    idA((A)) --- idA1((A1)) --- idA11((A11))
+    idRoot((ROOT)) --- idB((B))
+    idB((B)) --- idB1((B1 renders))
+    idB((B)) --- idB2((B2));
+    idB1((B1 renders)) -- render --- idB11((B11));
+    idB1((B1 renders)) -- render --- idB12((B12));
+    idB1((B1 renders)) -- render --- idB13((B13));
 ```
 
 If component state changes, it renders:
@@ -117,14 +119,14 @@ flowchart TB
     idA1:::renders
     idA1:::bla
     idA11:::renders
-    idRoot((ROOT)) --> idA((A));
-    idA((A)) --> idA1((A1&nbspstate updated)) -- render --> idA11((A11))
-    idRoot((ROOT)) --> idB((B))
-    idB((B)) --> idB1((B1))
-    idB((B)) --> idB2((B2));
-    idB1((B1)) --> idB11((B11));
-    idB1((B1)) --> idB12((B12));
-    idB1((B1)) --> idB13((B13));
+    idRoot((ROOT)) --- idA((A));
+    idA((A)) --- idA1((A1&nbspstate updated)) -- render --- idA11((A11))
+    idRoot((ROOT)) --- idB((B))
+    idB((B)) --- idB1((B1))
+    idB((B)) --- idB2((B2));
+    idB1((B1)) --- idB11((B11));
+    idB1((B1)) --- idB12((B12));
+    idB1((B1)) --- idB13((B13));
 ```
 
 As a typical situation for all examples, we will consider a component, that contains local state and shared click
@@ -158,12 +160,41 @@ Its simplified structure is
 ```mermaid
 flowchart TB
     classDef dashed stroke-dasharray: 5 5
-    idApp((App)):::dashed -.-> idRoot(Page)
-    idRoot(/render-siblings Page) --> idEx((ExampleBox));
-    idEx(ExampleBox) --> id1(StateDependentCounter)
-    idEx(ExampleBox) --> id2(ClickableItem)
-    idEx(ExampleBox) --> id3("React.memo(StateIndependent)")
+    idApp((App)):::dashed -.- idRoot(Page)
+    idRoot(/render-siblings Page) --- idEx((ExampleBox));
+    idEx(ExampleBox) --- id1(StateDependentCounter)
+    idEx(ExampleBox) --- id2(ClickableItem)
+    idEx(ExampleBox) --- id3(StateIndependent)
+    idEx(ExampleBox) --- id4("React.memo(StateIndependent)")
 ```
+
+When we click on a ClickableItem, we modify the local state of ExampleBox, which is rendered in the ```<StateDependentCounter />```. ```<StateIndependent />``` and ```React.memo(StateIndependent)``` component don't depend on hat state. Second one is wrapped in ```React.memo```.
+
+The actual code:
+
+```tsx
+export const Example = () => {
+  console.log('Example');
+
+  const [value, setValue] = useState(0);
+
+  return (
+          <ExampleBox>
+            <StateDependentCounter externalValue={value}/>
+            <ClickableItem
+                    onClick={() => {
+                      setValue((v) => v + 1);
+                    }}
+            >
+              ClickableItem
+            </ClickableItem>
+            <StateIndependent/>
+            <StateIndependentMemo/>
+          </ExampleBox>
+  );
+};
+```
+
 
 ## Conclusion
 

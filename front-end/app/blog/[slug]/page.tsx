@@ -1,19 +1,24 @@
 import React from "react";
-
-import {getArticleSEOContent, getArticlesSlugs, getFullArticleContent} from "@/lib/articles";
-import {ArticleContent} from "@/components/article-content";
+import {getArticleSEOContent, getArticlesSlugs} from "@/lib/articles";
 import GoTop from "@/components/ScrollUpButton";
-import content from "@/app/configuration/content";
+import {content} from "@/app/configuration/content";
 import {getOGImageURL} from "@/lib/image";
 import {MermaidInitializer} from "@/lib/RemarkMermaidPlugin";
+import {ArticleContent} from "@/components/article-content";
+import {ArticleContainer} from "@/components/image/ArticleContainer";
 
 export async function generateStaticParams() {
     const allSlugs = await getArticlesSlugs();
     return allSlugs.map(slug => ({slug}));
 }
 
-export async function generateMetadata({params}: any) {
-    const post = await getArticleSEOContent({slug: params.slug});
+type StaticParams = Awaited<ReturnType<typeof generateStaticParams>>[number];
+type StaticProps = {
+    params: StaticParams;
+}
+
+export const generateMetadata = async (props: StaticProps) => {
+    const post = await getArticleSEOContent({slug: props.params.slug});
     const ogImage = getOGImageURL({src: post.thumbnail});
 
     return {
@@ -30,21 +35,12 @@ export async function generateMetadata({params}: any) {
     }
 }
 
-type StaticProps = {
-    params: {
-        slug: string;
-    }
-}
-
 export default async function Post(props: StaticProps) {
-    const post = await getFullArticleContent({slug: props.params.slug});
-
     return (
-        <article className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4'>
-            <h1>{post.title}</h1>
-            <ArticleContent>{post.content}</ArticleContent>
+        <ArticleContainer>
+            <ArticleContent slug={props.params.slug}/>
             <GoTop/>
-            <MermaidInitializer />
-        </article>
+            <MermaidInitializer/>
+        </ArticleContainer>
     );
 }

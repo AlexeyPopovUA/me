@@ -76,3 +76,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+pre.shiki {
+  counter-reset: codeblock-line;
+
+  .line {
+    counter-increment: codeblock-line;
+
+    &::before {
+      content: counter(codeblock-line);
+      margin-right: 1rem;
+      color: #a3a2a2;
+    }
+  }
+}
