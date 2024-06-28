@@ -22,49 +22,25 @@ keywords:
   - Profiling
 ---
 
-# Why my React components re-render?
+# Impact of React 19 and its new compiler on the performance of web apps
 
-## Performance is a thing
+## Does performance matter in web apps?
 
-The topic of performance in web development is much wider than reflection of personal feelings. It is a complex of
-analytical and software development technics, that has a real influence on business metrics. If you need a proof, have a
-look at the short article ["Why speed matters"](https://web.dev/learn/performance/why-speed-matters) from the Chrome
-Developer Relations team.
+Performance is a crucial aspect of web development. It impacts user experience, search engine optimization (SEO), and business metrics. A fast and responsive web app keeps users engaged and coming back.
 
-Purpose of this article is to explore a tiny piece of this topic, dedicated to rendering of a React application of
-different components compositions. Let's check what causes application parts to re-render and what helps to reduce it.
-As a bonus section, we will see the impact of the latest release candidate React 19, and it's brand-new compiler.
+For a deeper dive into web performance best practices, check out this resource: ["Why speed matters"](https://web.dev/learn/performance/why-speed-matters) from the Chrome Developer Relations team.
 
-## When performance improvement is necessary?
+In this article, we'll focus specifically on the rendering performance of React applications composed of various components. We'll explore what triggers component re-renders and how to minimize them. Finally, we'll examine the impact of React 19's new compiler on rendering performance.
 
-### My application exists
+## TL;DR Just give me the links!
 
-Before diving into this topic deeper, lets try to be honest with ourselves. Is performance the biggest issue now, or
-you're just bored?
+[GitHub](https://github.com/AlexeyPopovUA/react-performance-examples)
 
-To help you find this out, I would ask you next questions:
+[Hosted version with React 18](https://main.dev.react-performance-examples.examples.oleksiipopov.com/)
 
-- Does your team have time to speak about performance, or they are completely swamped in other high priority issues?
-  Please, start from those. It is either too early or too late. You're probably burning already
+[Hosted version with React 19](https://full-rc-upgrade.dev.react-performance-examples.examples.oleksiipopov.com/)
 
-- Does it take seconds for your website hosting to serve the small index.html file? Please start from that
-
-- Is your page a big fat 50MB collection of html, scripts, styles and images? Please start from that
-
-We need to be practical. If the biggest performance issue of you web application is actually in its responsiveness
-during the visitor workflow, then this article might be useful.
-
-### I start a new one
-
-That's a luxury! Performance can be a permanent part of you thinking process, not necessary an emergency measure.
-Rendering effectiveness of React applications in particular is strongly dependent on its structure. So keeping it in
-mind, it is easier to avoid common problems.
-
-### Long story short
-
-Fixing React application structure may give you the biggest performance boost, if other problems have a smaller impact.
-
-## React components composition
+## When do React components re-render?
 
 React components could be combined in an app in form of tree for rendering:
 
@@ -80,19 +56,14 @@ flowchart TB
     idB1((B1)) --- idB13((B13));
 ```
 
-Many of these elements define nested ones as children or properties. Those can share common properties and state. The
-way we define the structure, defines the **rendering scope** and it's **frequency**. Let's review cases, which cause
-parts of an app to re-render:
+Many of these elements define nested ones as children or properties. Those can share common properties and state. The way we define the structure, defines the **rendering scope** and it's **frequency**. These are the cases, which cause parts of an app to re-render:
 
 * Parent renders
 * State changes
 * Context changes
 * Hook changes
 
-In this article we will pay special attention to the simplest first 2, that represent the influence of components
-composition on the rendering performance.
-
-So, if parent renders, then it's children do it as well:
+So, if a component renders, then it's children do it as well:
 
 ```mermaid
 flowchart TB
@@ -111,27 +82,11 @@ flowchart TB
     idB1((B1 renders)) -- render --- idB13((B13));
 ```
 
-If component state changes, it renders:
+Re-rendering of components may be an expensive job sometimes, but there are ways to improve that.
 
-```mermaid
-flowchart TB
-    classDef renders fill: #fbd89d, stroke: #f59e0b, stroke-width: 2px, white-space: normal, text-align: center
-    idA1:::renders
-    idA1:::bla
-    idA11:::renders
-    idRoot((ROOT)) --- idA((A));
-    idA((A)) --- idA1((A1&nbspstate updated)) -- render --- idA11((A11))
-    idRoot((ROOT)) --- idB((B))
-    idB((B)) --- idB1((B1))
-    idB((B)) --- idB2((B2));
-    idB1((B1)) --- idB11((B11));
-    idB1((B1)) --- idB12((B12));
-    idB1((B1)) --- idB13((B13));
-```
+In this article we will pay special attention to first 2 rendering reasons, that represent the influence of components composition.
 
-As a typical situation for all examples, we will consider a component, that contains local state and shared click
-handler. Click handler is supposed to modify the local state. This component also renders nested components. And this is
-what we want to check - what renders when the state changes and how to reduce these activities.
+As a typical situation for all examples, we will consider a component, that contains local state and shared click handler. Click handler is supposed to modify the local state. This component also renders nested components. And this is what we want to check - what renders when the state changes and how to reduce these activities.
 
 So the next situations could be modelled:
 
@@ -142,59 +97,201 @@ So the next situations could be modelled:
 
 ## Web application with examples
 
-I have implemented a simple multi page NextJS application. Each page contains a components composition example.
+I have implemented a simple multi-page Next.js application, using Next.js 14 and React 18. Each page contains a component composition example.
 
-The typical example page consists of an ```<ExampleBox />``` container, that has local state. ExampleBox renders
-children, that may or may not take properties from their parent, like state, callbacks etc. One child has a handler that
-modifies the state and triggers re-rendering of ExampleBox. ```<StateDependentCounter />``` shows the state value. The
-purpose of click handler is to trigger rendering loop of ```<ExampleBox />``` and its children. Our main goal is to find
-out when and why children re-render and how to avoid it.
+```mermaid
+flowchart TB
+    classDef dashed stroke-dasharray: 5 5
+    idApp((App)):::dashed -.- idRenderSiblings(/render-siblings Page)
+    idApp((App)):::dashed -.- idCmpAsProps(/components-as-properties Page)
+    idApp((App)):::dashed -.- idCachingProps(/caching-properties Page)
+    idApp((App)):::dashed -.- idCachingCallback(/caching-callback Page)
+    idRenderSiblings --- Example1((Example1));
+    idCmpAsProps --- Example2((Example2));
+    idCachingProps --- Example3((Example3));
+    idCachingCallback --- Example4((Example4));
+```
 
-Please note, that current demo just shows the basic use cases and in practice such cases don't need any performance
-improvements.
-
-![Typical example page](/articles/react-performance/generic-page.png "Typical example page")
-
-Its simplified structure is
+The typical example page consists of an ```<Example />``` container, that has local state. Example renders children, that may or may not take properties from their parent, like state, callbacks etc. ```<ClickableItem />``` has a handler that modifies the state and triggers re-rendering of ```<Example />```. ```<StateDependentCounter />``` shows the state value. The purpose of click handler is to trigger rendering loop of ```<Example />``` and its children.
 
 ```mermaid
 flowchart TB
     classDef dashed stroke-dasharray: 5 5
     idApp((App)):::dashed -.- idRoot(Page)
-    idRoot(/render-siblings Page) --- idEx((ExampleBox));
-    idEx(ExampleBox) --- id1(StateDependentCounter)
-    idEx(ExampleBox) --- id2(ClickableItem)
-    idEx(ExampleBox) --- id3(StateIndependent)
-    idEx(ExampleBox) --- id4("React.memo(StateIndependent)")
+    idRoot(/example-page) --- idEx((Example));
+    idEx(Example) --- id1(StateDependentCounter)
+    idEx(Example) --- id2(ClickableItem)
 ```
 
-When we click on a ClickableItem, we modify the local state of ExampleBox, which is rendered in the ```<StateDependentCounter />```. ```<StateIndependent />``` and ```React.memo(StateIndependent)``` component don't depend on hat state. Second one is wrapped in ```React.memo```.
+## Re-rendering of sibling components
+
+
+When we click on a ClickableItem, we modify the local state of ExampleBox, which is rendered in
+the ```<StateDependentCounter />```. ```<StateIndependent />``` and ```React.memo(StateIndependent)``` component don't
+depend on hat state. Second one is wrapped in ```React.memo```.
 
 The actual code:
 
 ```tsx
 export const Example = () => {
-  console.log('Example');
+    console.log('Example');
 
-  const [value, setValue] = useState(0);
+    const [value, setValue] = useState(0);
 
-  return (
-          <ExampleBox>
+    return (
+        <ExampleBox>
             <StateDependentCounter externalValue={value}/>
             <ClickableItem
-                    onClick={() => {
-                      setValue((v) => v + 1);
-                    }}
+                onClick={() => {
+                    setValue((v) => v + 1);
+                }}
             >
-              ClickableItem
+                ClickableItem
             </ClickableItem>
             <StateIndependent/>
             <StateIndependentMemo/>
-          </ExampleBox>
-  );
+        </ExampleBox>
+    );
+};
+```
+
+## Caching properties
+
+```tsx
+
+export const Example = () => {
+    console.log('Example');
+
+    const [value, setValue] = useState(0);
+
+    const callbackCached = useCallback(() => {
+        setValue((v) => v + 1);
+    }, []);
+
+    const obj = {test: 123};
+
+    return (
+        <ExampleBox>
+            <StateDependentCounter externalValue={value}/>
+            <CallbackDependentCached callback={callbackCached} variant="callbackCached"/>
+            <RenderObject value={obj} variant="RenderObject"/>
+            <RenderObjectMemo value={obj} variant="RenderObjectMemo"/>
+            <RenderObjectMemoCompared value={obj} variant="RenderObjectMemoCompared"/>
+        </ExampleBox>
+    );
 };
 ```
 
 
-## Conclusion
+Screenshot
+Code snippet
+Rendering screenshot from React DevTools Profiler for React 18
+Explain
+Rendering screenshot from React DevTools Profiler for React 19
+Explain the difference
+
+## Caching callbacks
+
+```tsx
+export const Example = () => {
+    console.log('Example');
+
+    const [value, setValue] = useState(0);
+
+    const sharedCallback = () => {
+        setValue((v) => v + 1);
+    };
+
+    const sharedCallbackCached = useCallback(() => {
+        setValue((v) => v + 1);
+    }, []);
+
+    return (
+        <ExampleBox>
+            <StateDependentCounter externalValue={value}/>
+            <CallbackDependent callback={sharedCallback} variant="sharedCallback"/>
+            <CallbackDependentCached callback={sharedCallback} variant="sharedCallback"/>
+            <CallbackDependent callback={sharedCallbackCached} variant="sharedCallbackCached"/>
+            <CallbackDependentCached callback={sharedCallbackCached} variant="sharedCallbackCached"/>
+        </ExampleBox>
+    );
+};
+```
+
+Screenshot
+Code snippet
+Rendering screenshot from React DevTools Profiler for React 18
+Explain
+Rendering screenshot from React DevTools Profiler for React 19
+Explain the difference
+
+## Components as properties
+
+```tsx
+export const Example = () => {
+    console.log('Example');
+
+    return (
+        <SubExample
+            externalComponent1={<IAmUsedAsAsAProperty variant="externaly defined"/>}
+            externalComponent2={<IAmUsedAsAsAChild variant="externaly defined"/>}
+        />
+    );
+};
+
+type SubExampleProps = {
+    externalComponent1: React.ReactNode;
+    externalComponent2: React.ReactNode;
+};
+
+export const SubExample = (props: SubExampleProps) => {
+    console.log('SubExample');
+
+    const [value, setValue] = useState(0);
+
+    const sharedCallbackCached = useCallback(() => {
+        setValue((v) => v + 1);
+    }, []);
+
+    return (
+        <ExampleBox>
+            <StateDependentCounter externalValue={value}/>
+            <ClickableItem onClick={sharedCallbackCached}>ClickableItem</ClickableItem>
+            <RenderComponentAsAProperty
+                propComponent={<IAmUsedAsAsAProperty variant="defined near the consumer"/>}
+                variant="RenderComponentAsAProperty propComponent={<IAmUsedAsAsAProperty />}"
+            />
+            <RenderComponentAsAProperty
+                propComponent={props.externalComponent1}
+                variant="RenderComponentAsAProperty propComponent={props.externalComponent}"
+            />
+            <RenderComponentAsAProperty
+                propComponent={props.externalComponent1}
+                variant="RenderComponentAsAProperty propComponent={props.externalComponent} + children"
+            >
+                {props.externalComponent2}
+            </RenderComponentAsAProperty>
+        </ExampleBox>
+    );
+};
+```
+
+Screenshot
+Code snippet
+Rendering screenshot from React DevTools Profiler for React 18
+Explain
+Rendering screenshot from React DevTools Profiler for React 19
+Explain the difference
+
+## Why React 19 with the new compiler are so good?
+
+Auto-wrapping with `memo`
+Internal component caching
+Compiled component is transformed, so all callbacks are defined once for all rendering calls
+
+## Conclusions
+
+We reviewed several component compositions and ways to minimize the rendering jobs.
+We checked the impact of React 19 and the new compiler on rendering performance.
+What can we get rid of when updating?
 
