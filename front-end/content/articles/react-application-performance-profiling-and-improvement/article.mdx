@@ -34,7 +34,9 @@ In this article, we'll focus specifically on the rendering performance of React 
 
 ## TL;DR Just give me the links!
 
-[GitHub](https://github.com/AlexeyPopovUA/react-performance-examples)
+[GitHub > react-performance-examples](https://github.com/AlexeyPopovUA/react-performance-examples)
+
+[GitHub > react-performance-examples + React 19](https://github.com/AlexeyPopovUA/react-performance-examples/tree/full-rc-upgrade)
 
 [Hosted version with React 18](https://main.dev.react-performance-examples.examples.oleksiipopov.com/)
 
@@ -125,6 +127,7 @@ flowchart TB
 
 ## Re-rendering of sibling components
 
+![Re-rendering of sibling components](/articles/react-performance/ui-siblings.png "Re-rendering of sibling components")
 
 When we click on a ClickableItem, we modify the local state of ExampleBox, which is rendered in
 the ```<StateDependentCounter />```. ```<StateIndependent />``` and ```React.memo(StateIndependent)``` component don't
@@ -155,7 +158,38 @@ export const Example = () => {
 };
 ```
 
+First rendering outputs:
+
+```text
+Example
+StateDependentCounter
+StateIndependent
+React.memo(StateIndependent)
+```
+
+On click
+
+```text
+Example
+StateDependentCounter
+StateIndependent
+```
+
+![Rendering siblings > React 18](/articles/react-performance/react-18-profile-siblings.png "Rendering siblings > React 18")
+
+On click (React 19)
+
+```text
+Example
+StateDependentCounter
+```
+
+![Rendering siblings > React 19](/articles/react-performance/react-19-profile-siblings.png "Rendering siblings > React 19")
+
+
 ## Caching properties
+
+![Caching properties](/articles/react-performance/ui-properties-objects.png "Caching propertiess")
 
 ```tsx
 
@@ -190,7 +224,15 @@ Explain
 Rendering screenshot from React DevTools Profiler for React 19
 Explain the difference
 
+![Caching properties > React 18](/articles/react-performance/react-18-profile-props.png "Caching properties > React 18")
+
+
+![Caching properties > React 19](/articles/react-performance/react-19-profile-props.png "Caching properties > React 19")
+
+
 ## Caching callbacks
+
+![Caching callbacks](/articles/react-performance/ui-callbacks.png "Caching callbacks")
 
 ```tsx
 export const Example = () => {
@@ -225,7 +267,14 @@ Explain
 Rendering screenshot from React DevTools Profiler for React 19
 Explain the difference
 
+![Caching callbacks > React 18](/articles/react-performance/react-18-profile-callbacks.png "Caching callbacks > React 18")
+
+
+![Caching callbacks > React 19](/articles/react-performance/react-19-profile-callbacks.png "Caching callbacks > React 19")
+
 ## Components as properties
+
+![Components as properties](/articles/react-performance/ui-components-as-properties.png "Components as properties")
 
 ```tsx
 export const Example = () => {
@@ -282,6 +331,9 @@ Rendering screenshot from React DevTools Profiler for React 18
 Explain
 Rendering screenshot from React DevTools Profiler for React 19
 Explain the difference
+
+![Components as properties > React 19](/articles/react-performance/react-19-profile-cmp-props.png "Components as properties > React 19")
+
 
 ## Why React 19 with the new compiler are so good?
 
