@@ -9,10 +9,6 @@ on:
       - 'package-lock.json'
 
 env:
-  DEFAULT_BRANCH: main
-  AWS_ACCOUNT: ${{ vars.AWS_ACCOUNT }}
-  AWS_DEPLOYMENT_REGION: ${{ vars.AWS_DEPLOYMENT_REGION }}
-  HOSTED_ZONE_ID: ${{ vars.HOSTED_ZONE_ID }}
   S3_HOSTING_BUCKET: me-hosting
   CF_DISTRIBUTION_NAME: me-main
   CF_INVALIDATION_WAIT: true
