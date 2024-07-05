@@ -24,7 +24,7 @@ export async function PostCard(props: Props) {
     >
         <div className="flex flex-col items-stretch pb-4 hover:text-amber-600">
             <div className="flex flex-row mb-4">
-                <ThumbnailImage src={src} blurDataURL={blurDataURL} alt={props.title}/>
+                <ThumbnailImage src={src} blurDataURL={blurDataURL} alt={props.title} width={700} height={330}/>
             </div>
             <div className="font-bold text-xl underline mb-2">{props.title}</div>
             {props.date ? <div className="text-sm text-gray-600 mb-4">{props.date}</div> : null}

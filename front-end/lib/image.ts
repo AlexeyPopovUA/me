@@ -1,3 +1,5 @@
+import Jimp from "jimp";
+
 const BASE_URL = "https://images.oleksiipopov.com";
 const BUCKET = "serverless-image-handler-image-source";
 const BASE_PATH = "me";
@@ -98,16 +100,24 @@ export const getContainBlurredImageURL = (props: { src: string }) =>
         }
     })
 
-export const readImageAsBase64 = async (src: string) => {
+export const readImageBase64AndInfo = async (src: string) => {
     const blob = await (await fetch(src)).arrayBuffer();
-    const url = Buffer.from(blob).toString("base64");
+    const imgData = await Jimp.read(Buffer.from(blob));
+    const url = imgData.bitmap.data.toString("base64");
 
-    return `data:image/png;base64,${url}`;
+    return {
+        blurDataURL: `data:image/png;base64,${url}`,
+        ratio: imgData.getWidth() / imgData.getHeight()
+    }
 }
 
 // @TODO Add output for final image URL
 // @TODO Add correspondence of src cropping method between the final image and the blurred one
-export const readBlurredImageSrcPair = async ({src}: { src: string; }) => ({
-    src,
-    blurDataURL: await readImageAsBase64(getContainBlurredImageURL({src}))
-});
+export const readBlurredImageSrcPair = async ({src}: { src: string; }) => {
+    const {blurDataURL, ratio} = await readImageBase64AndInfo(getContainBlurredImageURL({src}));
+    return ({
+        src,
+        ratio,
+        blurDataURL: blurDataURL
+    });
+};

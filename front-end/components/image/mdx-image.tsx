@@ -6,16 +6,14 @@ import {readBlurredImageSrcPair} from "@/lib/image";
 
 /**
  * @todo Add types
- * @todo Implement a correct image with dimensions
- * @todo Add blur photo loader
  */
 const MDXImage = async (props: any) => {
-    const {src, blurDataURL} = await readBlurredImageSrcPair({src: props.src});
-    // todo Set image size from own image properties
+    const {src, blurDataURL, ratio} = await readBlurredImageSrcPair({src: props.src});
+
     return (
         <figure>
             <ContentImage className="max-w-fit" loader={imageLoader}
-                          width={800} height={500} src={src}
+                          width={800} height={800 / ratio} src={src}
                           blurDataURL={blurDataURL}
                           alt={props.alt}/>
             <figcaption className="text-center">{props.title}</figcaption>
