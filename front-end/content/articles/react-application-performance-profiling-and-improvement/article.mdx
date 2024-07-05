@@ -26,21 +26,32 @@ keywords:
 
 ## Does performance matter in web apps?
 
-Performance is a crucial aspect of web development. It impacts user experience, search engine optimization (SEO), and business metrics. A fast and responsive web app keeps users engaged and coming back.
+Performance is a crucial aspect of web development. It impacts user experience, search engine optimization (SEO), and
+business metrics. A fast and responsive web app keeps users engaged and coming back.
 
-For a deeper dive into web performance best practices, check out this resource: ["Why speed matters"](https://web.dev/learn/performance/why-speed-matters) from the Chrome Developer Relations team.
+For a deeper dive into web performance best practices, check out this
+resource: ["Why speed matters"](https://web.dev/learn/performance/why-speed-matters) from the Chrome Developer Relations
+team.
 
-In this article, we'll focus specifically on the rendering performance of React applications composed of various components. We'll explore what triggers component re-renders and how to minimize them. Finally, we'll examine the impact of React 19's new compiler on rendering performance.
+In this article, we'll focus specifically on the rendering performance of React applications composed of various
+components. We'll explore what triggers component re-renders and how to minimize them. Finally, we'll examine the impact
+of React 19's new compiler on rendering performance.
 
-## TL;DR Just give me the links!
+## TL;DR
 
-[GitHub > react-performance-examples](https://github.com/AlexeyPopovUA/react-performance-examples)
+**Just give me the links!**
 
-[GitHub > react-performance-examples + React 19](https://github.com/AlexeyPopovUA/react-performance-examples/tree/full-rc-upgrade)
+### Hosted demo web application
 
-[Hosted version with React 18](https://main.dev.react-performance-examples.examples.oleksiipopov.com/)
+> [React 18 Demo](https://main.dev.react-performance-examples.examples.oleksiipopov.com/)
 
-[Hosted version with React 19](https://full-rc-upgrade.dev.react-performance-examples.examples.oleksiipopov.com/)
+> [React 19 Demo](https://full-rc-upgrade.dev.react-performance-examples.examples.oleksiipopov.com/)
+
+### GitHub
+
+> [react-performance-examples > React 18](https://github.com/AlexeyPopovUA/react-performance-examples)
+
+> [react-performance-examples > React 19 + New compiler](https://github.com/AlexeyPopovUA/react-performance-examples/tree/full-rc-upgrade)
 
 ## When do React components re-render?
 
@@ -58,7 +69,9 @@ flowchart TB
     idB1((B1)) --- idB13((B13));
 ```
 
-Many of these elements define nested ones as children or properties. Those can share common properties and state. The way we define the structure, defines the **rendering scope** and it's **frequency**. These are the cases, which cause parts of an app to re-render:
+Many of these elements define nested ones as children or properties. Those can share common properties and state. The
+way we define the structure, defines the **rendering scope** and it's **frequency**. These are the cases, which cause
+parts of an app to re-render:
 
 * Parent renders
 * State changes
@@ -158,41 +171,22 @@ export const Example = () => {
 };
 ```
 
-First rendering outputs:
 
-```text
-Example
-StateDependentCounter
-StateIndependent
-React.memo(StateIndependent)
-```
+| Action          | React 18 (console output)                                                                     | React 19 + compiler (console output) |
+|:----------------|:----------------------------------------------------------------------------------------------|:-------------------------------------|
+| First rendering | Example <br /> StateDependentCounter<br />StateIndependent<br />React.memo(StateIndependent)  | the same                             |
+| On click        | Example<br />StateDependentCounter<br />StateIndependent                                      | Example <br />StateDependentCounter  |
 
-On click
-
-```text
-Example
-StateDependentCounter
-StateIndependent
-```
 
 ![Rendering siblings > React 18](/articles/react-performance/react-18-profile-siblings.png "Rendering siblings > React 18")
 
-On click (React 19)
-
-```text
-Example
-StateDependentCounter
-```
-
 ![Rendering siblings > React 19](/articles/react-performance/react-19-profile-siblings.png "Rendering siblings > React 19")
-
 
 ## Caching properties
 
 ![Caching properties](/articles/react-performance/ui-properties-objects.png "Caching propertiess")
 
 ```tsx
-
 export const Example = () => {
     console.log('Example');
 
@@ -217,18 +211,23 @@ export const Example = () => {
 ```
 
 
-Screenshot
-Code snippet
-Rendering screenshot from React DevTools Profiler for React 18
-Explain
-Rendering screenshot from React DevTools Profiler for React 19
-Explain the difference
+| Action          | React 18 (console output)                                                                                                                                                                                                                                       | React 19 + compiler (console output) |
+|:----------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------|
+| First rendering | Example <br /> StateDependentCounter<br />React.memo(CallbackDependent) callbackCached<br />RenderObject \{"test":123\} <br /> RenderObjectMemo \{"test":123\} Option: RenderObjectMemo <br /> RenderObjectMemo \{"test":123\} Option: RenderObjectMemoCompared | the same                             |
+| On click        | Example <br /> StateDependentCounter<br />RenderObject \{"test":123\} <br /> RenderObjectMemo  \{"test":123\} Option: RenderObjectMemo                                                                                                                          | Example <br />StateDependentCounter  |
+
+
+TODO Explain
+
+"On click" rendering screenshot from React DevTools Profiler for React 18
 
 ![Caching properties > React 18](/articles/react-performance/react-18-profile-props.png "Caching properties > React 18")
 
+"On click" rendering screenshot from React DevTools Profiler for React 19
 
 ![Caching properties > React 19](/articles/react-performance/react-19-profile-props.png "Caching properties > React 19")
 
+TODO Explain the difference
 
 ## Caching callbacks
 
@@ -260,17 +259,23 @@ export const Example = () => {
 };
 ```
 
-Screenshot
-Code snippet
-Rendering screenshot from React DevTools Profiler for React 18
-Explain
-Rendering screenshot from React DevTools Profiler for React 19
-Explain the difference
+| Action          | React 18 (console output)                                                                                                                                                                                                                | React 19 + compiler (console output) |
+|:----------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------|
+| First rendering | Example <br /> StateDependentCounter <br /> CallbackDependent sharedCallback <br /> React.memo(CallbackDependent) sharedCallback <br /> CallbackDependent sharedCallbackCached <br /> React.memo(CallbackDependent) sharedCallbackCached | the same                             |
+| On click        | Example <br /> StateDependentCounter <br /> CallbackDependent sharedCallback <br /> React.memo(CallbackDependent) sharedCallback <br /> CallbackDependent sharedCallbackCached                                                           | Example <br /> StateDependentCounter |
+
+
+"On click" rendering screenshot from React DevTools Profiler for React 18
 
 ![Caching callbacks > React 18](/articles/react-performance/react-18-profile-callbacks.png "Caching callbacks > React 18")
 
+TODO Explain
+
+"On click" rendering screenshot from React DevTools Profiler for React 19
 
 ![Caching callbacks > React 19](/articles/react-performance/react-19-profile-callbacks.png "Caching callbacks > React 19")
+
+TODO Explain the difference
 
 ## Components as properties
 
@@ -325,26 +330,33 @@ export const SubExample = (props: SubExampleProps) => {
 };
 ```
 
-Screenshot
-Code snippet
-Rendering screenshot from React DevTools Profiler for React 18
-Explain
-Rendering screenshot from React DevTools Profiler for React 19
-Explain the difference
+
+| Action          | React 18 (console output)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | React 19 + compiler (console output) |
+|:----------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------|
+| First rendering | Example <br /> SubExample <br /> StateDependentCounter <br /> RenderComponentAsAProperty RenderComponentAsAProperty propComponent=\{\<IAmUsedAsAsAProperty />\} <br /> IAmUsedAsAsAProperty defined near the consumer <br /> RenderComponentAsAProperty RenderComponentAsAProperty propComponent=\{props.externalComponent\} <br /> IAmUsedAsAsAProperty externally defined <br /> RenderComponentAsAProperty RenderComponentAsAProperty propComponent=\{props.externalComponent\} + children <br /> IAmUsedAsAsAProperty externally defined <br /> IAmUsedAsAsAChild externally defined | the same                             |
+| On click        | SubExample <br /> StateDependentCounter <br /> RenderComponentAsAProperty RenderComponentAsAProperty propComponent=\{\<IAmUsedAsAsAProperty />\} <br /> IAmUsedAsAsAProperty defined near the consumer <br /> RenderComponentAsAProperty RenderComponentAsAProperty propComponent=\{props.externalComponent\} <br /> RenderComponentAsAProperty RenderComponentAsAProperty propComponent=\{props.externalComponent\} + children                                                                                                                                                          | Example <br /> StateDependentCounter |
+
+
+"On click" rendering screenshot from React DevTools Profiler for React 18
 
 ![Components as properties > React 18](/articles/react-performance/react-18-profile-cmp-props.png "Components as properties > React 18")
+
+TODO Explain
+
+"On click" rendering screenshot from React DevTools Profiler for React 19
+
 ![Components as properties > React 19](/articles/react-performance/react-19-profile-cmp-props.png "Components as properties > React 19")
 
+TODO Explain the difference
 
 ## Why React 19 with the new compiler are so good?
 
-Auto-wrapping with `memo`
-Internal component caching
-Compiled component is transformed, so all callbacks are defined once for all rendering calls
+* Auto-wrapping with `memo`
+* Internal component caching
+* Compiled component is transformed, so all callbacks are defined once for all rendering calls
 
 ## Conclusions
 
 We reviewed several component compositions and ways to minimize the rendering jobs.
 We checked the impact of React 19 and the new compiler on rendering performance.
 What can we get rid of when updating?
-

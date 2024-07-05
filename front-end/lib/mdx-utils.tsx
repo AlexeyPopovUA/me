@@ -7,6 +7,7 @@ import {remarkCode} from "@/lib/RemarkCodeHighlightingPlugin";
 import rehypeRaw from "rehype-raw";
 import {compileMDX, MDXRemoteProps} from "next-mdx-remote/rsc";
 import {read} from "to-vfile";
+import remarkGfm from 'remark-gfm'
 
 const cmp = {
     // Note, that MDXImage is a server component, therefore wrapped to match types
@@ -17,10 +18,11 @@ const mdPlugins: PluggableList = [
     [remarkMermaid],
     [emoji, {accessible: true, emoticon: false}],
     [remarkUnwrapImages],
-    [remarkCode]
+    [remarkCode],
+    [remarkGfm]
 ];
 const rhPlugins: PluggableList = [
-    [rehypeRaw, {passThrough: []}],
+    [rehypeRaw, {passThrough: ['mdxJsxTextElement'], allowDangerousHtml: true}],
 ];
 
 const options: MDXRemoteProps["options"] = {
