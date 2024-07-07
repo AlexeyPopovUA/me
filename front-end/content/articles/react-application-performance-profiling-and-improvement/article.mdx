@@ -171,6 +171,10 @@ export const Example = () => {
 };
 ```
 
+When we click on a ```<ClickableItem />```, we modify the local state of ```<Example />```, which is rendered in
+the ```<StateDependentCounter />```. ```<StateIndependent />``` and ```React.memo(StateIndependent)``` component don't
+depend on that state. Second one is wrapped in ```React.memo```.
+
 
 | Action          | React 18 (console output)                                                                     | React 19 + compiler (console output) |
 |:----------------|:----------------------------------------------------------------------------------------------|:-------------------------------------|
@@ -258,6 +262,7 @@ export const Example = () => {
     );
 };
 ```
+
 
 | Action          | React 18 (console output)                                                                                                                                                                                                                | React 19 + compiler (console output) |
 |:----------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------|

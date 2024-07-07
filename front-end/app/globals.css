@@ -77,6 +77,11 @@
   }
 }
 
+.table-wrapper {
+  @apply w-full;
+  @apply overflow-auto;
+}
+
 pre.shiki {
   counter-reset: codeblock-line;
 

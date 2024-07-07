@@ -11,7 +11,8 @@ import remarkGfm from 'remark-gfm'
 
 const cmp = {
     // Note, that MDXImage is a server component, therefore wrapped to match types
-    img: (props: any) => <MDXImage {...props} />
+    img: (props: any) => <MDXImage {...props} />,
+    table: (props: any) => <div className="table-wrapper"><table {...props} /></div>
 };
 
 const mdPlugins: PluggableList = [
@@ -22,7 +23,7 @@ const mdPlugins: PluggableList = [
     [remarkGfm]
 ];
 const rhPlugins: PluggableList = [
-    [rehypeRaw, {passThrough: ['mdxJsxTextElement'], allowDangerousHtml: true}],
+    [rehypeRaw, {passThrough: ['mdxJsxTextElement', 'mdxJsxFlowElement'], allowDangerousHtml: true}],
 ];
 
 const options: MDXRemoteProps["options"] = {
