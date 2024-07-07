@@ -1,0 +1,430 @@
+---
+title: React 18 vs React 19 in typical component structures
+slug: react-18-vs-react-19
+date: 2024-07-09
+draft: true
+description: Comparison of React 18 and React 19 performance in typical component structures
+thumbnail: /articles/feature-branches-npm/feature-branches-for-NPM-modules.png
+tags:
+  - React
+  - Performance
+  - Profiling
+keywords:
+  - React
+  - React 18
+  - React 19
+  - React 18 vs React 19
+  - React performance
+  - React hooks
+  - React compiler
+  - NextJS
+  - JavaScript
+  - TypeScript
+  - Performance
+  - Performance profiling
+  - Profiling
+  - useMemo
+  - useCallback
+  - React.memo
+  - React best practices
+---
+
+# Impact of React 19 and compiler on the web app rendering performance
+
+## Does performance matter in web apps?
+
+Performance is a crucial aspect of web development. It impacts user experience, search engine optimization (SEO), and
+business metrics. A fast and responsive web app keeps users engaged and coming back.
+
+For a deeper dive into web performance best practices, check out this
+resource: ["Why speed matters"](https://web.dev/learn/performance/why-speed-matters) from the Chrome Developer Relations
+team.
+
+In this article, we'll focus specifically on the rendering performance of React applications composed of various
+components. We'll explore what triggers component re-renders and how to minimize them. Finally, we'll examine the impact
+of React 19's new compiler on rendering performance.
+
+## TL;DR
+
+**Just give me the links!**
+
+### Hosted demo web application
+
+> [React 18 Demo](https://main.dev.react-performance-examples.examples.oleksiipopov.com/)
+
+> [React 19 Demo](https://full-rc-upgrade.dev.react-performance-examples.examples.oleksiipopov.com/)
+
+### GitHub
+
+> [react-performance-examples > React 18](https://github.com/AlexeyPopovUA/react-performance-examples)
+
+> [react-performance-examples > React 19 + New compiler](https://github.com/AlexeyPopovUA/react-performance-examples/tree/full-rc-upgrade)
+
+## When do React components re-render?
+
+React components could be combined in an app in form of tree for rendering:
+
+```mermaid
+flowchart TB
+    idRoot((ROOT)) --- id((A));
+    id((A)) --- id1((A1)) --- id11((A11))
+    idRoot((ROOT)) --- idB((B))
+    idB((B)) --- idB1((B1))
+    idB((B)) --- idB2((B2));
+    idB1((B1)) --- idB11((B11));
+    idB1((B1)) --- idB12((B12));
+    idB1((B1)) --- idB13((B13));
+```
+
+Many of these elements define nested ones as children or properties. Those can share common properties and state. The
+way we define the structure, defines the **rendering scope** and it's **frequency**. These are the cases, which cause
+parts of an app to re-render:
+
+* Parent renders
+* State changes
+* Context changes
+* Hook changes
+
+So, if a component renders, then it's children do it as well:
+
+```mermaid
+flowchart TB
+    classDef renders fill: #fbd89d, stroke: #f59e0b, stroke-width: 2px
+    idB1:::renders
+    idB11:::renders
+    idB12:::renders
+    idB13:::renders
+    idRoot((ROOT)) --- idA((A));
+    idA((A)) --- idA1((A1)) --- idA11((A11))
+    idRoot((ROOT)) --- idB((B))
+    idB((B)) --- idB1((B1 renders))
+    idB((B)) --- idB2((B2));
+    idB1((B1 renders)) -- render --- idB11((B11));
+    idB1((B1 renders)) -- render --- idB12((B12));
+    idB1((B1 renders)) -- render --- idB13((B13));
+```
+
+This article will focus on the first two primary causes of re-rendering that represent the influence of components composition.
+
+Re-rendering components can be a performance bottleneck. However, there are ways to mitigate this issue:
+
+* composition schema tuning:
+  * avoid properties drilling
+  * move non-changing component definitions higher in the tree and use those as properties (and children)
+  * move local state closer to its consumers in the tree
+* caching hooks and wrappers for heavy calculations and renderings:
+  * ```useMemo```
+  * ```React.memo```
+  * ```useCallback```
+
+In React 19 compiler memoizes all components and hooks automatically in local non-shared caches of components. So, the caching hooks and wrappers are not necessary and React 19 simply bypasses the existing usage of those. Let's see if it is true. 
+
+For illustrative purposes, we'll consider a component with local state and a shared click handler. The click handler updates the local state, and the component renders nested components. Our goal is to analyze which parts of the component tree re-render in response to state changes and explore optimization techniques.
+
+So the next situations could be modelled:
+
+* re-rendering of sibling children when parent renders
+* sharing callbacks between children
+* sharing properties between children
+* using other components as properties
+
+## Web application with examples
+
+I've implemented a simple multi-page Next.js application using Next.js 14 and React 18. To experiment with React 19, I created a version utilizing Next.js 15RC, React 19RC, and the new compiler. Each page showcases a component composition example.
+
+```mermaid
+flowchart TB
+    classDef dashed stroke-dasharray: 5 5
+    idApp((App)):::dashed -.- idRenderSiblings(/render-siblings Page)
+    idApp((App)):::dashed -.- idCmpAsProps(/components-as-properties Page)
+    idApp((App)):::dashed -.- idCachingProps(/caching-properties Page)
+    idApp((App)):::dashed -.- idCachingCallback(/caching-callback Page)
+    idRenderSiblings --- Example1((Example1));
+    idCmpAsProps --- Example2((Example2));
+    idCachingProps --- Example3((Example3));
+    idCachingCallback --- Example4((Example4));
+```
+
+A typical example page consists of an ```<Example />``` container component with local state.
+
+This component renders child components that can access properties like state and callbacks from their parent. A ```<ClickableItem />``` component includes a handler that modifies the parent's state, triggering a re-render of ```<Example />```. A ```<StateDependentCounter />``` displays the state value. The primary purpose of the click handler is to induce re-renders of ```<Example />``` and its children.
+
+```mermaid
+flowchart TB
+    classDef dashed stroke-dasharray: 5 5
+    idApp((App)):::dashed -.- idRoot(Page)
+    idRoot(/example-page) --- idEx((Example));
+    idEx(Example) --- id1(StateDependentCounter)
+    idEx(Example) --- id2(ClickableItem)
+```
+
+## Re-rendering of sibling components
+
+![Re-rendering of sibling components](/articles/react-performance/ui-siblings.png "Re-rendering of sibling components")
+
+The actual code:
+
+```tsx
+export const Example = () => {
+    console.log('Example');
+
+    const [value, setValue] = useState(0);
+
+    return (
+        <ExampleBox>
+            <StateDependentCounter externalValue={value}/>
+            <ClickableItem
+                onClick={() => {
+                    setValue((v) => v + 1);
+                }}
+            >
+                ClickableItem
+            </ClickableItem>
+            <StateIndependent/>
+            <StateIndependentMemo/>
+        </ExampleBox>
+    );
+};
+```
+
+When we click on a ```<ClickableItem />```, we modify the local state of ```<Example />```, which is rendered in the ```<StateDependentCounter />```. 
+
+```<StateIndependent />``` and ```React.memo(StateIndependent)``` components don't depend on that state. Second one is wrapped in ```React.memo```.
+
+Each component outputs its name into console:
+
+| Action          | React 18 (console output)                                                                                      | React 19 + compiler (console output)      |
+|:----------------|:---------------------------------------------------------------------------------------------------------------|:------------------------------------------|
+| First rendering | Example <br /><br /> StateDependentCounter<br /><br />StateIndependent<br /><br />React.memo(StateIndependent) | the same                                  |
+| On click        | Example<br /><br />StateDependentCounter<br /><br />StateIndependent                                           | Example <br /><br />StateDependentCounter |
+
+As observed, after a click, React 18 re-rendered `<Example />`, `<StateDependentCounter />`, `<StateIndependent />`, but not `React.memo(StateIndependent`. `React.memo` returned the previously calculated result after comparing the properties (absent) with ones, present in cache.
+
+In contrast, React 19 rendered only those things, that really changed - `<Example />` and `<StateDependentCounter />`. Nice :smirk: React 19 compiler cached all components automatically.
+
+"On click" rendering screenshot from React DevTools Profiler for React 18
+
+![Rendering siblings > React 18](/articles/react-performance/react-18-profile-siblings.png "Rendering siblings > React 18")
+
+"On click" rendering screenshot from React DevTools Profiler for React 19
+
+![Rendering siblings > React 19](/articles/react-performance/react-19-profile-siblings.png "Rendering siblings > React 19")
+
+## Caching properties
+
+![Caching properties](/articles/react-performance/ui-properties-objects.png "Caching propertiess")
+
+```tsx
+export const Example = () => {
+    console.log('Example');
+
+    const [value, setValue] = useState(0);
+
+    const callbackCached = useCallback(() => {
+        setValue((v) => v + 1);
+    }, []);
+
+    const obj = {test: 123};
+
+    return (
+        <ExampleBox>
+            <StateDependentCounter externalValue={value}/>
+            <CallbackDependentCached callback={callbackCached} variant="callbackCached"/>
+            <RenderObject value={obj} variant="RenderObject"/>
+            <RenderObjectMemo value={obj} variant="RenderObjectMemo"/>
+            <RenderObjectMemoCompared value={obj} variant="RenderObjectMemoCompared"/>
+        </ExampleBox>
+    );
+};
+```
+
+When we click on a ```<CallbackDependentCached />```, we modify the local state of ```<Example />```, which is rendered in the ```<StateDependentCounter />```.
+
+```<RenderObject />```, ```<RenderObjectMemo />``` and ```<RenderObjectMemoCompared />``` consume the same hardcoded ```obj``` object.
+
+```<RenderObjectMemo />``` is simply wrapped with ```React.memo```. ```<RenderObjectMemoCompared />``` is wrapped with ```React.memo``` with a comparator function, that does the deep equality comparison of properties.
+
+Each component outputs its name into console:
+
+| Action          | React 18 (console output)                                                                                                                                                                                                                                                                     | React 19 + compiler (console output)      |
+|:----------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------|
+| First rendering | Example <br /><br /> StateDependentCounter<br /><br />React.memo(CallbackDependent) callbackCached<br /><br />RenderObject \{"test":123\} <br /><br /> RenderObjectMemo \{"test":123\} Option: RenderObjectMemo <br /><br /> RenderObjectMemo \{"test":123\} Option: RenderObjectMemoCompared | the same                                  |
+| On click        | Example <br /><br /> StateDependentCounter<br /><br />RenderObject \{"test":123\} <br /><br /> RenderObjectMemo  \{"test":123\} Option: RenderObjectMemo                                                                                                                                      | Example <br /><br />StateDependentCounter |
+Nothing 
+
+TODO Explain
+
+As observed, after a click, React 18 re-rendered `<Example />`, `<StateDependentCounter />`, `<RenderObject \{"test":123\} />` and `<RenderObjectMemo  \{"test":123\} Option: RenderObjectMemo />`, but not `<React.memo(CallbackDependent) callbackCached />` and `<RenderObjectMemo \{"test":123\} Option: RenderObjectMemoCompared />`.
+
+`<React.memo(CallbackDependent) callbackCached />` is not rendered, because the callback function is cached via `useCallback` hook and remained the same instance in both rendering jobs.
+
+`<RenderObjectMemo \{"test":123\} Option: RenderObjectMemoCompared />` didn't render because of comparator function supplied to `React.memo` wrapper, which did a deep comparison of different instances of the `obj` parameters.
+
+In contrast, React 19 rendered only those things, that really changed - `<Example />` and `<StateDependentCounter />` :open_mouth: . That happened because the `obj` object was automatically cached, so no other components had updates.
+
+"On click" rendering screenshot from React DevTools Profiler for React 18
+
+![Caching properties > React 18](/articles/react-performance/react-18-profile-props.png "Caching properties > React 18")
+
+"On click" rendering screenshot from React DevTools Profiler for React 19
+
+![Caching properties > React 19](/articles/react-performance/react-19-profile-props.png "Caching properties > React 19")
+
+## Caching callbacks
+
+![Caching callbacks](/articles/react-performance/ui-callbacks.png "Caching callbacks")
+
+```tsx
+export const Example = () => {
+    console.log('Example');
+
+    const [value, setValue] = useState(0);
+
+    const sharedCallback = () => {
+        setValue((v) => v + 1);
+    };
+
+    const sharedCallbackCached = useCallback(() => {
+        setValue((v) => v + 1);
+    }, []);
+
+    return (
+        <ExampleBox>
+            <StateDependentCounter externalValue={value}/>
+            <CallbackDependent callback={sharedCallback} variant="sharedCallback"/>
+            <CallbackDependentCached callback={sharedCallback} variant="sharedCallback"/>
+            <CallbackDependent callback={sharedCallbackCached} variant="sharedCallbackCached"/>
+            <CallbackDependentCached callback={sharedCallbackCached} variant="sharedCallbackCached"/>
+        </ExampleBox>
+    );
+};
+```
+
+When we click on one of ```<CallbackDependent* variant="*" />``` components, we modify the same local state of ```<Example />```, which is rendered
+in the ```<StateDependentCounter />```.
+
+```<CallbackDependent callback={sharedCallback} variant="sharedCallback"/>``` consumes a regular callback.
+
+```<CallbackDependentCached callback={sharedCallback} variant="sharedCallback"/>``` is wrapped in ```React.memo``` and consumes a regular callback.
+
+```<CallbackDependent callback={sharedCallbackCached} variant="sharedCallbackCached"/>``` consumes a cached callback.
+
+```<CallbackDependentCached callback={sharedCallbackCached} variant="sharedCallbackCached"/>``` is wrapped in ```React.memo``` and consumes a __cached__ callback.
+
+Each component outputs its name into console:
+
+| Action          | React 18 (console output)                                                                                                                                                                                                                                              | React 19 + compiler (console output)       |
+|:----------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------|
+| First rendering | Example <br /><br /> StateDependentCounter <br /><br /> CallbackDependent sharedCallback <br /><br /> React.memo(CallbackDependent) sharedCallback <br /><br /> CallbackDependent sharedCallbackCached <br /><br /> React.memo(CallbackDependent) sharedCallbackCached | the same                                   |
+| On click        | Example <br /><br /> StateDependentCounter <br /><br /> CallbackDependent sharedCallback <br /><br /> React.memo(CallbackDependent) sharedCallback <br /><br /> CallbackDependent sharedCallbackCached                                                                 | Example <br /><br /> StateDependentCounter |
+
+As observed, after a click, React 18 re-rendered `<Example />`, `<StateDependentCounter />`, `<CallbackDependent sharedCallback />`, `<React.memo(CallbackDependent) sharedCallback />` and `<CallbackDependent sharedCallbackCached />`, but not `<React.memo(CallbackDependent) sharedCallbackCached />`. It happened because only the last one had all properties correctly cached and left unchanged.
+
+React 19 rendered only those things, that really changed - `<Example />` and `<StateDependentCounter />`. All properties (including callbacks) have been automatically cached.
+
+"On click" rendering screenshot from React DevTools Profiler for React 18
+
+![Caching callbacks > React 18](/articles/react-performance/react-18-profile-callbacks.png "Caching callbacks > React 18")
+
+"On click" rendering screenshot from React DevTools Profiler for React 19
+
+![Caching callbacks > React 19](/articles/react-performance/react-19-profile-callbacks.png "Caching callbacks > React 19")
+
+## Components as properties
+
+![Components as properties](/articles/react-performance/ui-components-as-properties.png "Components as properties")
+
+```tsx
+export const Example = () => {
+    console.log('Example');
+
+    return (
+        <SubExample
+            externalComponent1={<IAmUsedAsAsAProperty variant="externaly defined"/>}
+            externalComponent2={<IAmUsedAsAsAChild variant="externaly defined"/>}
+        />
+    );
+};
+
+type SubExampleProps = {
+    externalComponent1: React.ReactNode;
+    externalComponent2: React.ReactNode;
+};
+
+export const SubExample = (props: SubExampleProps) => {
+    console.log('SubExample');
+
+    const [value, setValue] = useState(0);
+
+    const sharedCallbackCached = useCallback(() => {
+        setValue((v) => v + 1);
+    }, []);
+
+    return (
+        <ExampleBox>
+            <StateDependentCounter externalValue={value}/>
+            <ClickableItem onClick={sharedCallbackCached}>ClickableItem</ClickableItem>
+            <RenderComponentAsAProperty
+                propComponent={<IAmUsedAsAsAProperty variant="defined near the consumer"/>}
+                variant="RenderComponentAsAProperty propComponent={<IAmUsedAsAsAProperty />}"
+            />
+            <RenderComponentAsAProperty
+                propComponent={props.externalComponent1}
+                variant="RenderComponentAsAProperty propComponent={props.externalComponent}"
+            />
+            <RenderComponentAsAProperty
+                propComponent={props.externalComponent1}
+                variant="RenderComponentAsAProperty propComponent={props.externalComponent} + children"
+            >
+                {props.externalComponent2}
+            </RenderComponentAsAProperty>
+        </ExampleBox>
+    );
+};
+```
+
+```<Example />```  renders ```<SubExample />``` component and sets ```<IAmUsedAsAsAProperty />``` and ```<IAmUsedAsAsAChild />``` as its properties.
+
+When we click on a ```<CallbackDependentCached />```, we modify the local state of ```<SubExample />```, which is rendered in the ```<StateDependentCounter />```.
+
+The first ```<RenderComponentAsAProperty``` uses locally defined ```<IAmUsedAsAsAProperty />``` as a property.
+
+The second ```<RenderComponentAsAProperty />``` uses externally defined ```<IAmUsedAsAsAProperty />``` as a property.
+
+Third ```<RenderComponentAsAProperty />``` uses externally defined ```<IAmUsedAsAsAProperty />``` as a property and externally defined ```<IAmUsedAsAsAChild />``` as a child.
+
+Each component outputs its name into console:
+
+| Action          | React 18 (console output)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | React 19 + compiler (console output)       |
+|:----------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------|
+| First rendering | Example <br /><br /> SubExample <br /><br /> StateDependentCounter <br /><br /> RenderComponentAsAProperty RenderComponentAsAProperty propComponent=\{\<IAmUsedAsAsAProperty />\} <br /><br /> IAmUsedAsAsAProperty defined near the consumer <br /><br /> RenderComponentAsAProperty RenderComponentAsAProperty propComponent=\{props.externalComponent\} <br /><br /> IAmUsedAsAsAProperty externally defined <br /><br /> RenderComponentAsAProperty RenderComponentAsAProperty propComponent=\{props.externalComponent\} + children <br /><br /> IAmUsedAsAsAProperty externally defined <br /><br /> IAmUsedAsAsAChild externally defined | the same                                   |
+| On click        | SubExample <br /><br /> StateDependentCounter <br /><br /> RenderComponentAsAProperty RenderComponentAsAProperty propComponent=\{\<IAmUsedAsAsAProperty />\} <br /><br /> IAmUsedAsAsAProperty defined near the consumer <br /><br /> RenderComponentAsAProperty RenderComponentAsAProperty propComponent=\{props.externalComponent\} <br /><br /> RenderComponentAsAProperty RenderComponentAsAProperty propComponent=\{props.externalComponent\} + children                                                                                                                                                                                  | Example <br /><br /> StateDependentCounter |
+
+Well... it looks like a lot to explain.
+
+If looking carefully, we notice 1 new important effect in React 18 rendering logs, that demonstrates importance of a good components composition, using them as properties and children (in fact, it is the same). Components, defined closer to the root, outside of their updating parent, don't re-render. Those were rendered earlier. That's the case, when the next practice is justified "move non-changing component definitions higher". Components as properties, defined together with their consumer, render again.
+
+Not a big surprise to see, that the brillian React 19 compiler rendered only a tiny peace. Everything is cached. Yep. As simple as that.
+
+"On click" rendering screenshot from React DevTools Profiler for React 18
+
+![Components as properties > React 18](/articles/react-performance/react-18-profile-cmp-props.png "Components as properties > React 18")
+
+"On click" rendering screenshot from React DevTools Profiler for React 19
+
+![Components as properties > React 19](/articles/react-performance/react-19-profile-cmp-props.png "Components as properties > React 19")
+
+
+## Why React 19 with it's new compiler is so good in terms of performance?
+
+* Auto-memoization of all components
+* Internal component caching of variables, functions and hooks
+* Basically, components are re-written by compiler in such a way, so all internal elements are defined once and re-rendering does not create new instances of those (remember `useCallback(() => dosmthWithDeps(), deps)`) and does not cause rendering waterfall for consumers
+
+## Conclusions
+
+In this article, we reviewed various component compositions and methods to minimize rendering jobs.
+
+We examined the impact of React 19 and its new compiler on rendering performance, noting a significant improvement in rendering speed for projects without or with insufficient caching.
+
+Theoretically, once we upgrade to React 19, we can eliminate all caching hooks and wrappers from React 18. However, there is no immediate urgency to do so, as the compiler will handle all cases appropriately.
