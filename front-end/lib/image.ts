@@ -103,10 +103,10 @@ export const getContainBlurredImageURL = (props: { src: string }) =>
 export const readImageBase64AndInfo = async (src: string) => {
     const blob = await (await fetch(src)).arrayBuffer();
     const imgData = await Jimp.read(Buffer.from(blob));
-    const url = imgData.bitmap.data.toString("base64");
+    const url = await imgData.getBase64Async(-1);
 
     return {
-        blurDataURL: `data:image/png;base64,${url}`,
+        blurDataURL: url,
         ratio: imgData.getWidth() / imgData.getHeight()
     }
 }
