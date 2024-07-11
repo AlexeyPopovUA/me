@@ -1,16 +1,18 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import {Metadata} from "next";
 
 import LatestArticles from "@/app/latest-articles";
 import {getOGImageURL, readBlurredImageSrcPair} from "@/lib/image";
 import {imageLoader} from "@/components/image/image-loader";
 import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
 import {PageSchema} from "@/content/pages/resume/schema";
+import {environment} from "@/app/configuration/environment";
 
 const pageSlug = "home";
 
-export async function generateMetadata({params}: any) {
+export async function generateMetadata({params}: any): Promise<Metadata> {
     const {frontMatter} = await readFrontMatterWithContent<PageSchema>(getPagePathByDirName(pageSlug));
     const ogImage = getOGImageURL({src: "/pages/home/me-w-square-bg.jpg"});
 
@@ -18,6 +20,10 @@ export async function generateMetadata({params}: any) {
         title: frontMatter.title,
         description: frontMatter.description,
         keywords: frontMatter.keywords,
+        metadataBase: new URL(environment.url),
+        alternates:{
+            canonical: "/"
+        },
         openGraph: {
             title: frontMatter.title,
             description: frontMatter.description,

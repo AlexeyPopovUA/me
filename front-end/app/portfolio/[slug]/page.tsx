@@ -8,6 +8,9 @@ import {ProjectSection} from "./project-section";
 import {getOGImageURL, readBlurredImageSrcPair} from "@/lib/image";
 import {content} from "@/app/configuration/content";
 import {ArticleContainer} from "@/components/image/ArticleContainer";
+import {environment} from "@/app/configuration/environment";
+import {ensurePathSlash} from "@/lib/utils";
+import {Metadata} from "next";
 
 export async function generateStaticParams() {
     const allSlugs = await getProjectSlugs();
@@ -19,13 +22,17 @@ type StaticProps = {
     params: StaticParams;
 }
 
-export const generateMetadata = async (props: StaticProps) => {
+export const generateMetadata = async (props: StaticProps): Promise<Metadata> => {
     const {frontMatter} = await getProjectSEOContent({slug: props.params.slug});
     const ogImage = getOGImageURL({src: frontMatter.thumbnail});
 
     return {
         title: `${frontMatter.title} - ${content.authorName}`,
         description: frontMatter.description,
+        metadataBase: new URL(environment.url),
+        alternates: {
+            canonical: ensurePathSlash(`/portfolio/${props.params.slug}`)
+        },
         openGraph: {
             title: `${frontMatter.title} - ${content.authorName}`,
             description: frontMatter.description,

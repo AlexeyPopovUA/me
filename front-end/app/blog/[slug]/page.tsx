@@ -6,6 +6,9 @@ import {getOGImageURL} from "@/lib/image";
 import {MermaidInitializer} from "@/lib/RemarkMermaidPlugin";
 import {ArticleContent} from "@/components/article-content";
 import {ArticleContainer} from "@/components/image/ArticleContainer";
+import {environment} from "@/app/configuration/environment";
+import {ensurePathSlash} from "@/lib/utils";
+import {Metadata} from "next";
 
 export async function generateStaticParams() {
     const allSlugs = await getArticlesSlugs();
@@ -17,13 +20,17 @@ type StaticProps = {
     params: StaticParams;
 }
 
-export const generateMetadata = async (props: StaticProps) => {
+export const generateMetadata = async (props: StaticProps): Promise<Metadata> => {
     const post = await getArticleSEOContent({slug: props.params.slug});
     const ogImage = getOGImageURL({src: post.thumbnail});
 
     return {
         title: `${post.title} - ${content.authorName}`,
         description: post.description,
+        metadataBase: new URL(environment.url),
+        alternates: {
+            canonical: ensurePathSlash(`/blog/${props.params.slug}`)
+        },
         keywords: post.keywords,
         openGraph: {
             title: `${post.title} - ${content.authorName}`,

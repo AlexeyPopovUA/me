@@ -10,15 +10,22 @@ import OwnProjects from "@/app/resume/components/OwnProjects";
 import Education from "@/app/resume/components/Education";
 import renderData from "@/app/resume/data/data";
 import {content} from "@/app/configuration/content";
+import {environment} from "@/app/configuration/environment";
+import {ensurePathSlash} from "@/lib/utils";
+import {Metadata} from "next";
 
 const pageSlug = "resume";
 
-export async function generateMetadata({params}: any) {
+export async function generateMetadata({params}: any): Promise<Metadata> {
     const {frontMatter} = await readFrontMatterWithContent<PageSchema>(getPagePathByDirName(pageSlug));
 
     return {
         title: `${frontMatter.title} - ${content.authorName}`,
         description: frontMatter.description,
+        metadataBase: new URL(environment.url),
+        alternates: {
+            canonical: ensurePathSlash(`/${pageSlug}`)
+        },
         keywords: frontMatter.keywords,
         openGraph: {
             title: `${frontMatter.title} - ${content.authorName}`,
