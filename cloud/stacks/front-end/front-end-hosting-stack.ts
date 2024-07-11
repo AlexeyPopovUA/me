@@ -14,7 +14,7 @@ import {
     OriginAccessIdentity,
     FunctionCode,
     Function as CFFunction,
-    FunctionEventType
+    FunctionEventType, ResponseHeadersPolicy
 } from "aws-cdk-lib/aws-cloudfront";
 import {S3Origin} from "aws-cdk-lib/aws-cloudfront-origins";
 import {Certificate, CertificateValidation} from "aws-cdk-lib/aws-certificatemanager";
@@ -75,6 +75,18 @@ export class FrontEndHostingStack extends Stack {
             defaultTtl: Duration.days(30)
         });
 
+        const responseHeadersPolicy = new ResponseHeadersPolicy(this, `${project}-response-headers-policy`, {
+            customHeadersBehavior: {
+                customHeaders: [
+                    {
+                        header: "Cache-Control",
+                        value: `max-age=${1 * 60 * 60}`, // 1 hour
+                        override: false
+                    }
+                ]
+            }
+        });
+
         const distribution = new Distribution(this, `${project}-api-distribution`, {
             // comment contains the distribution name
             comment: `${project}-main hosting distribution`,
@@ -92,7 +104,8 @@ export class FrontEndHostingStack extends Stack {
             ],
             defaultBehavior: {
                 allowedMethods: AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
-                cachePolicy: cachePolicy,
+                cachePolicy,
+                responseHeadersPolicy,
                 cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
                 compress: true,
                 viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
