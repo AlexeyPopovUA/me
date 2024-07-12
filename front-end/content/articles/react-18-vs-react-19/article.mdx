@@ -324,9 +324,7 @@ Each component outputs its name into console:
 |:----------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------|
 | First rendering | Example <br /><br /> StateDependentCounter<br /><br />React.memo(CallbackDependent) callbackCached<br /><br />RenderObject \{"test":123\} <br /><br /> RenderObjectMemo \{"test":123\} Option: RenderObjectMemo <br /><br /> RenderObjectMemo \{"test":123\} Option: RenderObjectMemoCompared | the same                                  |
 | On click        | Example <br /><br /> StateDependentCounter<br /><br />RenderObject \{"test":123\} <br /><br /> RenderObjectMemo  \{"test":123\} Option: RenderObjectMemo                                                                                                                                      | Example <br /><br />StateDependentCounter |
-Nothing 
 
-TODO Explain
 
 As observed, after a click, React 18 re-rendered `<Example />`, `<StateDependentCounter />`, `<RenderObject \{"test":123\} />` and `<RenderObjectMemo  \{"test":123\} Option: RenderObjectMemo />`, but not `<React.memo(CallbackDependent) callbackCached />` and `<RenderObjectMemo \{"test":123\} Option: RenderObjectMemoCompared />`.
 
