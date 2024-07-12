@@ -14,7 +14,7 @@ router.use(express.json());
 router.use(express.urlencoded({extended: true}));
 
 /**
- * This route is for nodejs or mobile applications where environment name is sent via "environment" query parameter
+ * This route is for Node.js or mobile applications where environment name is sent via "environment" query parameter
  */
 router.get("/demo", demoRouteHandler);
 

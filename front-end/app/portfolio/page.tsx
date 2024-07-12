@@ -35,6 +35,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function Post() {
     return (
         <article className='container mx-auto px-4 sm:px-8 md:px-12 py-8'>
+            <div className="prose prose-sm md:prose-base lg:prose-lg mb-4">
+                <h1>Portfolio</h1>
+            </div>
             <AllProjects/>
         </article>
     );

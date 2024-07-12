@@ -3,7 +3,7 @@ const data = Object.seal({
         name: "Oleksii",
         surname: "Popov",
         initials: "O.Y.",
-        position: "Fullstack Software Engineer (React/NodeJS/TypeScript/AWS)",
+        position: "Fullstack Software Engineer (React/Node.js/TypeScript/AWS)",
         Website: {title: "oleksiipopov.com", url: "https://oleksiipopov.com"},
         LinkedIn: {title: "linkedin.com/in/oleksii-popov", url: "https://linkedin.com/in/oleksii-popov"},
         GitHub: {title: "github.com/AlexeyPopovUA", url: "https://github.com/AlexeyPopovUA"},
@@ -35,7 +35,7 @@ const data = Object.seal({
         {
             name: "Programming languages",
             description:
-                "Advanced knowledge of JavaScript, TypeScript, NodeJS, HTML, CSS, SCSS. Basic knowledge of Java, PHP"
+                "Advanced knowledge of JavaScript, TypeScript, Node.js, HTML, CSS, SCSS. Basic knowledge of Java, PHP"
         },
         {
             name: "Frontend",
@@ -47,7 +47,7 @@ const data = Object.seal({
         },
         {
             name: "Backend",
-            description: "NodeJS, Serverless, Express JS, Wordpress, Netlify CMS, GraphQL, MongoDB, DynamoDB, MySQL"
+            description: "Node.js, Serverless, Express JS, Wordpress, Netlify CMS, GraphQL, MongoDB, DynamoDB, MySQL"
         },
         {
             name: "Testing",
@@ -96,7 +96,7 @@ const data = Object.seal({
                 "Maintenance of the new Dynatrace Kubernetes web application",
                 "Maintenance of the automated tests"
             ],
-            stack: "React, Typescript, Docker, Kubernetes, NodeJS, Java"
+            stack: "React, Typescript, Docker, Kubernetes, Node.js, Java"
         },
         {
             company: "TomTom (Amsterdam, Netherlands)",
@@ -112,7 +112,7 @@ const data = Object.seal({
                 "Added feature branches support for a high concurrency automation testing infrastructure of https://plan.tomtom.com with feature branch matching between projects",
                 "Implemented performance testing dashboard for the existing performance metric collection system"
             ],
-            stack: "React, Redux, Thunk, Typescript, GatsbyJS, TailwindCSS, GraphQL, Docker, nodejs, scss, jest, AWS, aws-cdk, aws-sdk, sitespeed.io, Grafana, Storybook, Java, Selenium, GitHub actions"
+            stack: "React, Redux, Thunk, Typescript, GatsbyJS, TailwindCSS, GraphQL, Docker, Node.js, scss, jest, AWS, aws-cdk, aws-sdk, sitespeed.io, Grafana, Storybook, Java, Selenium, GitHub actions"
         },
         {
             company: "TomTom (Amsterdam, Netherlands)",
@@ -129,7 +129,7 @@ const data = Object.seal({
                 "Implemented POC of realtime technical log monitoring system which became a part of team workflow",
                 "Developed a POC service with backend side map rendering"
             ],
-            stack: "React, Redux, Saga, TypeScript, Docker, NodeJS, Express JS, SCSS, Jest, AWS, Serverless, aws-cdk, aws-sdk, sitespeed.io, Grafana, Storybook, Java, Selenium"
+            stack: "React, Redux, Saga, TypeScript, Docker, Node.js, Express JS, SCSS, Jest, AWS, Serverless, aws-cdk, aws-sdk, sitespeed.io, Grafana, Storybook, Java, Selenium"
         },
         {
             company: "Albelli (Amsterdam, Netherlands)",
@@ -141,7 +141,7 @@ const data = Object.seal({
                 "Developed different tools for debugging, logging and fixing customer issues",
                 "Set up code quality monitoring system"
             ],
-            stack: "JavaScript, TypeScript, SCSS, NodeJS, google-closure-library, Mocha, Java, Grunt, Selenium"
+            stack: "JavaScript, TypeScript, SCSS, Node.js, google-closure-library, Mocha, Java, Grunt, Selenium"
         },
         {
             company: "Insoft Global (Ukraine)",
@@ -153,7 +153,7 @@ const data = Object.seal({
                 "Implemented POC of a hybrid mobile application",
                 "Code review, code refactoring, technical interviews, mentorship"
             ],
-            stack: "Sencha ExtJS, SCSS, NodeJS, Java"
+            stack: "Sencha ExtJS, SCSS, Node.js, Java"
         },
         {
             company: "Exadel",

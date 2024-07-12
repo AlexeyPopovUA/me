@@ -21,7 +21,7 @@ export async function generateMetadata({params}: any): Promise<Metadata> {
         description: frontMatter.description,
         keywords: frontMatter.keywords,
         metadataBase: new URL(environment.url),
-        alternates:{
+        alternates: {
             canonical: "/"
         },
         openGraph: {
@@ -51,9 +51,9 @@ export default async function Home() {
                                alt="Profile photo of Oleksii Popov"/>
                     </div>
                     <div className="flex flex-col justify-center">
-                        <div className="mb-2 text-xl">Hi, I&apos;m Oleksii Popov,</div>
-                        <div className="mb-4 text-xl">Fullstack Software Engineer</div>
-                        <div className="mb-4">I develop solutions with React, NodeJS, JavaScript, TypeScript and AWS
+                        <h1 className="mb-2 text-xl md:text-2xl lg:text-3xl">Hi, I&apos;m Oleksii Popov,</h1>
+                        <div className="mb-4 text-xl lg:text-2xl">Fullstack Software Engineer</div>
+                        <div className="mb-4">I develop solutions with React, Node.js, JavaScript, TypeScript and AWS
                         </div>
                     </div>
                 </div>
