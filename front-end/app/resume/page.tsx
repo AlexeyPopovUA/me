@@ -13,11 +13,13 @@ import {content} from "@/app/configuration/content";
 import {environment} from "@/app/configuration/environment";
 import {ensurePathSlash} from "@/lib/utils";
 import {Metadata} from "next";
+import {getOGImageURL} from "@/lib/image";
 
 const pageSlug = "resume";
 
-export async function generateMetadata({params}: any): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
     const {frontMatter} = await readFrontMatterWithContent<PageSchema>(getPagePathByDirName(pageSlug));
+    const ogImage = getOGImageURL({src: frontMatter.thumbnail});
 
     return {
         title: `${frontMatter.title} - ${content.authorName}`,
@@ -29,8 +31,11 @@ export async function generateMetadata({params}: any): Promise<Metadata> {
         keywords: frontMatter.keywords,
         openGraph: {
             title: `${frontMatter.title} - ${content.authorName}`,
-            description: frontMatter.description
-        },
+            description: frontMatter.description,
+            images: [
+                ogImage
+            ]
+        }
     }
 }
 

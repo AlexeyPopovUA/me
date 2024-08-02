@@ -3,4 +3,5 @@ export interface PageSchema {
     slug: string;
     date: Date;
     description: string;
+    thumbnail: string;
 }

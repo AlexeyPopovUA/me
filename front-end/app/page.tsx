@@ -12,9 +12,9 @@ import {environment} from "@/app/configuration/environment";
 
 const pageSlug = "home";
 
-export async function generateMetadata({params}: any): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
     const {frontMatter} = await readFrontMatterWithContent<PageSchema>(getPagePathByDirName(pageSlug));
-    const ogImage = getOGImageURL({src: "/pages/home/me-w-square-bg.jpg"});
+    const ogImage = getOGImageURL({src: frontMatter.thumbnail});
 
     return {
         title: frontMatter.title,

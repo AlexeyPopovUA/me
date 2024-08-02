@@ -13,7 +13,7 @@ const pageSlug = "blog";
 
 export async function generateMetadata(): Promise<Metadata> {
     const {frontMatter} = await readFrontMatterWithContent<PageSchema>(getPagePathByDirName(pageSlug));
-    const ogImage = getOGImageURL({src: "/pages/home/me-w-square-bg.jpg"});
+    const ogImage = getOGImageURL({src: frontMatter.thumbnail});
 
     return {
         title: `${frontMatter.title} - ${content.authorName}`,
@@ -29,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
             images: [
                 ogImage
             ]
-        },
+        }
     }
 }
 

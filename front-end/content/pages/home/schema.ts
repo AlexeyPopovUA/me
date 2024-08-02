@@ -4,4 +4,5 @@ export interface PageSchema {
     date: Date;
     description: string;
     keywords: string[];
+    thumbnail: string;
 }
