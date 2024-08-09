@@ -1,19 +1,17 @@
 "use client";
 
-import clsx from 'clsx';
-import type {ImageProps as NextImageProps} from 'next/image';
-import NextImage from 'next/image';
-import {useCallback} from 'react';
+import {PropsWithChildren, useCallback, useMemo} from 'react';
 import type {Slide} from "yet-another-react-lightbox";
 
 import useLightbox from "@/components/image/useLightBox";
 import {generateLBSlides} from "@/lib/image";
 
-export interface ImageProps extends NextImageProps {
-    shouldOpenLightbox?: boolean
+export interface ImageProps extends PropsWithChildren {
+    shouldOpenLightbox: boolean;
+    src: string;
 }
 
-const ContentImage = ({shouldOpenLightbox = true, ...rest}: ImageProps) => {
+export function ContentImage({shouldOpenLightbox, src, children}: ImageProps) {
     const {openLightbox, renderLightbox} = useLightbox();
 
     const handleOpenLightbox = useCallback(() => {
@@ -22,21 +20,14 @@ const ContentImage = ({shouldOpenLightbox = true, ...rest}: ImageProps) => {
         }
     }, [openLightbox, shouldOpenLightbox]);
 
-    const isThumb = rest.id === 'thumbnail-image';
-    const className = clsx(
-        `flex justify-center`,
-        shouldOpenLightbox && 'cursor-zoom-in',
-        isThumb && 'thumbnail-image'
-    );
-
-    const slides = generateLBSlides([rest.src as string]) as Slide[];
+    const slides = useMemo(() => generateLBSlides([src as string]) as Slide[], [src]);
 
     return (
         <>
-            <NextImage {...rest} className={className} quality={70} loading="lazy"
-                       data-umami-event={isThumb ? 'view-post-thumbnail' : 'view-image-in-lightbox'}
-                       placeholder="blur"
-                       onClick={handleOpenLightbox}/>
+            <div onClick={handleOpenLightbox}>
+                {children}
+            </div>
+
             {renderLightbox({
                 slides, carousel: {
                     finite: true
@@ -44,6 +35,4 @@ const ContentImage = ({shouldOpenLightbox = true, ...rest}: ImageProps) => {
             })}
         </>
     )
-};
-
-export default ContentImage;
+}

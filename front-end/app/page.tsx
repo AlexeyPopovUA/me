@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import {Metadata} from "next";
 
@@ -9,6 +8,7 @@ import {imageLoader} from "@/components/image/image-loader";
 import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
 import {PageSchema} from "@/content/pages/resume/schema";
 import {environment} from "@/app/configuration/environment";
+import {ThumbnailImage} from "@/components/image/thumbnail-image";
 
 const pageSlug = "home";
 
@@ -41,14 +41,17 @@ export default async function Home() {
         <div className="prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto mb-24">
             <section>
                 <div className="flex flex-col sm:flex-row">
-                    <div className="mr-4 flex flex-row justify-center">
-                        <Image className="rounded-full border-4 border-amber-500 aspect-square" loader={imageLoader}
-                               placeholder="blur"
-                               loading="eager"
-                               blurDataURL={blurDataURL}
-                               quality={70}
-                               width={300} height={300} src={src}
-                               alt="Profile photo of Oleksii Popov"/>
+                    <div className="mr-4 mb-4 flex flex-row justify-center">
+                        <ThumbnailImage
+                            containerClassName="rounded-full border-4 border-amber-500 aspect-square w-72 sm:w-52 md:w-60 lg:w-64"
+                            imageClassName="rounded-full aspect-square"
+                            loader={imageLoader}
+                            placeholder="blur"
+                            loading="eager"
+                            blurDataURL={blurDataURL}
+                            quality={70}
+                            width={300} height={300} src={src}
+                            alt="Profile photo of Oleksii Popov"/>
                     </div>
                     <div className="flex flex-col justify-center">
                         <h1 className="mb-2 text-xl md:text-2xl lg:text-3xl">Hi, I&apos;m Oleksii Popov,</h1>

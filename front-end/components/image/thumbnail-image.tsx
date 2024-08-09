@@ -1,24 +1,30 @@
 import React from "react";
-import Image from "next/image";
+import clsx from "clsx";
+import {ImageProps} from "next/image";
 
-import {imageLoader} from "@/components/image/image-loader";
+import {ThumbnailImageClient} from "@/components/image/thumbnail-image-client";
 
-type Props = {
-    src: string;
-    alt: string;
+type Props = ImageProps & {
+    // overridden as required
     blurDataURL: string;
     width: number;
     height: number;
+    // custom
+    imageClassName?: string;
+    containerClassName?: string;
 };
 
-const ThumbnailImage = ({src, alt, blurDataURL, width, height}: Props) => <Image
-    className="flex-1 aspect-video object-contain"
-    loader={imageLoader}
-    loading="lazy"
-    placeholder="blur"
-    blurDataURL={blurDataURL}
-    width={width} height={height}
-    src={src}
-    alt={alt}/>;
-
-export default ThumbnailImage;
+export function ThumbnailImage(props: Props) {
+    return (
+        <div className={clsx(props.containerClassName, `relative`)} style={{aspectRatio: props.width / props.height}}>
+            <ThumbnailImageClient
+                blurDataURL={props.blurDataURL}
+                width={props.width} height={props.height}
+                loading={props.loading}
+                src={props.src}
+                onClick={props.onClick}
+                className={props.imageClassName}
+                alt={props.alt}/>
+        </div>
+    );
+}

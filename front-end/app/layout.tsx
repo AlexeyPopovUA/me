@@ -1,6 +1,7 @@
-import React from "react";
+import React, {PropsWithChildren} from "react";
 import {Domine} from 'next/font/google'
-import { GoogleAnalytics } from '@next/third-parties/google'
+import {GoogleAnalytics} from '@next/third-parties/google'
+import clsx from "clsx";
 
 import TopNavigationMenu from "@/components/navigation/top-navigation-menu";
 import Footer from "@/app/footer";
@@ -21,21 +22,17 @@ export async function generateMetadata() {
     }
 }
 
-export default function RootLayout({
-                                       children,
-                                   }: {
-    children: React.ReactNode
-}) {
+export default function RootLayout({children}: PropsWithChildren) {
     return (
         <html lang="en">
-        <body className={font.className}>
+        <body className={clsx(font.className, "relative")}>
         <header className="print:hidden w-full border-b bg-white">
             <TopNavigationMenu/>
         </header>
         {children}
         <Footer/>
         </body>
-        {NODE_ENV === "production" ? <GoogleAnalytics gaId="G-DZVHV18EK4" /> : null}
+        {NODE_ENV === "production" ? <GoogleAnalytics gaId="G-DZVHV18EK4"/> : null}
         </html>
     )
 }

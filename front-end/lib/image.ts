@@ -86,38 +86,51 @@ export const generateLBSlides = (images: string[]) => {
     }));
 };
 
-export const getContainBlurredImageURL = (props: { src: string }) =>
-    encodePayloadForUrl({
+async function getImageDimensionsRatio(props: { src: string }) {
+    const url = encodePayloadForUrl({
         ...getDefaultBucketProps(props.src),
         edits: {
             png: {
-                quality: 20
+                quality: 100
             },
             resize: {
-                width: 10,
-                fit: "contain"
+                // should be relatively big to determine the ratio w/o effect of internal numbers rounding
+                width: 100
             }
         }
-    })
+    });
 
-export const readImageBase64AndInfo = async (src: string) => {
-    const blob = await (await fetch(src)).arrayBuffer();
+    const blob = await (await fetch(url)).arrayBuffer();
     const imgData = await Jimp.read(Buffer.from(blob));
-    const url = await imgData.getBase64Async(-1);
-
-    return {
-        blurDataURL: url,
-        ratio: imgData.getWidth() / imgData.getHeight()
-    }
+    return imgData.getWidth() / imgData.getHeight();
 }
 
-// @TODO Add output for final image URL
-// @TODO Add correspondence of src cropping method between the final image and the blurred one
+async function getBlurDataURL({src, width, height}: { src: string, width: number, height: number }) {
+    const payloadURL = encodePayloadForUrl({
+        ...getDefaultBucketProps(src),
+        edits: {
+            png: {
+                quality: 75
+            },
+            resize: {
+                width,
+                height,
+                fit: "outside"
+            }
+        }
+    });
+    const blob = await (await fetch(payloadURL)).arrayBuffer();
+    const imgData = await Jimp.read(Buffer.from(blob));
+    return imgData.getBase64Async(-1);
+}
+
 export const readBlurredImageSrcPair = async ({src}: { src: string; }) => {
-    const {blurDataURL, ratio} = await readImageBase64AndInfo(getContainBlurredImageURL({src}));
+    const ratio = await getImageDimensionsRatio({src});
+    const blurDataURL = await getBlurDataURL({src, width: 10, height: 10 / ratio});
+
     return ({
         src,
         ratio,
-        blurDataURL: blurDataURL
+        blurDataURL
     });
 };
