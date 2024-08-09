@@ -86,16 +86,16 @@ export const generateLBSlides = (images: string[]) => {
     }));
 };
 
-export const getContainBlurredImageURL = (props: { src: string }) =>
+export const getBlurredImageURL = (props: { src: string }) =>
     encodePayloadForUrl({
         ...getDefaultBucketProps(props.src),
         edits: {
             png: {
-                quality: 20
+                quality: 10
             },
             resize: {
                 width: 10,
-                fit: "contain"
+                fit: "inside"
             }
         }
     })
@@ -111,10 +111,8 @@ export const readImageBase64AndInfo = async (src: string) => {
     }
 }
 
-// @TODO Add output for final image URL
-// @TODO Add correspondence of src cropping method between the final image and the blurred one
 export const readBlurredImageSrcPair = async ({src}: { src: string; }) => {
-    const {blurDataURL, ratio} = await readImageBase64AndInfo(getContainBlurredImageURL({src}));
+    const {blurDataURL, ratio} = await readImageBase64AndInfo(getBlurredImageURL({src}));
     return ({
         src,
         ratio,
