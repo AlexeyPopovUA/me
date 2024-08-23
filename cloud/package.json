@@ -10,19 +10,18 @@
     "update-dependencies": "npx npm-check-updates -u --packageFile package.json"
   },
   "devDependencies": {
-    "@tsconfig/recommended": "^1.0.6",
+    "@tsconfig/recommended": "^1.0.7",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.14.9",
-    "aws-cdk": "^2.147.2",
+    "@types/node": "^20.16.1",
+    "aws-cdk": "^2.154.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.4"
   },
   "dependencies": {
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.114.1-alpha.0",
-    "@aws-sdk/client-dynamodb": "^3.602.0",
-    "@aws-sdk/lib-dynamodb": "^3.602.0",
-    "@aws-solutions-constructs/aws-cloudfront-apigateway-lambda": "^2.60.0",
-    "aws-cdk-lib": "2.147.2",
+    "@aws-sdk/client-dynamodb": "^3.637.0",
+    "@aws-sdk/lib-dynamodb": "^3.637.0",
+    "aws-cdk-lib": "2.154.1",
     "constructs": "^10.3.0",
     "source-map-support": "^0.5.21",
     "demo": "*"
