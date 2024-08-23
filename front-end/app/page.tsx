@@ -8,7 +8,7 @@ import {imageLoader} from "@/components/image/image-loader";
 import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
 import {PageSchema} from "@/content/pages/resume/schema";
 import {environment} from "@/app/configuration/environment";
-import {ThumbnailImage} from "@/components/image/thumbnail-image";
+import {ThumbnailImage} from "@/components/image/animated-image-loading/thumbnail-image";
 
 const pageSlug = "home";
 
@@ -43,7 +43,7 @@ export default async function Home() {
                 <div className="flex flex-col sm:flex-row">
                     <div className="mr-4 mb-4 flex flex-row justify-center">
                         <ThumbnailImage
-                            containerClassName="rounded-full border-4 border-amber-500 aspect-square w-72 sm:w-52 md:w-60 lg:w-64"
+                            className="rounded-full border-4 border-amber-500 aspect-square w-72 sm:w-52 md:w-60 lg:w-64"
                             imageClassName="rounded-full aspect-square"
                             loader={imageLoader}
                             placeholder="blur"
