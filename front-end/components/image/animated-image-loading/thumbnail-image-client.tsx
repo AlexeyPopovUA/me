@@ -33,7 +33,13 @@ export function ThumbnailImageClient(props: Props) {
     [props.width, props.height, props.loading, props.priority, props.onClick],
   );
 
-  const blurredImageStyle = commonCfg.style;
+  const blurredImageStyle: CSSProperties = useMemo(
+    () => ({
+      ...commonCfg.style,
+      opacity: loaded ? 0 : 1,
+    }),
+    [commonCfg.style, loaded],
+  );
 
   const normalImageStyle: CSSProperties = useMemo(
     () => ({
