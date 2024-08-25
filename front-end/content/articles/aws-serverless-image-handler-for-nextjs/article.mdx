@@ -1,9 +1,9 @@
 ---
-title: Using AWS Serverless Image Handler for Next.js images
+title: Remote image optimization API for Next.js static websites
 slug: aws-serverless-image-handler-for-nextjs
-date: 2024-02-29
+date: 2024-08-25
 draft: true
-description: Using AWS serverless image handler for Next.js images
+description: Remote image optimization API for Next.js static websites
 thumbnail: /articles/feature-branches-npm/feature-branches-for-NPM-modules.png
 tags:
     - AWS
@@ -14,61 +14,97 @@ keywords:
     - image optimization service
 ---
 
-## Why
+# Remote image optimization API for Next.js static websites
 
-Before learning about Next.js I was pretty much happy with Gatsby.js and the way it offered you support of responsive images for an exported static website. You should not think how and where those images are optimized. You simply get all processed images in the distribution directory after the build, which should be uploaded to the storage of static web hosting. That's it. Gatsby takes care of the rest - creation of resized versions, injecting image URLs with different sizes into HTML code, adding tiny blurred versions for loading state.
+## Can I have a static website with optimized images in Next.js?
 
-Next.js became a standard for many web projects and currently often required in job vacancies. I planned to develop a new personal website, so decided to do it with Next.js and learn a new popular framework at the same time. Next.js framework offers several types of build artifacts, supposed to work on a permanent Node.js
-server, edge, lambdas or CDN (static HTML). The biggest surprise was, that you cannot get responsive images that easy in an exported static website. Either non-optimized local images or remotely optimized ones have to be used.
+Well... Next.js does not provide built-in support for image optimization in statically exported web apps. Unlike Gatsby.js, which processes and optimizes images during the build process, Next.js requires either pre-optimized local images or the use of a remote image optimization service. This limitation means that developers need to handle image optimization manually or rely on external services.
 
-Long story short. This article offers one of many ways to get a self-hosted image optimization service that provides an exported static Next.js website with images and blurred versions of those.
-
-## How
-
-In case if you need a completely static website, mostly rendered on build time and partially on a client, then you typically use  the ```output: 'export'``` option of ```next.config.mjs``` configuration file. See [the details here](https://nextjs.org/docs/app/building-your-application/deploying/static-exports).  This mode has [restrictions](https://nextjs.org/docs/app/building-your-application/deploying/static-exports#unsupported-features), one of which is [unsupported image optimization](https://nextjs.org/docs/app/building-your-application/deploying/static-exports#image-optimization). Basically, either you use local pre-processed images or a remote optimization service. Images should be loaded with a custom "loader", which "knows" how to get a correct URL of an image, based on its size, quality and path. Obviously, maintaining multiple sizes of the same image locally in  a blog-like project is a nightmare. So, the remote optimization service is a way.
-
-One of the cheapest image optimization solutions, that is already implemented by someone else, and could be completely controlled and [reviewed](https://github.com/aws-solutions/serverless-image-handler/tree/main) by a developer, is [Serverless Image Handler on AWS](https://aws.amazon.com/solutions/implementations/serverless-image-handler/), available in  [AWS Solutions Library](https://aws.amazon.com/solutions/). It offers different image optimization and modification techniques. Resizing, cropping and automatic serving of WEBP, PNG and JPEG formats - are just a few possibilities of the service. Only the [Sharp](https://sharp.pixelplumbing.com/) library is the limit. Also, this is an open code solution, one can deploy to the personal AWS account, using Cloud Formation template. Image resizing agent is a lambda, but not a permanently running Node.js server, that makes it extremely cheap in case of properly setup hosting caching policy.
-
-Serverless Image Handler from AWS Solutions does not support assigning a custom domain name and set up many other things. It is basically an example of a solution, that is considered to be a good one. And it definitely is! So we need to apply a bit more effort and create own CloudFront distribution with Caching policy, Cache Control response headers and Content Security Policy and delegation of all request to the original distribution.
-
-As a bonus point, we will add tiny blurry versions of images to HTML files, so we have smth rendered on the page immediately, while browser is busy with loading a proper image taken from an image ```srcset```.
+In this article I'll explain why I preferred to use a remote image optimization service for a Next.js static website and how I integrated it with the Serverless Image Handler from AWS Solutions.
 
 ## tl;dr Just show me the code!
 
-TODO GitHub repo
-TODO URL of the deployed static app
+> [GitHub repo](https://github.com/AlexeyPopovUA/nextjs-remote-images/)
 
-## Example implementation
+> [Demo app](https://nextjs-remote-images.examples.oleksiipopov.com/)
 
+> [Serverless Image Handler on AWS](https://aws.amazon.com/solutions/implementations/serverless-image-handler/)
 
+## What happens in other frameworks?
 
-### Image optimization service
+Quick investigation shows that other popular frameworks like Gatsby.js and Svelte have different approaches to image optimization in **static websites**:
 
+| Framework | Build Time Image Optimization Support                                                                                                                        | Image Optimization Service |
+|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|
+| Gatsby.js | Plugins like [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/) and gatsby-transformer-sharp                                       | Optional                   |
+| Next.js   | Custom tooling to generate pre-optimized images. For instance, [Next-Image-Export-Optimizer](https://github.com/Niels-IO/next-image-export-optimizer#readme) | Required                   |
+| Svelte    | third-party plugins or preprocessors                                                                                                                         | Required                   |
+| Astro     | [@astrojs/image integration](https://docs.astro.build/en/guides/images/)                                                                                     | Optional                   |
 
+## Choosing the right approach
 
-#### Service deployment and configuration
+That problem made me to reconsider the convenient Gatsby solution as I had in previous projects. I needed to choose between using a remote image optimization service or pre-optimizing images locally during the build process. Both approaches have their pros and cons, depending on factors such as setup complexity, build time, flexibility, performance, storage requirements, cost, maintenance, and other considerations. Here's a comparison of the two approaches:
 
+| Feature/Aspect           | Remote Images (Image Optimization API)                                                                  | Locally Exported Pre-Optimized Images (Build Time)                                    |
+|--------------------------|---------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
+| **Setup Complexity**     | Requires setting up an external service or API, configuring loaders, and handling API keys and security | Requires configuring build tools to generate multiple image sizes                     |
+| **Build Time**           | Faster, as images are not processed during the build                                                    | Slower, as images are processed and optimized during the build                        |
+| **Flexibility**          | High, can dynamically request different sizes and formats based on device and network conditions        | Limited to the sizes and formats generated during the build                           |
+| **Loading Speed**        | Potentially better, as images can be optimized on-the-fly based on the user's device and network        | Dependent on the pre-generated sizes; may not be as optimized for all scenarios       |
+| **Storage Requirements** | Potentially lower, as images are stored and served by the external service                              | Higher, as multiple sizes of each image need to be stored locally                     |
+| **Cost**                 | May incur costs based on usage, API calls, and data transfer                                            | One-time cost during build; also, CDN traffic costs                                   |
+| **Maintenance**          | Requires maintaining API integration and handling potential changes in the external service             | Requires maintaining build scripts and ensuring all necessary sizes are generated     |
+| **CDN Integration**      | Can be integrated with CDN for faster delivery                                                          | Uses the same CDN as other assets, but requires uploading of all pre-generated images |
+| **Image Quality**        | Can dynamically adjust quality based on user conditions                                                 | Fixed quality based on build-time settings                                            |
+| **Fallback Handling**    | Can provide fallbacks dynamically if the API fails                                                      | Fallbacks need to be pre-generated and included during the build                      |
+| **Initial Page Load**    | May be slower initially due to API calls                                                                | Faster initial load as images are served directly from the local storage or CDN       |
+| **Caching**              | Can leverage API and CDN caching strategies                                                             | Can leverage CDN caching, but requires proper cache invalidation strategies           |
 
+Looking at the comparison, I decided to use a remote image optimization service for my Next.js website. This approach offers more flexibility, faster build times, lower storage requirements, and potentially better image optimization based on user conditions.
 
-#### Proxy CDN for a normal domain and caching control
+Next problem is to find a suitable image optimization service. I chose the Serverless Image Handler from AWS Solutions, which offers a range of image optimization and modification techniques, including resizing, cropping, and automatic serving of WEBP, PNG, and JPEG formats. The service is based on the Sharp library and can be deployed to a personal AWS account using a CloudFormation template.
 
+## Architecture
 
+The Serverless Image Handler service does not support assigning a custom domain name, setting up hosting cache and viewer policies, retrieving image metadata information, or providing convenient image maintenance. To address these limitations, I needed to create a CloudFront distribution with caching policies, Cache-Control response headers, and Content Security Policy, and delegate all requests to the original distribution.
 
-### Simple Next.js project
+Original architecture of the Serverless Image Handler from AWS Solutions:
 
+![Architecture](/articles/nextjs-images/architecture.png "Architecture (© AWS Solutions)")
 
+When I added the CloudFront distribution, the architecture looked like this:
 
-#### Creation of a static website with Next.js
+@TODO add the architecture diagram
 
+## How to integrate the Serverless Image Handler with Next.js
 
+In case if you need a completely static website, mostly rendered on build time and partially on a client, then you typically use the ```output: 'export'``` option of ```next.config.mjs``` configuration file. See [the details here](https://nextjs.org/docs/app/building-your-application/deploying/static-exports). This mode has [restrictions](https://nextjs.org/docs/app/building-your-application/deploying/static-exports#unsupported-features), one of which is [unsupported image optimization](https://nextjs.org/docs/app/building-your-application/deploying/static-exports#image-optimization). So, in our case, images could be loaded with a custom "loader", which "knows" how to get a correct URL of an image, based on its size, quality and path. 
 
-#### Adding responsive images
+The service from AWS Solutions provides a URL-based API to request images with specific transformations. For example, to request an image, you use the following URL:
 
+```html
+<img src="https://<your-domain>/<base64-cfg>" alt="Image description">
+```
 
+where `<your-domain>` is the domain of the Serverless Image Handler service, and `<base64-cfg>` is a base64-encoded JSON object containing the image transformation parameters. For example:
 
-#### Using tiny blurred images in HTML files
-
-
-
-## Conclusion
+```json
+{
+  "bucket": "my-bucket",
+  "key": "path/to/my-image.jpg",
+  "edits": {
+    "webp": {
+      "quality": 75
+    },
+    "png": {
+      "quality": 75
+    },
+    "resize": {
+      "width": 300,
+      "height": 200,
+      "fit": "cover"
+    }
+  }
+}
+```
 
