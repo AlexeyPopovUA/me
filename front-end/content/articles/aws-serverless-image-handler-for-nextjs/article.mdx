@@ -22,7 +22,9 @@ Well... Next.js does not provide built-in support for image optimization in stat
 
 In this article I'll explain why I preferred to use a remote image optimization service for a Next.js static website and how I integrated it with the Serverless Image Handler from AWS Solutions.
 
-## tl;dr Just show me the code!
+## TL;DR
+
+**Just give me the links!**
 
 > [GitHub repo](https://github.com/AlexeyPopovUA/nextjs-remote-images/)
 
@@ -62,19 +64,110 @@ That problem made me to reconsider the convenient Gatsby solution as I had in pr
 
 Looking at the comparison, I decided to use a remote image optimization service for my Next.js website. This approach offers more flexibility, faster build times, lower storage requirements, and potentially better image optimization based on user conditions.
 
+## Serverless image handler from AWS Solutions
+
 Next problem is to find a suitable image optimization service. I chose the Serverless Image Handler from AWS Solutions, which offers a range of image optimization and modification techniques, including resizing, cropping, and automatic serving of WEBP, PNG, and JPEG formats. The service is based on the Sharp library and can be deployed to a personal AWS account using a CloudFormation template.
 
-## Architecture
+| What it offers                                   | What is missing                           | What I added          |
+|--------------------------------------------------|-------------------------------------------|-----------------------|
+| Resizing                                         | Custom domain name                        | Custom domain name    |
+| Cropping                                         | Hosting cache and viewer policies control | Hosting cache control |
+| Filters                                          | Image metadata information retrieval      |                       |
+| Automatic serving of WEBP, PNG, and JPEG formats | Convenient image maintenance              |                       |
+| Demo app                                         |                                           |                       |
+| etc.                                             |                                           |                       |
 
-The Serverless Image Handler service does not support assigning a custom domain name, setting up hosting cache and viewer policies, retrieving image metadata information, or providing convenient image maintenance. To address these limitations, I needed to create a CloudFront distribution with caching policies, Cache-Control response headers, and Content Security Policy, and delegate all requests to the original distribution.
+To address some of the limitations, I needed to create a CloudFront distribution with caching policies, Cache-Control response headers, and Content Security Policy, and delegate all requests to the original distribution.
 
 Original architecture of the Serverless Image Handler from AWS Solutions:
 
-![Architecture](/articles/nextjs-images/architecture.png "Architecture (© AWS Solutions)")
+![Original architecture](/articles/nextjs-images/serverless-image-handler-original.png "Original architecture (© AWS Solutions)")
+
+There is also an optional demo app that lets you try out the Serverless Image Handler service with a sample image:
+
+![Image handler demo app](/articles/nextjs-images/image-handler-demo.png "Image handler demo app")
+
+Custom domain name, cache and viewer policies were the most important missing parts for me. For adding those, I've implemented a CloudFront distribution to delegate all requests to the original distribution.
 
 When I added the CloudFront distribution, the architecture looked like this:
 
-@TODO add the architecture diagram
+![Architecture with custom domain name](/articles/nextjs-images/serverless-image-handler-with-domain.png "Architecture with custom domain name")
+
+Here is the [AWS-CDK](https://aws.amazon.com/cdk/) code snippet for the CloudFront distribution just to give you some implementation details:
+
+```ts
+export class ImageServiceProxyStack extends Stack {
+  constructor(scope: Construct, id: string, props: StackProps) {
+    super(scope, id, props);
+
+    const project = configuration.COMMON.project;
+
+    // Hosted zone provides you with a domain name
+    const hostedZone = HostedZone.fromHostedZoneAttributes(this, `${project}-hosted-zone`, {
+      hostedZoneId: configuration.HOSTING.hostedZoneID,
+      zoneName: configuration.HOSTING.hostedZoneName
+    });
+
+    // Certifiacte is necessary to use HTTPS
+    const certificate = new Certificate(this, `${project}-cert`, {
+      domainName: configuration.HOSTING.imageProxyDomainName,
+      validation: CertificateValidation.fromDns(hostedZone)
+    });
+
+    // Cache policy for the CloudFront distribution to control caching and excoding behavior
+    const cachePolicy = new CachePolicy(this, `${project}-cache-policy`, {
+      cachePolicyName: `${project}-proxy-cache-policy`,
+      headerBehavior: CacheHeaderBehavior.allowList("Accept"),
+      cookieBehavior: CacheCookieBehavior.none(),
+      enableAcceptEncodingBrotli: true,
+      enableAcceptEncodingGzip: true,
+      minTtl: Duration.days(30),
+      maxTtl: Duration.days(365),
+      defaultTtl: Duration.days(100)
+    });
+
+    // CloudFront distribution to delegate all requests to the original distribution
+    const distribution = new Distribution(this, `${project}-proxy-distribution`, {
+      comment: `${project}-main image proxy distribution`,
+      httpVersion: HttpVersion.HTTP2_AND_3,
+      priceClass: PriceClass.PRICE_CLASS_ALL,
+      certificate,
+      enableIpv6: true,
+      minimumProtocolVersion: SecurityPolicyProtocol.TLS_V1_2_2021,
+      enableLogging: true,
+      enabled: true,
+      domainNames: [
+        configuration.HOSTING.imageProxyDomainName
+      ],
+      defaultBehavior: {
+        allowedMethods: AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+        cachePolicy,
+        cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
+        compress: true,
+        viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        origin: new HttpOrigin(configuration.HOSTING.imageProxyOriginDomain, {
+          originShieldEnabled: true,
+          protocolPolicy: OriginProtocolPolicy.HTTPS_ONLY
+        })
+      }
+    });
+
+    // Record sets to point the domain name to the CloudFront distribution (IPv4)
+    new ARecord(this, `${project}-record-a`, {
+      recordName: configuration.HOSTING.imageProxyDomainName,
+      zone: hostedZone,
+      target: RecordTarget.fromAlias(new CloudFrontTarget(distribution))
+    });
+
+    // Record sets to point the domain name to the CloudFront distribution (IPv6)
+    new AaaaRecord(this, `${project}-record-4a`, {
+      recordName: configuration.HOSTING.imageProxyDomainName,
+      zone: hostedZone,
+      target: RecordTarget.fromAlias(new CloudFrontTarget(distribution))
+    });
+  }
+}
+```
 
 ## How to integrate the Serverless Image Handler with Next.js
 
@@ -107,4 +200,12 @@ where `<your-domain>` is the domain of the Serverless Image Handler service, and
   }
 }
 ```
+
+## I've built a demo app
+
+![/articles/nextjs-images/home-page.png](/articles/nextjs-images/home-page.png)
+
+![/articles/nextjs-images/responsive-image.png](/articles/nextjs-images/responsive-image.png)
+
+![/articles/nextjs-images/thumbnails-with-diff-cropping-modes.png](/articles/nextjs-images/thumbnails-with-diff-cropping-modes.png)
 
