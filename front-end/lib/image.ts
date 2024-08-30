@@ -189,13 +189,13 @@ async function getImageDimensionsRatio(props: { src: string }) {
     ...getDefaultBucketProps(props.src),
     edits: {
       png: {
-        quality: 100
+        quality: 10,
       },
       resize: {
         // should be relatively big to determine the ratio w/o effect of internal numbers rounding
-        width: 100
-      }
-    }
+        width: 200,
+      },
+    },
   });
 
   const blob = await (await fetch(url)).arrayBuffer();

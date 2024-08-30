@@ -1,7 +1,7 @@
 'use client';
 
-import React, {CSSProperties, useCallback, useMemo, useState} from 'react';
-import Image, {ImageProps} from 'next/image';
+import React, { CSSProperties, useCallback, useMemo, useState } from 'react';
+import Image, { ImageProps } from 'next/image';
 import clsx from 'clsx';
 
 import './thumbnail-client-image.css';
@@ -28,23 +28,16 @@ export function ThumbnailImageClient(props: Props) {
       height: props.height,
       loading: props.loading,
       priority: props.priority,
-      onClick: props.onClick
+      style: {},
     }),
-    [props.width, props.height, props.loading, props.priority, props.onClick],
-  );
-
-  const blurredImageStyle: CSSProperties = useMemo(
-    () => ({
-      ...commonCfg.style,
-      opacity: loaded ? 0 : 1,
-    }),
-    [commonCfg.style, loaded],
+    [props.priority, props.width, props.height, props.loading],
   );
 
   const normalImageStyle: CSSProperties = useMemo(
     () => ({
       ...commonCfg.style,
       opacity: loaded ? 1 : 0,
+      transition: 'opacity 0.3s ease-in-out',
     }),
     [commonCfg.style, loaded],
   );
@@ -56,7 +49,7 @@ export function ThumbnailImageClient(props: Props) {
         aria-hidden={true}
         className={classNameBlurred}
         src={props.blurDataURL}
-        style={blurredImageStyle}
+        style={commonCfg.style}
         alt={props.alt}
         unoptimized={true}
       />
