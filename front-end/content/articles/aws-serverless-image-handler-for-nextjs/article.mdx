@@ -36,12 +36,12 @@ In this article I'll explain why I preferred to use a remote image optimization 
 
 Quick investigation shows that other popular frameworks like Gatsby.js and Svelte have different approaches to image optimization in **static websites**:
 
-| Framework | Build Time Image Optimization Support                                                                                                                        | Image Optimization Service |
-|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|
-| Gatsby.js | Plugins like [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/) and gatsby-transformer-sharp                                       | Optional                   |
-| Next.js   | Custom tooling to generate pre-optimized images. For instance, [Next-Image-Export-Optimizer](https://github.com/Niels-IO/next-image-export-optimizer#readme) | Required                   |
-| Svelte    | third-party plugins or preprocessors                                                                                                                         | Required                   |
-| Astro     | [@astrojs/image integration](https://docs.astro.build/en/guides/images/)                                                                                     | Optional                   |
+| Framework     | Build Time Image Optimization Support                                                                                                                        | Image Optimization Service |
+|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|
+| **Gatsby.js** | Plugins like [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/) and gatsby-transformer-sharp                                       | Optional                   |
+| **Next.js**   | Custom tooling to generate pre-optimized images. For instance, [Next-Image-Export-Optimizer](https://github.com/Niels-IO/next-image-export-optimizer#readme) | Required                   |
+| **Svelte**    | third-party plugins or preprocessors                                                                                                                         | Required                   |
+| **Astro**     | [@astrojs/image integration](https://docs.astro.build/en/guides/images/)                                                                                     | Optional                   |
 
 ## Choosing the right approach
 
@@ -202,6 +202,11 @@ where `<your-domain>` is the domain of the Serverless Image Handler service, and
 ```
 
 ## I've built a demo app
+
+<video width="100%" style={{aspectRatio: 1.736}} controls preload="none" autoplay loop muted>
+  <source src="/content/articles/aws-serverless-image-handler-for-nextjs/full-image-thumbnails-loading-animation.webm" type="video/webm" />
+  Your browser does not support the video tag.
+</video>
 
 ![/articles/nextjs-images/home-page.png](/articles/nextjs-images/home-page.png)
 
