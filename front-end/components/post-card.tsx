@@ -26,7 +26,7 @@ export async function PostCard(props: Props) {
       <div className="flex flex-col items-stretch pb-4 hover:text-amber-600">
         <div className="flex flex-row mb-4 aspect-video justify-center">
           <ThumbnailImage
-            className="mb-4 ml-auto mr-auto h-56"
+            className="mx-auto h-56"
             imageClassName="h-56 object-contain"
             unoptimized={true}
             src={imageURL}

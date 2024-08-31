@@ -26,7 +26,7 @@ export function Gallery(props: Gallery.Props) {
   return <>
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-4">
       {props.imageCfgs.map((imageCfg, index) => (
-        <div key={imageCfg.src} className="cursor-pointer bg-slate-100 aspect-video">
+        <div key={imageCfg.src} className="mb-4 cursor-pointer bg-slate-100 aspect-video">
           <ThumbnailImage
             onClick={() => {
               setIndex(index);
@@ -36,14 +36,13 @@ export function Gallery(props: Gallery.Props) {
             src={imageCfg.imageURL}
             blurDataURL={imageCfg.blurDataURL}
             alt={`Gallery image ${index}`}
-            className="mb-4 ml-auto mr-auto h-32"
+            className="mx-auto h-32"
             imageClassName="h-32 object-contain"
             loading="lazy"
             width={250}
             height={250 / imageCfg.ratio}
           />
         </div>
-
       ))}
     </div>
 
