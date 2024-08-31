@@ -43,7 +43,7 @@ export function ThumbnailImageClient(props: Props) {
   );
 
   return (
-    <>
+    <div onClick={props.onClick}>
       <Image
         {...commonCfg}
         aria-hidden={true}
@@ -65,6 +65,6 @@ export function ThumbnailImageClient(props: Props) {
         unoptimized={props.unoptimized}
         alt={props.alt}
       />
-    </>
+    </div>
   );
 }
