@@ -203,14 +203,50 @@ where `<your-domain>` is the domain of the Serverless Image Handler service, and
 
 ## I've built a demo app
 
-<video width="100%" style={{aspectRatio: 1.736}} controls preload="none" autoplay loop muted>
-  <source src="/content/articles/aws-serverless-image-handler-for-nextjs/full-image-thumbnails-loading-animation.webm" type="video/webm" />
-  Your browser does not support the video tag.
-</video>
+It shows different implementation of images in a static Next.js app and AWS Serverless Image Handler.
 
-![/articles/nextjs-images/home-page.png](/articles/nextjs-images/home-page.png)
+![/articles/nextjs-images/home-page.png](/articles/nextjs-images/home-page.png "Home page")
+
+### Single responsive image
+
+Loading different image sizing during the page load (normal network):
+
+<ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/responsive-single-image-resizing.webm" poster="/articles/nextjs-images/responsive-single-image-resizing-v-frame.png"></ArticleVideo>
+
+Loading process of a single responsive image (3G network emulation):
+
+<ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/responsive-single-image.webm" poster="/articles/nextjs-images/responsive-single-image-v-frame.png"></ArticleVideo>
+
+
+### Thumbnails with different "image fit" modes
+
+// TODO: Add "thumbnails with different cropping modes" screenshot
+
+### Single responsive image with blur placeholder
+
+<ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/single-responsive-image-with-blur.webm" type="video/webm"></ArticleVideo>
+
+### Single responsive image with blur transition
+
+<ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/single-responsive-image-blur-transition.webm" type="video/webm"></ArticleVideo>
+
+### Full Thumbnails with loading animation
+
+<ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/full-image-thumbnails-loading-animation.webm" type="video/webm"></ArticleVideo>
+
+### Cropped Thumbnails with loading animation
+
+<ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/cropped-image-thumbnails-loading-animation.webm" type="video/webm"></ArticleVideo>
+
+
+
+
+
+
 
 ![/articles/nextjs-images/responsive-image.png](/articles/nextjs-images/responsive-image.png)
 
+
 ![/articles/nextjs-images/thumbnails-with-diff-cropping-modes.png](/articles/nextjs-images/thumbnails-with-diff-cropping-modes.png)
+
 
