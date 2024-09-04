@@ -18,7 +18,7 @@ keywords:
 
 ## Can I have a static website with optimized images in Next.js?
 
-Well... Next.js does not provide built-in support for image optimization in statically exported web apps. Unlike Gatsby.js, which processes and optimizes images during the build process, Next.js requires either pre-optimized local images or the use of a remote image optimization service. This limitation means that developers need to handle image optimization manually or rely on external services.
+Well... ~~not so fast~~ Next.js does not provide built-in support for image optimization in statically exported web apps. Unlike Gatsby.js, which processes and optimizes images during the build process, Next.js requires either pre-optimized local images or the use of a remote image optimization service. This limitation means that developers need to handle image optimization manually or rely on external services.
 
 In this article I'll explain why I preferred to use a remote image optimization service for a Next.js static website and how I integrated it with the Serverless Image Handler from AWS Solutions.
 
@@ -201,30 +201,44 @@ where `<your-domain>` is the domain of the Serverless Image Handler service, and
 }
 ```
 
-## I've built a demo app
+## The Demo App
 
-It shows different implementation of images in a static Next.js app and AWS Serverless Image Handler.
+In order to show the different implementations of images in a static Next.js app and AWS Serverless Image Handler, I have built [this demo app](https://nextjs-remote-images.examples.oleksiipopov.com/). The app contains multiple examples of image optimization and loading techniques, including:
+
+* Single responsive image (simple next/image component)
+* Single responsive image with blur placeholder (next/image component with blurDataURL and placeholder="blur" attributes)
+* Single responsive image with blur transition (animation on image load)
+* Thumbnails with different "image fit" modes (next/image component with different `resize.fit` API configurations)
+* Full Thumbnails with loading animation
+* Cropped Thumbnails with loading animation
 
 ![/articles/nextjs-images/home-page.png](/articles/nextjs-images/home-page.png "Home page")
 
-### Single responsive image
+### Single responsive image \{#single-responsive-image\}
 
-Loading different image sizing during the page load (normal network):
+It is a simplest use case of next/image component. It loads an image with a specific size and quality. The image is resized based on the device's screen size and resolution.
+
+> [Single responsive image demo](https://nextjs-remote-images.examples.oleksiipopov.com/examples/responsive-single-image/)
+
+If you click on the video below, you will see how the loading of different image sizes happens (normal network):
 
 <ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/responsive-single-image-resizing.webm" poster="/articles/nextjs-images/responsive-single-image-resizing-v-frame.png"></ArticleVideo>
 
-Loading process of a single responsive image (3G network emulation):
+Pay a special attention at the visual loading process of a single responsive image in a non-ideal connectivity (3G network emulation):
 
 <ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/responsive-single-image.webm" poster="/articles/nextjs-images/responsive-single-image-v-frame.png"></ArticleVideo>
 
+Image renders partially, which is not a good user experience. To improve it, we can use a blur placeholder.
+
+### Single responsive image with blur placeholder
+
+<ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/single-responsive-image-with-blur.webm" type="video/webm"></ArticleVideo>
 
 ### Thumbnails with different "image fit" modes
 
 // TODO: Add "thumbnails with different cropping modes" screenshot
 
-### Single responsive image with blur placeholder
 
-<ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/single-responsive-image-with-blur.webm" type="video/webm"></ArticleVideo>
 
 ### Single responsive image with blur transition
 
