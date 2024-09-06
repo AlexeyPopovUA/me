@@ -12,6 +12,9 @@ export default {
         oldBlogStaticDomainName: "blog.oleksiipopov.com",
         serviceDomainName: "service.oleksiipopov.com",
         imageProxyDomainName: "images.oleksiipopov.com",
-        imageProxyOriginDomain: "dqdoi2i9o4m2u.cloudfront.net"
+        imageProxyOriginDomain: "dqdoi2i9o4m2u.cloudfront.net",
+        imageProxyOriginalsPath: "originals",
+        imageBucketName: "serverless-image-handler-image-source",
+        imageBucketRegion: "us-east-1",
     }
 };
