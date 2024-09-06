@@ -201,9 +201,9 @@ where `<your-domain>` is the domain of the Serverless Image Handler service, and
 }
 ```
 
-## The Demo App
+## The Demo Application
 
-In order to show the different implementations of images in a static Next.js app and AWS Serverless Image Handler, I have built [this demo app](https://nextjs-remote-images.examples.oleksiipopov.com/). The app contains multiple examples of image optimization and loading techniques, including:
+In order to show the different implementations of images in a static Next.js app and AWS Serverless Image Handler, I have built [this demo app](https://nextjs-remote-images.examples.oleksiipopov.com/). It contains multiple examples of image optimization and loading techniques, including:
 
 * Single responsive image (simple next/image component)
 * Single responsive image with blur placeholder (next/image component with blurDataURL and placeholder="blur" attributes)
@@ -212,11 +212,11 @@ In order to show the different implementations of images in a static Next.js app
 * Full Thumbnails with loading animation
 * Cropped Thumbnails with loading animation
 
-![/articles/nextjs-images/home-page.png](/articles/nextjs-images/home-page.png "Home page")
+![/articles/nextjs-images/landing-page.png](/articles/nextjs-images/landing-page.png "Home page")
 
-### Single responsive image \{#single-responsive-image\}
+### Single responsive image
 
-It is a simplest use case of next/image component. It loads an image with a specific size and quality. The image is resized based on the device's screen size and resolution.
+It is the simplest use case of next/image component. It loads an image with a specific size and quality. The image is resized based on the device's screen size and resolution.
 
 > [Single responsive image demo](https://nextjs-remote-images.examples.oleksiipopov.com/examples/responsive-single-image/)
 
@@ -232,35 +232,36 @@ Image renders partially, which is not a good user experience. To improve it, we 
 
 ### Single responsive image with blur placeholder
 
-<ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/single-responsive-image-with-blur.webm" type="video/webm"></ArticleVideo>
+> [Single responsive image with blur placeholder](https://nextjs-remote-images.examples.oleksiipopov.com/examples/blurred-single-image/)
 
-### Thumbnails with different "image fit" modes
-
-// TODO: Add "thumbnails with different cropping modes" screenshot
-
-
+<ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/single-responsive-image-with-blur.webm" poster="/articles/nextjs-images/single-responsive-image-with-blur-frame.png" type="video/webm"></ArticleVideo>
 
 ### Single responsive image with blur transition
 
-<ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/single-responsive-image-blur-transition.webm" type="video/webm"></ArticleVideo>
+> [Single responsive image with blur transition](https://nextjs-remote-images.examples.oleksiipopov.com/examples/blurred-animated-single-image/)
 
-### Full Thumbnails with loading animation
+<ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/single-responsive-image-blur-transition.webm" poster="/articles/nextjs-images/single-responsive-image-blur-transition-frame.png" type="video/webm"></ArticleVideo>
 
-<ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/full-image-thumbnails-loading-animation.webm" type="video/webm"></ArticleVideo>
+### Thumbnails with different "image fit" modes
+
+> [Thumbnails with different "image fit" modes](https://nextjs-remote-images.examples.oleksiipopov.com/examples/thumbnail-image-fit/)
+
+![Thumbnails with different 'image fit' modes](/articles/nextjs-images/fill-image-options-thumbnails.png "Thumbnails with different 'image fit' modes")
 
 ### Cropped Thumbnails with loading animation
 
-<ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/cropped-image-thumbnails-loading-animation.webm" type="video/webm"></ArticleVideo>
+> [Cropped Thumbnails with loading animation (scroll down)](https://nextjs-remote-images.examples.oleksiipopov.com/examples/animated-thumbnails/)
 
+<ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/cropped-thumbnails-loading.webm" type="video/webm" poster="/articles/nextjs-images/cropped-thumbnails-loading-frame.png"></ArticleVideo>
 
+### Full Thumbnails with loading animation
 
+> [Full Thumbnails with loading animation](https://nextjs-remote-images.examples.oleksiipopov.com/examples/animated-thumbnails/)
 
+<ArticleVideo src="/content/articles/aws-serverless-image-handler-for-nextjs/full-image-thumbnails-loading.webm" poster="/articles/nextjs-images/full-image-thumbnails-loading-frame.png" type="video/webm"></ArticleVideo>
 
+## What is necessary to improve
 
+### Image dimensions retrieval
 
-![/articles/nextjs-images/responsive-image.png](/articles/nextjs-images/responsive-image.png)
-
-
-![/articles/nextjs-images/thumbnails-with-diff-cropping-modes.png](/articles/nextjs-images/thumbnails-with-diff-cropping-modes.png)
-
-
+## Conclusion
