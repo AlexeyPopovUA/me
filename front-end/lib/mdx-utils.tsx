@@ -18,7 +18,7 @@ const cmp = {
     <table {...props} />
   </div>,
   ArticleVideo: (props: React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>) => {
-    const poster = props.poster ? getInsideImageURL({src: props.poster, width: 800, height: 800 / 1.736}) : undefined;
+    const poster = props.poster ? getInsideImageURL({src: props.poster, width: 1000, height: 1000 / 1.736}) : undefined;
     return <video width="100%" poster={poster} controls preload="none" loop muted>
       <source src={props.src}/>
       Your browser does not support the video tag.
