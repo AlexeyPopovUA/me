@@ -10,6 +10,7 @@ import {read} from "to-vfile";
 import remarkGfm from 'remark-gfm'
 import React from "react";
 import {getInsideImageURL} from "@/lib/image";
+import {getOriginalVideoURL} from "@/lib/video";
 
 const cmp = {
   // Note, that MDXImage is a server component, therefore wrapped to match types
@@ -19,8 +20,10 @@ const cmp = {
   </div>,
   ArticleVideo: (props: React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>) => {
     const poster = props.poster ? getInsideImageURL({src: props.poster, width: 1000, height: 1000 / 1.736}) : undefined;
-    return <video width="100%" poster={poster} controls preload="none" loop muted>
-      <source src={props.src}/>
+    const originalVideoURL = props.src ? getOriginalVideoURL({ src: props.src}) : "";
+
+    return <video className="cursor-pointer" width="100%" poster={poster} controls preload="none" loop muted>
+      <source src={originalVideoURL}/>
       Your browser does not support the video tag.
     </video>;
   },
