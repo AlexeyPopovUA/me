@@ -4,7 +4,7 @@ slug: aws-serverless-image-handler-for-nextjs
 date: 2024-08-25
 draft: true
 description: Remote image optimization API for Next.js static websites
-thumbnail: /articles/feature-branches-npm/feature-branches-for-NPM-modules.png
+thumbnail: /articles/nextjs-images/article-hero.png
 tags:
     - AWS
     - Next.js
@@ -14,11 +14,13 @@ keywords:
     - image optimization service
 ---
 
+![Article hero: Next.js, TypeScript, AWS](/articles/nextjs-images/article-hero.png)
+
 # Remote image optimization API for Next.js static websites
 
 ## Can I have a static website with optimized images in Next.js?
 
-Well... ~~not so fast~~ Next.js does not provide built-in support for image optimization in statically exported web apps. Unlike Gatsby.js, which processes and optimizes images during the build process, Next.js requires either pre-optimized local images or the use of a remote image optimization service. This limitation means that developers need to handle image optimization manually or rely on external services.
+Well... ~~no :)~~ Next.js does not provide built-in support for image optimization in statically exported web apps. Unlike Gatsby.js, which processes and optimizes images during the build process, Next.js requires either pre-optimized local images or the use of a remote image optimization service. This limitation means that developers need to handle image optimization manually or rely on external services.
 
 In this article I'll explain why I preferred to use a remote image optimization service for a Next.js static website and how I integrated it with the Serverless Image Handler from AWS Solutions.
 
@@ -203,7 +205,7 @@ where `<your-domain>` is the domain of the Serverless Image Handler service, and
 
 ## The Demo Application
 
-In order to show the different implementations of images in a static Next.js app and AWS Serverless Image Handler, I have built [this demo app](https://nextjs-remote-images.examples.oleksiipopov.com/). It contains multiple examples of image optimization and loading techniques, including:
+In order to show the different use cases of images in a static Next.js app and AWS Serverless Image Handler, I have built [this demo app](https://nextjs-remote-images.examples.oleksiipopov.com/). It contains multiple examples of image optimization and loading techniques, including:
 
 * Single responsive image (simple next/image component)
 * Single responsive image with blur placeholder (next/image component with blurDataURL and placeholder="blur" attributes)
@@ -214,54 +216,90 @@ In order to show the different implementations of images in a static Next.js app
 
 ![/articles/nextjs-images/landing-page.png](/articles/nextjs-images/landing-page.png "Home page")
 
+Next, we will go through each example in detail and see how the images are loaded, optimized, cropped and positioned in placeholders. So the AWS Image Handler service is proven to be a good solution for Next.js static websites.
+
 ### Single responsive image
 
 It is the simplest use case of next/image component. It loads an image with a specific size and quality. The image is resized based on the device's screen size and resolution.
 
-> [Single responsive image demo](https://nextjs-remote-images.examples.oleksiipopov.com/examples/responsive-single-image/)
+> [DEMO: Single responsive image demo](https://nextjs-remote-images.examples.oleksiipopov.com/examples/responsive-single-image/)
 
-If you click on the video below, you will see how the loading of different image sizes happens (normal network):
+If you click on the video below, you will see how the loading of different image sizes happens while resizing the screen (normal network):
 
 <ArticleVideo src="/articles/nextjs-images/responsive-single-image-resizing.webm" poster="/articles/nextjs-images/responsive-single-image-resizing-v-frame.png"></ArticleVideo>
 
-Pay a special attention at the visual loading process of a single responsive image in a non-ideal connectivity (3G network emulation):
+If you check the visual loading process in a non-ideal connectivity, it will look a bit glitchy (3G network emulation):
 
 <ArticleVideo src="/articles/nextjs-images/responsive-single-image.webm" poster="/articles/nextjs-images/responsive-single-image-v-frame.png"></ArticleVideo>
 
-Image renders partially, which is not a good user experience. To improve it, we can use a blur placeholder.
+Image renders partially, which is not a good user experience. To improve it a bit, we can use a blur placeholder.
 
 ### Single responsive image with blur placeholder
 
-> [Single responsive image with blur placeholder](https://nextjs-remote-images.examples.oleksiipopov.com/examples/blurred-single-image/)
+> [DEMO: Single responsive image with blur placeholder](https://nextjs-remote-images.examples.oleksiipopov.com/examples/blurred-single-image/)
+
+Check the video below to see how the image loads with a blur placeholder:
 
 <ArticleVideo src="/articles/nextjs-images/single-responsive-image-with-blur.webm" poster="/articles/nextjs-images/single-responsive-image-with-blur-frame.png" type="video/webm"></ArticleVideo>
 
+Situation is already better. The image is not fully loaded yet, but the user can see the placeholder, which is pre-rendered into the HTML page. So the placeholder of a correct size already occupies its place. This minimizes the layout shift and improves the user experience. Still not optimal. We still can see, how the image is loading.
+
 ### Single responsive image with blur transition
 
-> [Single responsive image with blur transition](https://nextjs-remote-images.examples.oleksiipopov.com/examples/blurred-animated-single-image/)
+Check the video below to see how the image loads with a blur transition (animation):
+
+> [DEMO: Single responsive image with blur transition](https://nextjs-remote-images.examples.oleksiipopov.com/examples/blurred-animated-single-image/)
 
 <ArticleVideo src="/articles/nextjs-images/single-responsive-image-blur-transition.webm" poster="/articles/nextjs-images/single-responsive-image-blur-transition-frame.png" type="video/webm"></ArticleVideo>
 
+The image is loading with a smooth transition from the blurred placeholder to the full image. This is a good user experience. The user can see the image loading process, but it is not annoying. The final image is revealed only when it is fully loaded.
+
 ### Thumbnails with different "image fit" modes
 
-> [Thumbnails with different "image fit" modes](https://nextjs-remote-images.examples.oleksiipopov.com/examples/thumbnail-image-fit/)
+> [DEMO: Thumbnails with different "image fit" modes](https://nextjs-remote-images.examples.oleksiipopov.com/examples/thumbnail-image-fit/)
+
+Next, we have thumbnails with different "image fit" modes. The images are resized and cropped based on the specified fit mode. The fit modes include "fill", "inside", "outside", "cover", "contain".
 
 ![Thumbnails with different 'image fit' modes](/articles/nextjs-images/fill-image-options-thumbnails.png "Thumbnails with different 'image fit' modes")
 
+Orange dashed lines show the boundaries of the image container. The image is resized and/or cropped based on the specified fit mode. See the detailed explanation at the Sharp library [documentation](https://sharp.pixelplumbing.com/api-resize#resize).
+
 ### Cropped Thumbnails with loading animation
 
-> [Cropped Thumbnails with loading animation (scroll down)](https://nextjs-remote-images.examples.oleksiipopov.com/examples/animated-thumbnails/)
+As a popular use case of images, we have cropped thumbnails with a loading blur animation. 
+
+> [DEMO: Cropped Thumbnails with loading animation (scroll down)](https://nextjs-remote-images.examples.oleksiipopov.com/examples/animated-thumbnails/)
+
+Check the video below to see how the cropped thumbnails load with a blur animation:
 
 <ArticleVideo src="/articles/nextjs-images/cropped-thumbnails-loading.webm" type="video/webm" poster="/articles/nextjs-images/cropped-thumbnails-loading-frame.png"></ArticleVideo>
 
 ### Full Thumbnails with loading animation
 
-> [Full Thumbnails with loading animation](https://nextjs-remote-images.examples.oleksiipopov.com/examples/animated-thumbnails/)
+Another variation of thumbnails is full thumbnails with a loading blur animation.
+
+> [DEMO: Full Thumbnails with loading animation](https://nextjs-remote-images.examples.oleksiipopov.com/examples/animated-thumbnails/)
+
+Check the video below to see how the full thumbnails load with a blur animation:
 
 <ArticleVideo src="/articles/nextjs-images/full-image-thumbnails-loading.webm" poster="/articles/nextjs-images/full-image-thumbnails-loading-frame.png" type="video/webm"></ArticleVideo>
 
-## What is necessary to improve
+## What could be improved
 
 ### Image dimensions retrieval
 
-## Conclusion
+One of the limitations of the Serverless Image Handler service is the lack of image metadata information retrieval. This means that you cannot get the original image dimensions (width and height) from the image. This information is useful for dynamically adjusting the layout based on the image size. For example, you may want to set the aspect ratio of an image container based on the image dimensions. To address this limitation, I used a separate call to Image Handler to fetch a low quality image and get its dimensions. It provides acceptable results and happens only once - on build time, when pages are pre-rendered. This is not an optimal solution, as it requires an additional call to the same API, which is not designed for it. A better solution would be to have a separate API endpoint to retrieve image metadata information. Result could be cached via the existing proxy CloudFront distribution with a big TTL, so the repeated call would be much faster and cheaper.
+
+### Serving original assets of any type
+
+Sometimes there is a need to server original assets, which are not always supported. For example, original SVG, GIF or video. The Serverless Image Handler is not designed to serve such assets. In this case, you need to implement an extra origin in the existing proxy CloudFront distribution that serves files from the same assets S3 Bucket as images, but directly.
+
+## Conclusions
+
+In this article, I've explained why I chose to use a remote image optimization service for a Next.js static website and how I used the Serverless Image Handler from AWS Solutions for this purpose.
+
+Also, I've implemented a demo app to showcase different image loading techniques, including responsive images and cropped thumbnails with loading animations.
+
+The AWS service provides a range of image optimization and modification techniques, including resizing, cropping, and automatic serving of WEBP, PNG, and JPEG formats. The service is based on the Sharp library and can be deployed to a personal AWS account using a CloudFormation template.
+
+The service is proven to be a good solution for Next.js static websites, offering some flexibility, faster build times, lower storage requirements, and potentially better image optimization based on user conditions.
