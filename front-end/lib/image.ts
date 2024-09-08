@@ -1,4 +1,4 @@
-import {Jimp} from "jimp";
+import Jimp from "jimp";
 
 const BASE_URL = "https://images.oleksiipopov.com";
 const BUCKET = "serverless-image-handler-image-source";
@@ -200,7 +200,7 @@ async function getImageDimensionsRatio(props: { src: string }) {
 
   const blob = await (await fetch(url)).arrayBuffer();
   const imgData = await Jimp.read(Buffer.from(blob));
-  return imgData.width / imgData.height;
+  return imgData.getWidth() / imgData.getHeight();
 }
 
 async function getBlurDataURL({src, width, height}: { src: string, width: number, height: number }) {
@@ -219,7 +219,7 @@ async function getBlurDataURL({src, width, height}: { src: string, width: number
   });
   const blob = await (await fetch(payloadURL)).arrayBuffer();
   const imgData = await Jimp.read(Buffer.from(blob));
-  return imgData.getBase64("image/png");
+  return imgData.getBase64Async(-1);
 }
 
 export const readBlurredImageSrcPair = async ({src}: { src: string; }) => {
