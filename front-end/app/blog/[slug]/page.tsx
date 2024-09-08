@@ -5,7 +5,6 @@ import {getArticleSEOContent, getArticlesSlugs} from "@/lib/articles";
 import GoTop from "@/components/ScrollUpButton";
 import {content} from "@/app/configuration/content";
 import {getOGImageURL} from "@/lib/image";
-import {MermaidInitializer} from "@/lib/RemarkMermaidPlugin";
 import {ArticleContent} from "@/components/article-content";
 import {ArticleContainer} from "@/components/ArticleContainer";
 import {environment} from "@/app/configuration/environment";
@@ -48,7 +47,6 @@ export default async function Post(props: StaticProps) {
     <ArticleContainer>
       <ArticleContent slug={props.params.slug}/>
       <GoTop/>
-      <MermaidInitializer/>
     </ArticleContainer>
   );
 }

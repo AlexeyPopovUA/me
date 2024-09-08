@@ -1,30 +1,34 @@
 import {visit} from 'unist-util-visit'
-import Script from "next/script";
+import {renderMermaid} from "@mermaid-js/mermaid-cli"
+import puppeteer from 'puppeteer';
 
 export function remarkMermaid() {
-    return transformer;
+  return transformer;
 
-    // @ts-ignore
-    function transformer(tree) {
-        visit(tree, 'code', (node) => {
-            if (node.lang === 'mermaid') {
-                node.type = 'html';
-                node.value = `<pre class='mermaid bg-white flex justify-center overflow-hidden'>${node.value}</pre>`;
+  // @ts-ignore
+  async function transformer(tree) {
+    const browser = await puppeteer.launch();
+    console.log("Browser launched");
+
+    const promises: Promise<unknown>[] = [];
+
+    visit(tree, 'code', (node) => {
+      if (node.lang === 'mermaid') {
+
+        promises.push(
+          renderMermaid(browser, node.value, 'svg').then((svg) => {
+              const svgString = svg.data.toString();
+              console.log({svgString});
+
+              node.type = 'html';
+              node.value = `<pre class='mermaid bg-white flex justify-center overflow-hidden'>${svgString}</pre>`;
             }
-        });
-    }
-}
+          )
+        );
+      }
+    });
 
-export const MermaidInitializer = () =>
-    <Script
-        type="module"
-        id="mermaid.initialize"
-        strategy="lazyOnload"
-        dangerouslySetInnerHTML={{
-            __html: `
-            import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
-            mermaid.initialize({startOnLoad: true});
-            mermaid.contentLoaded();
-    `,
-        }}
-    />;
+    await Promise.all(promises);
+    await browser.close();
+  }
+}
