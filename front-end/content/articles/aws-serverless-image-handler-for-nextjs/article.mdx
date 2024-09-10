@@ -171,21 +171,40 @@ export class ImageServiceProxyStack extends Stack {
 }
 ```
 
-## How to integrate the Serverless Image Handler with Next.js
+## How to use the Serverless Image Handler in Next.js?
 
-In case if you need a completely static website, mostly rendered on build time and partially on a client, then you typically use the ```output: 'export'``` option of ```next.config.mjs``` configuration file. See [the details here](https://nextjs.org/docs/app/building-your-application/deploying/static-exports). This mode has [restrictions](https://nextjs.org/docs/app/building-your-application/deploying/static-exports#unsupported-features), one of which is [unsupported image optimization](https://nextjs.org/docs/app/building-your-application/deploying/static-exports#image-optimization). So, in our case, images could be loaded with a custom "loader", which "knows" how to get a correct URL of an image, based on its size, quality and path. 
+### What is statically exported Next.js app?
 
-The service from AWS Solutions provides a URL-based API to request images with specific transformations. For example, to request an image, you use the following URL:
+Static website is a typically multipage website that is rendered on build time and served as a set of static HTML, CSS, and JavaScript files. It is a good choice for websites that do not require dynamic content and can be pre-rendered on build time. Next.js provides a way to export a static website. It generates a set of static HTML files that can be served from any static hosting provider like AWS CloudFront.
 
-```html
-<img src="https://<your-domain>/<base64-cfg>" alt="Image description">
+For setting this up, you need to use the ```output: 'export'``` option of ```next.config.mjs``` configuration file. See [the details here](https://nextjs.org/docs/app/building-your-application/deploying/static-exports). This mode has [restrictions](https://nextjs.org/docs/app/building-your-application/deploying/static-exports#unsupported-features), one of which is [unsupported image optimization](https://nextjs.org/docs/app/building-your-application/deploying/static-exports#image-optimization). 
+
+### Image loader
+
+So, in our case, remote images should be loaded with a custom "loader", which "knows" how to get a correct URL of an image, based on its size, quality and path.
+
+Here is the example of a custom loader for the Next.js ```next/image``` component:
+
+```ts
+'use client';
+
+import {ImageLoaderProps} from "next/image";
+import {getImageURL} from "@/lib/image";
+
+export function imageLoader({src, width, quality}: ImageLoaderProps) {
+  return getImageURL({src, width, quality});
+}
 ```
 
-where `<your-domain>` is the domain of the Serverless Image Handler service, and `<base64-cfg>` is a base64-encoded JSON object containing the image transformation parameters. For example:
+`imageLoader` does not use `height` property, as it is not supposed to be known upfront. This may cause a problem with the layout shift, but there is a way to mitigate it by using a blur placeholder. We will talk about it later.
+
+The ```getContainImageURL``` function is a helper function that generates a URL for the Serverless Image Handler service based on the image path, width, and quality.
+
+The service provides a URL-based API to request images with specific transformations. For example, to request an image, you use the following URL - `https://<your-domain>/<base64-cfg>`, where `<your-domain>` is the domain of the Serverless Image Handler service, and `<base64-cfg>` is a base64-encoded JSON object containing the image transformation parameters. For example:
 
 ```json
 {
-  "bucket": "my-bucket",
+  "bucket": "YOUR BUCKET NAME",
   "key": "path/to/my-image.jpg",
   "edits": {
     "webp": {
@@ -197,18 +216,61 @@ where `<your-domain>` is the domain of the Serverless Image Handler service, and
     "resize": {
       "width": 300,
       "height": 200,
-      "fit": "cover"
+      "fit": "contain"
     }
   }
 }
 ```
 
+So, in the end ```getImageURL``` looks like this:
+
+```ts
+type Props = {
+    src: string;
+    width: number;
+    height?: number;
+    quality?: number;
+    position?: string;
+};
+
+function getImageURL(props: Props) {
+  const {src, width, height, quality = 75, position = 'centre'} = props;
+
+  const taskToEncode = {
+    bucket: "YOUR BUCKET NAME",
+    key: `${BASE_PATH}${src}`,
+    edits: {
+      webp: {
+        quality
+      },
+      png: {
+        quality
+      },
+      jpg: {
+        quality
+      },
+      resize: {
+        width,
+        height,
+        // See @link https://sharp.pixelplumbing.com/api-resize
+        fit: 'contain',
+        position,
+      },
+    },
+  };
+
+  return `${BASE_URL}/${btoa(JSON.stringify(taskToEncode))}`;
+}
+```
+
+Check out the https://sharp.pixelplumbing.com/api-resize documentation for the full list of available options.
+
 ## The Demo Application
 
-In order to show the different use cases of images in a static Next.js app and AWS Serverless Image Handler, I have built [this demo app](https://nextjs-remote-images.examples.oleksiipopov.com/). It contains multiple examples of image optimization and loading techniques, including:
+In order to show the different use cases of images in a static Next.js app and AWS Serverless Image Handler, I built [this demo app](https://nextjs-remote-images.examples.oleksiipopov.com/). It contains multiple examples of image optimization and loading techniques, including:
 
 * Single responsive image (simple next/image component)
-* Single responsive image with blur placeholder (next/image component with blurDataURL and placeholder="blur" attributes)
+* Single responsive image with a blur placeholder (next/image component with blurDataURL and placeholder="blur" attributes)
 * Single responsive image with blur transition (animation on image load)
 * Thumbnails with different "image fit" modes (next/image component with different `resize.fit` API configurations)
 * Full Thumbnails with loading animation
