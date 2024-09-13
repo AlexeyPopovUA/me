@@ -48,7 +48,7 @@ export default async function Post() {
             <Skills skills={renderData.skills}/>
             <History experience={renderData.experience}/>
             <OwnProjects projects={renderData.ownProjects}/>
-            <Education education={renderData.education}/>
+            {/*<Education education={renderData.education}/>*/}
         </article>
     );
 }
