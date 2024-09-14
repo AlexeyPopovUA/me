@@ -1,26 +1,39 @@
 ---
-title: Remote image optimization API for Next.js static websites
-slug: aws-serverless-image-handler-for-nextjs
-date: 2024-08-25
-draft: true
+title: Optimizing Images for Next.js Static Websites with AWS Serverless Image Handler
+slug: nextjs-images
+date: 2024-09-14
+draft: false
 description: Remote image optimization API for Next.js static websites
 thumbnail: /articles/nextjs-images/article-hero.png
 tags:
+    - Full-Stack
     - AWS
     - Next.js
+    - Image Optimization
+    - Serverless
 keywords:
+    - Next.js
+    - static websites
+    - image optimization
     - AWS
+    - Serverless Image Handler
+    - remote image optimization
+    - web performance
+    - image loading techniques
+    - responsive images
+    - CloudFront
     - serverless image handler
     - image optimization service
+    - Next.js images
 ---
 
 ![Article hero: Next.js, TypeScript, AWS](/articles/nextjs-images/article-hero.png)
 
-# Remote image optimization API for Next.js static websites
+# Optimizing Images for Next.js Static Websites with AWS Serverless Image Handler
 
 ## Can I have a static website with optimized images in Next.js?
 
-Well... ~~no :)~~ Next.js does not provide built-in support for image optimization in statically exported web apps. Unlike Gatsby.js, which processes and optimizes images during the build process, Next.js requires either pre-optimized local images or the use of a remote image optimization service. This limitation means that developers need to handle image optimization manually or rely on external services.
+Well... ~~no :)~~ Next.js does not provide built-in support for image optimization in statically exported web apps. Unlike Gatsby.js, which is able to process and optimize images during the build process, Next.js requires either pre-optimized local images or the use of a remote image optimization service. This limitation means that developers need to handle image optimization manually or rely on external services.
 
 In this article I'll explain why I preferred to use a remote image optimization service for a Next.js static website and how I integrated it with the Serverless Image Handler from AWS Solutions.
 
@@ -28,9 +41,9 @@ In this article I'll explain why I preferred to use a remote image optimization 
 
 **Just give me the links!**
 
-> [GitHub repo](https://github.com/AlexeyPopovUA/nextjs-remote-images/)
-
 > [Demo app](https://nextjs-remote-images.examples.oleksiipopov.com/)
+
+> [GitHub repo](https://github.com/AlexeyPopovUA/nextjs-remote-images/)
 
 > [Serverless Image Handler on AWS](https://aws.amazon.com/solutions/implementations/serverless-image-handler/)
 
@@ -47,7 +60,7 @@ Quick investigation shows that other popular frameworks like Gatsby.js and Svelt
 
 ## Choosing the right approach
 
-That problem made me to reconsider the convenient Gatsby solution as I had in previous projects. I needed to choose between using a remote image optimization service or pre-optimizing images locally during the build process. Both approaches have their pros and cons, depending on factors such as setup complexity, build time, flexibility, performance, storage requirements, cost, maintenance, and other considerations. Here's a comparison of the two approaches:
+That problem made me to reconsider the convenient Gatsby solution as I had in previous projects. I had to choose between using a remote image optimization service or pre-optimizing images locally during the build process. Both approaches have their pros and cons, depending on factors such as setup complexity, build time, flexibility, performance, storage requirements, cost, maintenance, and other considerations. Here's a comparison of the two approaches:
 
 | Feature/Aspect           | Remote Images (Image Optimization API)                                                                  | Locally Exported Pre-Optimized Images (Build Time)                                    |
 |--------------------------|---------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
@@ -198,7 +211,7 @@ export function imageLoader({src, width, quality}: ImageLoaderProps) {
 
 `imageLoader` does not use `height` property, as it is not supposed to be known upfront. This may cause a problem with the layout shift, but there is a way to mitigate it by using a blur placeholder. We will talk about it later.
 
-The ```getContainImageURL``` function is a helper function that generates a URL for the Serverless Image Handler service based on the image path, width, and quality.
+The ```getImageURL``` function is a helper function that generates a URL for the Serverless Image Handler service based on the image path, width, and quality.
 
 The service provides a URL-based API to request images with specific transformations. For example, to request an image, you use the following URL - `https://<your-domain>/<base64-cfg>`, where `<your-domain>` is the domain of the Serverless Image Handler service, and `<base64-cfg>` is a base64-encoded JSON object containing the image transformation parameters. For example:
 
@@ -252,7 +265,7 @@ function getImageURL(props: Props) {
       resize: {
         width,
         height,
-        // See @link https://sharp.pixelplumbing.com/api-resize
+        // See https://sharp.pixelplumbing.com/api-resize
         fit: 'contain',
         position,
       },
@@ -346,7 +359,7 @@ Check the video below to see how the full thumbnails load with a blur animation:
 
 <ArticleVideo src="/articles/nextjs-images/full-image-thumbnails-loading.webm" poster="/articles/nextjs-images/full-image-thumbnails-loading-frame.png" type="video/webm"></ArticleVideo>
 
-## What could be improved
+## What could be improved?
 
 ### Image dimensions retrieval
 
@@ -354,7 +367,7 @@ One of the limitations of the Serverless Image Handler service is the lack of im
 
 ### Serving original assets of any type
 
-Sometimes there is a need to server original assets, which are not always supported. For example, original SVG, GIF or video. The Serverless Image Handler is not designed to serve such assets. In this case, you need to implement an extra origin in the existing proxy CloudFront distribution that serves files from the same assets S3 Bucket as images, but directly.
+Sometimes there is a need to serve original assets, which are not always supported. For example, original SVG, GIF or video. The Serverless Image Handler is not designed to serve such assets. In this case, you need to implement an extra origin in the existing proxy CloudFront distribution that serves files from the same assets S3 Bucket as images, but directly.
 
 ## Conclusions
 
