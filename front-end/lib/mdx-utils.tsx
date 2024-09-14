@@ -20,7 +20,7 @@ const cmp = {
   </div>,
   ArticleVideo: (props: React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>) => {
     const poster = props.poster ? getInsideImageURL({src: props.poster, width: 1000, height: 1000 / 1.736}) : undefined;
-    const originalVideoURL = props.src ? getOriginalVideoURL({ src: props.src}) : "";
+    const originalVideoURL = props.src ? getOriginalVideoURL({src: props.src}) : "";
 
     return <video className="cursor-pointer" width="100%" poster={poster} controls preload="none" loop muted>
       <source src={originalVideoURL}/>
