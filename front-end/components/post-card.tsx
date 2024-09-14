@@ -24,19 +24,17 @@ export async function PostCard(props: Props) {
     <Link className="hover:text-amber-600 hover:border-amber-500 border-2 rounded-md p-4" href={props.link}
           passHref>
       <div className="flex flex-col items-stretch pb-4 hover:text-amber-600">
-        <div className="flex flex-row mb-4 aspect-video justify-center">
-          <ThumbnailImage
-            className="mx-auto h-56"
-            imageClassName="h-56 object-contain"
-            unoptimized={true}
-            src={imageURL}
-            blurDataURL={blurDataURL}
-            alt={props.title}
-            loading="lazy"
-            width={560}
-            height={560 / ratio}
-          />
-        </div>
+        <ThumbnailImage
+          className="mx-auto h-56 mb-4"
+          imageClassName="h-56 object-contain"
+          unoptimized={true}
+          src={imageURL}
+          blurDataURL={blurDataURL}
+          alt={props.title}
+          loading="lazy"
+          width={560}
+          height={560 / ratio}
+        />
 
         <div className="font-bold text-xl underline mb-2">{props.title}</div>
         {props.date ? <div className="text-sm text-gray-600 mb-4">{props.date}</div> : null}
