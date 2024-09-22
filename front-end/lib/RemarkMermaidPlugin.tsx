@@ -1,34 +1,70 @@
 import {visit} from 'unist-util-visit'
 import {renderMermaid} from "@mermaid-js/mermaid-cli"
-import puppeteer from 'puppeteer';
+import puppeteer, {Browser} from 'puppeteer';
+import {Node} from 'unist';
+import {Transformer} from 'unified';
 
-export function remarkMermaid() {
+interface CodeNode extends Node {
+  lang?: string;
+  value: string;
+}
+
+let browserInstance: Promise<Browser> | null = null;
+
+async function getBrowserInstance() {
+  if (!browserInstance) {
+    console.log("Browser launch!");
+    browserInstance = puppeteer.launch({headless: true});
+  }
+}
+
+const cache: { [key: string]: any } = {};
+
+async function generateDiagrams(nodes: CodeNode[]) {
+  const browser = await browserInstance;
+  const svgs = await Promise.all(nodes.map(async (node) => {
+    if (cache[node.value]) {
+      return cache[node.value];
+    } else {
+      const svg = await renderMermaid(browser!, node.value, 'svg', {
+        mermaidConfig: {
+          htmlLabels: false,
+          flowchart: {htmlLabels: false}
+        }
+      });
+      cache[node.value] = svg;
+      return svg;
+    }
+  }));
+  svgs.map((svg, i) => {
+    nodes[i].type = 'html';
+    nodes[i].value = `<pre class='mermaid bg-white flex justify-center overflow-hidden'>${svg.data.toString()}</pre>`;
+  });
+}
+
+export function remarkMermaid(): Transformer {
   return transformer;
 
-  // @ts-ignore
-  async function transformer(tree) {
-    const browser = await puppeteer.launch();
-    console.log("Browser launched");
+  async function transformer(tree: Node) {
+    const nodesToRender: CodeNode[] = [];
 
-    const promises: Promise<unknown>[] = [];
-
-    visit(tree, 'code', (node) => {
+    visit(tree, 'code', (node: CodeNode) => {
       if (node.lang === 'mermaid') {
-
-        promises.push(
-          renderMermaid(browser, node.value, 'svg').then((svg) => {
-              const svgString = svg.data.toString();
-              console.log({svgString});
-
-              node.type = 'html';
-              node.value = `<pre class='mermaid bg-white flex justify-center overflow-hidden'>${svgString}</pre>`;
-            }
-          )
-        );
+        nodesToRender.push(node);
       }
     });
 
-    await Promise.all(promises);
-    await browser.close();
+    if (nodesToRender.length) {
+      void getBrowserInstance();
+      await generateDiagrams(nodesToRender);
+    }
   }
 }
+
+// Ensure the browser instance is closed when the process exits
+process.on('exit', async () => {
+  if (browserInstance) {
+    console.log("Browser close!");
+    await (await browserInstance).close();
+  }
+});
