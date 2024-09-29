@@ -14,7 +14,7 @@ let browserInstance: Promise<Browser> | null = null;
 async function getBrowserInstance() {
   if (!browserInstance) {
     console.log("Browser launch!");
-    browserInstance = puppeteer.launch({headless: true});
+    browserInstance = puppeteer.launch({headless: true, args: ['--no-sandbox']});
   }
 }
 
