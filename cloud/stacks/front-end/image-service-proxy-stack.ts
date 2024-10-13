@@ -18,7 +18,7 @@ import {
   ViewerProtocolPolicy,
   Function as CFFunction
 } from "aws-cdk-lib/aws-cloudfront";
-import {HttpOrigin, S3Origin} from "aws-cdk-lib/aws-cloudfront-origins";
+import {HttpOrigin, S3BucketOrigin} from "aws-cdk-lib/aws-cloudfront-origins";
 import {Certificate, CertificateValidation} from "aws-cdk-lib/aws-certificatemanager";
 import {AaaaRecord, ARecord, HostedZone, RecordTarget} from "aws-cdk-lib/aws-route53";
 import {CloudFrontTarget} from "aws-cdk-lib/aws-route53-targets";
@@ -102,7 +102,7 @@ export class ImageServiceProxyStack extends Stack {
           cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
           compress: true,
           viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-          origin: new S3Origin(s3Bucket, {
+          origin: S3BucketOrigin.withOriginAccessIdentity(s3Bucket, {
             originAccessIdentity,
             originShieldRegion: configuration.HOSTING.imageBucketRegion,
             originPath: "/"
