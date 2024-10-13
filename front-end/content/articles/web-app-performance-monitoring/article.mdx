@@ -11,5 +11,166 @@ tags:
 keywords:
     - performance
     - web essentials
+    - monitoring
+    - sitespeed.io
+    - website performance test
+    - web performance monitoring
 ---
 
+# Web app performance monitoring
+
+## Takeaways
+
+
+
+## TL;DR
+
+**Just give me the links!**
+
+### Hosted demo
+
+
+### GitHub
+
+> [Web app performance monitoring](https://github.com/AlexeyPopovUA/web-app-performance-monitoring)
+
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant API as API Gateway
+    participant SQS as AWS SQS
+    participant Lambda as AWS Lambda (SQS Poller)
+    participant SF as AWS Step Functions
+
+    C->>API: POST /request
+    API->>API: Validate task payload
+    API->>SQS: Create SQS message
+    SQS-->>API: Confirm message creation
+    API-->>C: 202 Accepted
+
+    loop Polling
+        Lambda->>SQS: Poll for messages
+        SQS-->>Lambda: Return message(s)
+        Lambda->>SF: Check running executions
+        SF-->>Lambda: Return execution status
+        alt Not a duplicate
+            Lambda->>SF: Start new execution
+        else Duplicate
+            Lambda->>Lambda: Drop task
+        end
+        Lambda->>SQS: Delete processed message
+    end
+```
+
+Here's a breakdown of the flow:
+
+1. The client sends a POST request to the API endpoint (https://task.perf-mon.examples.oleksiipopov.com/request).
+2. The API Gateway validates the task payload.
+3. If valid, the API creates an SQS message with the task details.
+4. The API responds to the client with a 202 Accepted status.
+5. An AWS Lambda function, acting as an SQS poller, periodically checks for new messages.
+6. When a message is received, the Lambda function checks the running AWS Step Functions executions by their name.
+7. If the task is not a duplicate, the Lambda function starts a new Step Functions execution.
+8. If the task is a duplicate, the Lambda function drops it.
+9. After processing, the Lambda function deletes the message from SQS.
+
+This architecture provides several benefits:
+
+- It decouples the client requests from task processing, allowing for better scalability and resilience.
+- It uses API Gateway for initial request handling and validation, improving security and reducing load on backend services.
+- It leverages SQS as a buffer to handle traffic spikes and ensure no tasks are lost.
+- It prevents duplicate task executions by checking existing Step Functions executions directly.
+
+```mermaid
+graph TB
+    SQS[AWS SQS] --> |Polls| Lambda[AWS Lambda SQS Poller]
+    Lambda --> |Invokes| StepFunction[AWS Step Function]
+
+    subgraph stepFunctionExecution [AWS Step Function execution]
+        StepFunction --> |Step 1| TaskReceiver[Task Receiver]
+        TaskReceiver --> |Creates State| TaskMap[Task Map]
+        TaskMap --> |Schedules| Fargate[AWS Fargate]
+
+        subgraph sitespeed [sitespeed.io]
+            Fargate --> |Runs| Sitespeed[Sitespeed.io Jobs]
+        end
+
+        TaskMap --> |After all tasks| Notification[Notification Step]
+        Notification --> |Triggers| SNS[AWS SNS]
+    end
+    
+    Sitespeed --> |Uploads Reports| S3[AWS S3]
+    Sitespeed --> |Sends Metrics| Grafana[Grafana]
+    SNS --> |Sends Email| Email[Email Notification]
+
+    classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:white;
+    class SQS,Lambda,StepFunction,Fargate,S3,SNS aws;
+
+    classDef sitespeed fill:#E3F2FD,stroke:#1565C0,stroke-width:2px;
+    class sitespeed sitespeed;
+
+    classDef stepFunction fill:#FFEBEE,stroke:#C62828,stroke-width:2px;
+    class stepFunctionExecution stepFunction;
+
+```
+
+Here's a detailed explanation of the system components and their interactions:
+
+Task Definition:
+
+* JSON format containing:
+  * Short project name
+  * Base URL of the web app
+  * Environment name
+  * Optional git branch or git tag name
+  * List of URLs to analyze (with short page names)
+  * For each URL: number of iterations and browser list
+
+AWS Lambda (SQS Poller):
+
+* Polls the SQS queue for incoming tasks
+* Invokes the AWS Step Function with the task payload
+
+AWS Step Function:
+
+* Task Receiver:
+  * Takes the task and creates an AWS Step state
+  * Generates all combinations of sample tasks for concurrent execution
+* Task Map:
+  * Takes an array of subtasks
+  * Schedules AWS Fargate instances to run sitespeed.io jobs for each subtask
+* Notification Step:
+  * Triggered after all tasks are completed
+  * Initiates an SNS email notification
+
+AWS Fargate:
+
+* Runs sitespeed.io jobs for each subtask
+* Uploads HTML reports to AWS S3
+* Sends metrics to Grafana
+
+AWS S3:
+
+* Stores HTML reports in a structured path:
+  * /project-name/environment/branch-or-tag/browser/page-name/
+
+Grafana:
+
+* Receives and visualizes performance metrics
+
+AWS SNS:
+
+* Sends email notifications containing:
+  * Links to static reports in S3
+  * Link to the Grafana dashboard
+
+To implement this solution, you'll need to:
+
+* Set up an AWS SQS queue to receive tasks
+* Create an AWS Lambda function to poll the SQS queue
+* Design and implement the AWS Step Function with the described steps
+* Configure AWS Fargate to run sitespeed.io jobs
+* Set up an S3 bucket with appropriate permissions and structure
+* Configure Grafana to receive and visualize metrics
+* Set up AWS SNS for email notifications
