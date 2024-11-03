@@ -3,7 +3,7 @@ const data = Object.seal({
         name: "Oleksii",
         surname: "Popov",
         initials: "O.Y.",
-        position: "Fullstack Software Engineer (React/Node.js/TypeScript/AWS)",
+        position: "Fullstack Software Engineer (React/TypeScript/AWS/Node.js)",
         Website: {title: "oleksiipopov.com", url: "https://oleksiipopov.com"},
         LinkedIn: {title: "linkedin.com/in/oleksii-popov", url: "https://linkedin.com/in/oleksii-popov"},
         GitHub: {title: "github.com/AlexeyPopovUA", url: "https://github.com/AlexeyPopovUA"},
@@ -13,7 +13,7 @@ const data = Object.seal({
     intro: {
         title: "Intro",
         description: [
-            "I am a Software Developer with more than 12 years of experience in web technologies.",
+            "I am a Front End Heavy Full Stack Software Developer with more than 12 years of experience in web technologies.",
             "Passionate about developing user-friendly products and have a track record of designing and implementing full-stack solutions, combining frontend, cloud native, and backend areas.",
             "My expertise lies in the architecture and development of high-scale single page applications, UI libraries, and SDKs, as well as in the implementation of CI/CD, hosting and distribution solutions.",
             "I am proficient in TypeScript and JavaScript across all stacks and use them whenever possible. However, I am also experienced in maintaining projects in other languages.",
@@ -41,7 +41,7 @@ const data = Object.seal({
         },
         {
             name: "Frontend",
-            description: "React, Redux, Redux-Thunk, Redux-Saga, GatsbyJS, Next.js, TailwindCSS, Storybook etc."
+            description: "React, Redux, TailwindCSS, Next.js, GatsbyJS, Storybook etc."
         },
         {
             name: "Cloud",
@@ -49,12 +49,12 @@ const data = Object.seal({
         },
         {
             name: "Backend",
-            description: "Node.js, Serverless, Express JS, Wordpress, Netlify CMS, GraphQL, MongoDB, DynamoDB, MySQL"
+            description: "Node.js, Express JS, Wordpress, Netlify CMS, GraphQL, MongoDB, DynamoDB, MySQL"
         },
         {
             name: "Other technologies",
             description: [
-                "Jest, Mocha, Selenium, Cucumber, Webpack, Rollup, Lerna, NPM, Dynatrace, Elastic Search & Kibana, Sumologic, Scalyr, NewRelic, TeamCity, Jenkins, ESList, Prettify, SonarQube/Cloud, sitespeed.io, Lighthouse"
+                "Jest, Selenium, Cucumber, Webpack, Lerna, NPM, Dynatrace, Elastic Search & Kibana, Sumologic, Scalyr, NewRelic, TeamCity, ESLint, SonarQube, sitespeed.io, Lighthouse"
             ]
         }
     ],
@@ -91,8 +91,7 @@ const data = Object.seal({
             dateStart: "October 2023",
             dateEnd: "",
             description: [
-                "Maintenance of a new Dynatrace Kubernetes web application, related services and libraries.",
-                "Profiling and improvements of React application performance.",
+                "Maintenance of a new Dynatrace Kubernetes web application, related services and libraries. Profiling and improvements of React application performance.",
                 "Code review, code refactoring, technical interviews."
             ],
             stack: "React, Typescript, Docker, Kubernetes, Dynatrace, Node.js, Java"

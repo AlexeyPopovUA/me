@@ -55,7 +55,7 @@ export default async function Home() {
                     </div>
                     <div className="flex flex-col justify-center">
                         <h1 className="mb-2 text-xl md:text-2xl lg:text-3xl">Hi, I&apos;m Oleksii Popov,</h1>
-                        <div className="mb-4 text-xl lg:text-2xl">Fullstack Software Engineer</div>
+                        <div className="mb-4 text-xl lg:text-2xl">Front End Heavy Fullstack Software Developer</div>
                         <div className="mb-4">I develop solutions with React, Node.js, JavaScript, TypeScript and AWS
                         </div>
                     </div>
@@ -67,8 +67,8 @@ export default async function Home() {
                 <p className="mb-4">Some of work examples could be found in the <Link className="font-bold"
                                                                                       href={"/portfolio"}>portfolio</Link>
                 </p>
-                <p className="mb-4">Sometimes I notice and create interesting solutions in
-                    front-end, cloud and back-end areas and share them <Link className="font-bold"
+                <p className="mb-4">I write articles about
+                    front-end, cloud and back-end <Link className="font-bold"
                                                                              href={"/blog"}>in my blog</Link>
                 </p>
                 <p className="mb-4">Here are some of the latest articles:</p>
