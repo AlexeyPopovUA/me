@@ -3,7 +3,7 @@ const data = {
         name: "Olena",
         surname: "Tymchenko",
         initials: "O.O.",
-        position: "Marketing Manager",
+        position: "Shift Manager",
         Email: "alenatymchenko@gmail.com",
         Address: "Klagenfurt am Wörthersee, Austria",
         Phone: "+43 676 540 84 32"
@@ -20,12 +20,12 @@ const data = {
     },
     skills: [
         {
-            "name": "SEO",
-            "description": "Analysis of website structure, optimization of web pages, copyrighting, communication with website visitors, internet marketing, user analysis, reporting"
+            "name": "Banking experience",
+            "description": "Performed data analysis in money transfer reporting. Worked with transfer systems (CONTACT, Western Union, UNIStream, Lider, Anelik, MIGOM, SWIFT). Supported individuals and businesses (bank transfer, account opening, money management, mortgage, deposits, and loans). Administrative work"
         },
         {
-            "name": "Banking experience",
-            "description": "Work with transfer systems (CONTACT, Western Union, UNIStream, Lider, Anelik, MIGOM, SWIFT), work with individuals and businesses (bank transfer, account opening, money management, mortgage, deposits, and loans), administrative work"
+            "name": "Search Engine Optimization and Copyrighting",
+            "description": "Analysis of website structure, optimization of web pages, copyrighting, communication with website visitors, internet marketing and advertising, user analysis, reporting"
         }
     ],
     certificates: [],
