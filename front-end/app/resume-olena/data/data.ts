@@ -25,7 +25,7 @@ const data = {
         },
         {
             "name": "Banking experience",
-            "description": "Work with transfer systems (CONTACT, Western Union, UNIStream, Lider, Anelik, MIGOM, SWIFT), work with individuals and businesses (bank transfer, account opening, money management, mortgage, deposits, and loans), administrative work"
+            "description": "Performed data analysis in money transfer reporting. Worked with transfer systems (CONTACT, Western Union, UNIStream, Lider, Anelik, MIGOM, SWIFT). Supported individuals and businesses (bank transfer, account opening, money management, mortgage, deposits, and loans). Administrative work"
         }
     ],
     certificates: [],
