@@ -41,7 +41,7 @@ export default async function Post() {
     const renderData = useMemo(() => data, []);
 
     return (
-        <article className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4 print:p-0 print:pt-2'>
+        <article className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4 print:p-0 print:pt-8'>
             <Header user={renderData.user} contacts={renderData.contacts}/>
             <Skills skills={renderData.skills}/>
             <History experience={renderData.experience}/>
