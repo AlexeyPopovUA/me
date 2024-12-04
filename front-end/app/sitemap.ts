@@ -1,4 +1,7 @@
-import {MetadataRoute} from 'next'
+export const dynamic = "force-static";
+export const revalidate = 60; // revalidate every 60 seconds
+
+import type {MetadataRoute} from 'next'
 
 import {
     getAllArticleSitemapData,
@@ -19,12 +22,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         "portfolio",
         "resume"
     ].map(page =>
-        ({
-            url: `${environment.url}/${ensurePathSlash(page)}`,
-            lastModified: new Date(),
-            priority: 0.7,
-            changeFrequency: "weekly"
-        }));
+      ({
+          url: `${environment.url}/${ensurePathSlash(page)}`,
+          lastModified: new Date(),
+          priority: 0.7,
+          changeFrequency: "weekly"
+      }));
 
     return [
         ...allPages,

@@ -32,13 +32,18 @@ async function generateDiagrams(nodes: CodeNode[]) {
           flowchart: {htmlLabels: false}
         }
       });
-      cache[node.value] = svg;
-      return svg;
+
+      const svgString = Buffer.from(svg.data.buffer).toString();
+
+      cache[node.value] = svgString;
+      return svgString;
     }
   }));
+
+
   svgs.map((svg, i) => {
     nodes[i].type = 'html';
-    nodes[i].value = `<pre class='mermaid bg-white flex justify-center overflow-hidden'>${svg.data.toString()}</pre>`;
+    nodes[i].value = `<pre class='mermaid bg-white flex justify-center overflow-hidden'>${svg}</pre>`;
   });
 }
 

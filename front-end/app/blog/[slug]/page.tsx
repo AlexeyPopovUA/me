@@ -17,11 +17,11 @@ export async function generateStaticParams() {
 
 type StaticParams = Awaited<ReturnType<typeof generateStaticParams>>[number];
 type StaticProps = {
-  params: StaticParams;
+  params: Promise<StaticParams>;
 }
 
 export const generateMetadata = async (props: StaticProps): Promise<Metadata> => {
-  const post = await getArticleSEOContent({slug: props.params.slug});
+  const post = await getArticleSEOContent({slug: (await props.params).slug});
   const ogImage = getOGImageURL({src: post.thumbnail});
 
   return {
@@ -29,7 +29,7 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
     description: post.description,
     metadataBase: new URL(environment.url),
     alternates: {
-      canonical: ensurePathSlash(`/blog/${props.params.slug}`)
+      canonical: ensurePathSlash(`/blog/${(await props.params).slug}`)
     },
     keywords: post.keywords,
     openGraph: {
@@ -39,14 +39,14 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
         ogImage
       ]
     }
-  }
+  };
 }
 
 export default async function Post(props: StaticProps) {
   return (
-    <ArticleContainer>
-      <ArticleContent slug={props.params.slug}/>
+    (<ArticleContainer>
+      <ArticleContent slug={(await props.params).slug}/>
       <GoTop/>
-    </ArticleContainer>
+    </ArticleContainer>)
   );
 }

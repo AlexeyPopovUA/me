@@ -19,11 +19,11 @@ export async function generateStaticParams() {
 
 type StaticParams = Awaited<ReturnType<typeof generateStaticParams>>[number];
 type StaticProps = {
-  params: StaticParams;
+  params: Promise<StaticParams>;
 }
 
 export const generateMetadata = async (props: StaticProps): Promise<Metadata> => {
-  const {frontMatter} = await getProjectSEOContent({slug: props.params.slug});
+  const {frontMatter} = await getProjectSEOContent({slug: (await props.params).slug});
   const ogImage = getOGImageURL({src: frontMatter.thumbnail});
 
   return {
@@ -31,7 +31,7 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
     description: frontMatter.description,
     metadataBase: new URL(environment.url),
     alternates: {
-      canonical: ensurePathSlash(`/portfolio/${props.params.slug}`)
+      canonical: ensurePathSlash(`/portfolio/${(await props.params).slug}`)
     },
     openGraph: {
       title: `${frontMatter.title} - ${content.authorName}`,
@@ -40,11 +40,11 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
         ogImage
       ]
     }
-  }
+  };
 }
 
 export default async function Post(props: StaticProps) {
-  const {frontMatter} = await getProjectData({slug: props.params.slug});
+  const {frontMatter} = await getProjectData({slug: (await props.params).slug});
   const imageCfgs: Gallery.Props["imageCfgs"] = await Promise.all(frontMatter.gallery.map(async image => {
     const blurredImageSrcPair = await readBlurredImageSrcPair({src: image});
     const imageURL = getInsideImageURL({src: image, width: 250, height: 250, quality: 75});
