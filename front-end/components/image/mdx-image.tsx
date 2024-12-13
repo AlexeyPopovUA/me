@@ -6,10 +6,8 @@ import {readBlurredImageSrcPair} from "@/lib/image";
 import {ThumbnailImage} from "@/components/image/animated-image-loading/thumbnail-image";
 import {imageLoader} from "@/components/image/image-loader";
 
-/**
- * @todo Add types
- */
-const MDXImage = async (props: any) => {
+// @ts-expect-error - todo > add proper types later
+const MDXImage = async (props) => {
   const {src, blurDataURL, ratio} = await readBlurredImageSrcPair({src: props.src});
 
   const className = clsx(

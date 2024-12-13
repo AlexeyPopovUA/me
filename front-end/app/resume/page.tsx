@@ -7,7 +7,6 @@ import Intro from "@/app/resume/components/Intro";
 import Skills from "@/app/resume/components/Skills";
 import History from "@/app/resume/components/History";
 import OwnProjects from "@/app/resume/components/OwnProjects";
-import Education from "@/app/resume/components/Education";
 import renderData from "@/app/resume/data/data";
 import {content} from "@/app/configuration/content";
 import {environment} from "@/app/configuration/environment";

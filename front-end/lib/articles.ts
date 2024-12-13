@@ -105,7 +105,7 @@ export async function getAllArticleSitemapData(): Promise<MetadataRoute.Sitemap>
         .map(dir => readFrontMatterWithContent<ArticlesSchema>(getArticlePathByDirName(dir))));
 
     // filter out drafts
-    let result = frontMatterList
+    const result = frontMatterList
         .filter(({frontMatter}) => !frontMatter.draft)
         .map(({frontMatter}) => frontMatter);
 
@@ -133,7 +133,7 @@ export async function getAllProjects() {
         .map(dir => readFrontMatterWithContent<ProjectsSchema>(getProjectPathByDirName(dir))));
 
     // filter out drafts
-    let result = frontMatterList
+    const result = frontMatterList
         .filter(({frontMatter}) => !frontMatter.draft)
         .map(({frontMatter}) => frontMatter);
 
@@ -151,7 +151,7 @@ export async function getAllProjectSitemapData(): Promise<MetadataRoute.Sitemap>
         .map(dir => readFrontMatterWithContent<ArticlesSchema>(getProjectPathByDirName(dir))));
 
     // filter out drafts
-    let result = frontMatterList.filter(({frontMatter}) => !frontMatter.draft)
+    const result = frontMatterList.filter(({frontMatter}) => !frontMatter.draft)
         .map(({frontMatter}) => frontMatter);
 
     // sort by date

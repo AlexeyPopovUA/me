@@ -4,17 +4,17 @@ import {
     transformerNotationHighlight
 } from '@shikijs/transformers';
 
-import {getHighlighter} from 'shiki';
+import {getSingletonHighlighter} from 'shiki';
 
-let highlighterInstancePromise: ReturnType<typeof getHighlighter> | undefined;
+let highlighterInstancePromise: ReturnType<typeof getSingletonHighlighter> | undefined;
 
 export function remarkCode() {
     return transformer;
 
-    // @ts-ignore
+    // @ts-expect-error - todo > add proper types later
     async function transformer(tree) {
         const languages = ['ts', 'tsx', 'javascript', 'json', 'html', 'bash', 'shell', 'text'];
-        highlighterInstancePromise = highlighterInstancePromise ? highlighterInstancePromise: getHighlighter({
+        highlighterInstancePromise = highlighterInstancePromise ? highlighterInstancePromise: getSingletonHighlighter({
             themes: ['github-light'],
             langs: languages,
         });

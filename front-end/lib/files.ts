@@ -18,7 +18,8 @@ export const listDirNames = async (basePath: string) => {
         .map(dirent => dirent.name);
 }
 
-export const readFrontMatterWithContent = async <T extends { [p: string]: any }>(articlePath: string) => {
+// @ts-expect-error - todo > add proper types later
+export const readFrontMatterWithContent = async <T extends Record<string, string | Date | Array>>(articlePath: string) => {
     const data = await getMdxDataByPath({path: articlePath});
 
     return {frontMatter: data.frontmatter as T, content: data.content};

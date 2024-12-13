@@ -14,8 +14,10 @@ import {getOriginalVideoURL} from "@/lib/video";
 
 const cmp = {
   // Note, that MDXImage is a server component, therefore wrapped to match types
-  img: (props: any) => <MDXImage {...props} />,
-  table: (props: any) => <div className="table-wrapper">
+  // @ts-expect-error - todo > add proper types later
+  img: (props) => <MDXImage {...props} />,
+  // @ts-expect-error - todo > add proper types later
+  table: (props) => <div className="table-wrapper">
     <table {...props} />
   </div>,
   ArticleVideo: (props: React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>) => {

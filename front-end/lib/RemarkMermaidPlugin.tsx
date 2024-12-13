@@ -18,7 +18,7 @@ async function getBrowserInstance() {
   }
 }
 
-const cache: { [key: string]: any } = {};
+const cache: { [key: string]: unknown } = {};
 
 async function generateDiagrams(nodes: CodeNode[]) {
   const browser = await browserInstance;

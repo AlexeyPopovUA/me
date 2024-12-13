@@ -20,6 +20,6 @@
     "front-end"
   ],
   "devDependencies": {
-    "@tsconfig/node20": "^20.1.4"
+    "@tsconfig/node22": "^22.0.0"
   }
 }
