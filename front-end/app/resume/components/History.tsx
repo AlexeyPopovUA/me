@@ -15,15 +15,7 @@ type Props = {
  */
 const getHumanizedDuration = (duration: moment.Duration) => {
     const years = duration.years();
-    let months = duration.months();
-    const days = duration.days();
-
-    //correction takes days into account
-    if (days / 31 > 0.75) {
-        duration.add(1, "month");
-        duration.subtract(days, "day");
-        months = duration.months();
-    }
+    const months = duration.months();
 
     //formatted output
     const result = [];
@@ -46,8 +38,8 @@ const History = (props: Props) => {
     );
     const historyDurationValues = historyDurations.map((duration) => getHumanizedDuration(duration));
 
-    let totalDuration = historyDurations[0];
-    for (let i = 1; i < historyDurations.length - 1; i++) {
+    let totalDuration = moment.duration();
+    for (let i = 0; i < historyDurations.length; i++) {
         totalDuration = totalDuration.add(historyDurations[i]);
     }
 
