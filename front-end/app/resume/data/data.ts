@@ -8,27 +8,28 @@ const data = Object.seal({
         LinkedIn: {title: "linkedin.com/in/oleksii-popov", url: "https://linkedin.com/in/oleksii-popov"},
         GitHub: {title: "github.com/AlexeyPopovUA", url: "https://github.com/AlexeyPopovUA"},
         Email: "opportunities@oleksiipopov.com",
-        Address: "Klagenfurt am Wörthersee, Austria"
+        Address: "Klagenfurt am Wörthersee, Austria",
+        EducationLevel: "MSc"
     },
     intro: {
-        title: "Intro",
+        title: "About me",
         description: [
-            "I am a Front End Heavy Full Stack Software Developer with more than 12 years of experience in web technologies.",
+            "I am a Front End Heavy Full Stack Software Developer with more than 13 years of experience.",
             "Passionate about developing user-friendly products and have a track record of designing and implementing full-stack solutions, combining frontend, cloud native, and backend areas.",
             "My expertise lies in the architecture and development of high-scale single page applications, UI libraries, and SDKs, as well as in the implementation of CI/CD, hosting and distribution solutions.",
-            "I am proficient in TypeScript and JavaScript across all stacks and use them whenever possible. However, I am also experienced in maintaining projects in other languages.",
+            "I am proficient in TypeScript and JavaScript across all stacks.",
             "Enthusiastic about optimizing applications for improved runtime and faster loading speeds, both for existing projects and new ones."
         ]
     },
     contacts: {
         Nationality: "Dutch",
-        "I speak": "English, Ukrainian, Russian, Dutch (A2)"
+        "I speak": "English, Ukrainian, Russian, Dutch"
     },
     skills: [
         {
             name: "General",
             description: [
-                "Architecture and development of high scale single page applications, UI libraries and SDK's, microservices and their infrastructure. System design of full-stack solutions. Application optimization for higher runtime and loading speed and scalability",
+                "Architecture and development of high scale single page applications, UI libraries and SDK's, microservices and infrastructure. System design of full-stack solutions.",
                 "Leading development of high quality technical solutions, cross-team collaboration, technical interviews, mentorship, code refactoring and review, unit/integration tests.",
                 "Defining the vision, development strategy and priorities for technologies in projects",
                 "Technical interviews, hiring, mentorship, onboarding of new team members"
@@ -49,12 +50,12 @@ const data = Object.seal({
         },
         {
             name: "Backend",
-            description: "Node.js, Express JS, Wordpress, Netlify CMS, GraphQL, MongoDB, DynamoDB, MySQL"
+            description: "Node.js, Express JS, GraphQL, MongoDB, DynamoDB, MySQL"
         },
         {
             name: "Other technologies",
             description: [
-                "Jest, Selenium, Cucumber, Webpack, Lerna, NPM, Dynatrace, Elastic Search & Kibana, Sumologic, Scalyr, NewRelic, TeamCity, ESLint, SonarQube, sitespeed.io, Lighthouse"
+                "Jest, Selenium, Webpack, Lerna, NPM, Elastic Search & Kibana, Sumologic, NewRelic, SonarQube, sitespeed.io, Lighthouse"
             ]
         }
     ],
@@ -92,7 +93,7 @@ const data = Object.seal({
             dateEnd: "",
             description: [
                 "Maintenance of a new Dynatrace Kubernetes web application, related services and libraries. Profiling and improvements of React application performance.",
-                "Code review, code refactoring, technical interviews."
+                "Code review, code refactoring, technical interviews for different teams."
             ],
             stack: "React, Typescript, Docker, Kubernetes, Dynatrace, Node.js, Java"
         },
@@ -127,9 +128,9 @@ const data = Object.seal({
         },
         {
             company: "Albelli (Amsterdam, Netherlands)",
-            title: "Software developer / Senior software developer",
+            title: "Software developer > Senior software developer",
             dateStart: "April 2016",
-            dateEnd: "December 2018",
+            dateEnd: "January 2019",
             description: [
                 "Participated in development and maintenance of online photo editors and hybrid mobile application.",
                 "Developed different tools for debugging, logging and fixing customer issues.",
@@ -140,39 +141,26 @@ const data = Object.seal({
         {
             company: "Insoft Global (Ukraine)",
             title: "JavaScript Developer",
-            dateStart: "March 2013",
-            dateEnd: "March 2016",
+            dateStart: "April 2013",
+            dateEnd: "April 2016",
             description: [
                 "Participated in front end and server side development of cloud management platforms, energy management and infrastructure management platforms.",
                 "Implemented POC of a hybrid mobile application",
-                "Code review, code refactoring, technical interviews, hiring, mentorship"
+                "Code review, code refactoring, technical interviews, hiring, onboarding, mentorship"
             ],
             stack: "Sencha ExtJS, SCSS, Node.js, Java"
         },
         {
-            company: "Exadel",
-            title: "JavaScript Developer",
-            dateStart: "July 2012",
-            dateEnd: "March 2013",
-            description: "Participated in front end development of a Next Wave Logistics (e-commerce project)",
-            stack: "JavaScript, jQuery, CSS, Backbone JS"
-        },
-        {
-            company: "Simple Solutions",
-            title: "Junior PHP Developer",
-            dateStart: "January 2012",
-            dateEnd: "July 2012",
-            description: [
-                "Developed numerous websites using Wordpress and OpenCart. Implemented plugins, widgets and themes for Wordpress. Preliminary project analysis. Tasks estimation. User guides writing"
-            ],
-            stack: "PHP, MySQL, LAMP, WordPress, JavaScript, jQuery, CSS"
-        },
-        {
-            company: "Simple Solutions",
-            title: "QA Engineer",
+            company: "Various companies (web studios and outsourcing)",
+            title: "QA > Junior PHP > JavaScript Developer",
             dateStart: "August 2011",
-            dateEnd: "January 2012",
-            description: "Manual testing. Specification writing. UI prototyping"
+            dateEnd: "March 2013",
+            description: [
+                "Participated in front end development of an e-commerce project",
+                "Developed numerous websites using Wordpress and OpenCart. Implemented plugins, widgets and themes for Wordpress. Preliminary project analysis. Tasks estimation. User guides writing",
+                "Manual testing. Specification writing. UI prototyping"
+            ],
+            stack: "JavaScript, jQuery, CSS, Backbone JS, PHP, MySQL, LAMP, WordPress"
         }
     ],
     education: [

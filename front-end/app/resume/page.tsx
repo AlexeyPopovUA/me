@@ -6,7 +6,6 @@ import Header from "@/app/resume/components/Header";
 import Intro from "@/app/resume/components/Intro";
 import Skills from "@/app/resume/components/Skills";
 import History from "@/app/resume/components/History";
-import OwnProjects from "@/app/resume/components/OwnProjects";
 import renderData from "@/app/resume/data/data";
 import {content} from "@/app/configuration/content";
 import {environment} from "@/app/configuration/environment";
@@ -46,8 +45,6 @@ export default async function Post() {
             <Intro intro={renderData.intro}/>
             <Skills skills={renderData.skills}/>
             <History experience={renderData.experience}/>
-            <OwnProjects projects={renderData.ownProjects}/>
-            {/*<Education education={renderData.education}/>*/}
         </article>
     );
 }
