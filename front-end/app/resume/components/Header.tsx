@@ -7,30 +7,28 @@ type Props = {
     contacts: typeof data.contacts;
 }
 
-const Header = (props: Props) => {
-    const websites = [props.user.Website, props.user.GitHub, props.user.LinkedIn];
-    const contacts = [props.user.Address, props.user.Email, `I speak ${props.contacts["I speak"]}`];
-
+export default function Header(props: Props) {
     return (
         <div className="flex flex-col items-center">
             <h1>{props.user.name} {props.user.surname}</h1>
             <div className="text-2xl text-center mb-4">{props.user.position}</div>
 
-            <div className="flex flex-col sm:flex-row">
-                <div className="text-left mb-4 sm:mb-0 mr-8">
-                    {contacts.map(contact => (
-                        <div className="max-w-sm" key={contact}>{contact}</div>
-                    ))}
+            <div className="flex flex-col sm:flex-row text-left">
+                <div className=" mb-4 sm:mb-0 mr-8">
+                    <div className="max-w-sm whitespace-nowrap">{props.user.Address}</div>
+                    <div className="max-w-sm whitespace-nowrap"><a
+                        href={`mailto:${props.user.Email}`}>{props.user.Email}</a></div>
+                    <div className="max-w-sm whitespace-nowrap">{`I speak ${props.contacts["I speak"]}`}</div>
                 </div>
-                <div className="text-left">
-                    {websites.map(site => (
-                        <a className="block underline whitespace-nowrap" key={site.title}
-                           href={site.url}>{site.title}</a>
-                    ))}
+                <div>
+                    <a className="block underline whitespace-nowrap"
+                       href={props.user.Website.url}>{props.user.Website.title}</a>
+                    <a className="block underline whitespace-nowrap"
+                       href={props.user.GitHub.url}>{props.user.GitHub.title}</a>
+                    <a className="block underline whitespace-nowrap"
+                       href={props.user.LinkedIn.url}>{props.user.LinkedIn.title}</a>
                 </div>
             </div>
         </div>
     );
-};
-
-export default Header;
+}

@@ -3,7 +3,7 @@ const data = Object.seal({
         name: "Oleksii",
         surname: "Popov",
         initials: "O.Y.",
-        position: "Fullstack Software Engineer (React/TypeScript/AWS/Node.js)",
+        position: "Full-Stack Software Developer (React/TypeScript/AWS/Node.js)",
         Website: {title: "oleksiipopov.com", url: "https://oleksiipopov.com"},
         LinkedIn: {title: "linkedin.com/in/oleksii-popov", url: "https://linkedin.com/in/oleksii-popov"},
         GitHub: {title: "github.com/AlexeyPopovUA", url: "https://github.com/AlexeyPopovUA"},
@@ -12,13 +12,14 @@ const data = Object.seal({
         EducationLevel: "MSc"
     },
     intro: {
-        title: "About me",
+        title: "About Me",
         description: [
-            "I am a Front End Heavy Full Stack Software Developer with more than 13 years of experience.",
-            "Passionate about developing user-friendly products and have a track record of designing and implementing full-stack solutions, combining frontend, cloud native, and backend areas.",
-            "My expertise lies in the architecture and development of high-scale single page applications, UI libraries, and SDKs, as well as in the implementation of CI/CD, hosting and distribution solutions.",
-            "I am proficient in TypeScript and JavaScript across all stacks.",
-            "Enthusiastic about optimizing applications for improved runtime and faster loading speeds, both for existing projects and new ones."
+            "I am a Front-End-Heavy Full-Stack Software Developer with over 13 years of experience in designing and delivering robust software solutions.",
+            "My passion lies in building user-centric products, leveraging my expertise across frontend, cloud-native, and backend technologies to craft seamless full-stack solutions.",
+            "I specialize in architecting and developing high-scale single-page applications, UI libraries, and SDKs, while also implementing CI/CD pipelines, hosting, and distribution solutions.",
+            "I excel at optimizing application performance for improved runtime efficiency and faster load speeds.",
+            "My experience includes leading the development of high-quality technical solutions, fostering cross-team collaboration, conducting technical interviews, and mentoring team members.",
+            "I also bring experience in defining project visions, setting development strategies, and prioritizing technologies to align with business goals.",
         ]
     },
     contacts: {
@@ -26,15 +27,6 @@ const data = Object.seal({
         "I speak": "English, Ukrainian, Russian, Dutch"
     },
     skills: [
-        {
-            name: "General",
-            description: [
-                "Architecture and development of high scale single page applications, UI libraries and SDK's, microservices and infrastructure. System design of full-stack solutions.",
-                "Leading development of high quality technical solutions, cross-team collaboration, technical interviews, mentorship, code refactoring and review, unit/integration tests.",
-                "Defining the vision, development strategy and priorities for technologies in projects",
-                "Technical interviews, hiring, mentorship, onboarding of new team members"
-            ]
-        },
         {
             name: "Programming languages",
             description:
@@ -87,7 +79,7 @@ const data = Object.seal({
     ],
     experience: [
         {
-            company: "Dynatrace (Klagenfurt, Austria)",
+            company: "Dynatrace (Klagenfurt am Wörthersee, Austria)",
             title: "Senior Software Developer",
             dateStart: "October 2023",
             dateEnd: "",
