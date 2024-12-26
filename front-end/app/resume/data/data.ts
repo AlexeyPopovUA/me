@@ -15,10 +15,10 @@ const data = Object.seal({
         title: "About Me",
         description: [
             "I am a Front-End-Heavy Full-Stack Software Developer with over 13 years of experience in designing and delivering robust software solutions.",
-            "My passion lies in building user-centric products, leveraging my expertise across frontend, cloud-native, and backend technologies to craft seamless full-stack solutions.",
+            "I build user-centric products, leveraging my expertise across frontend, cloud-native, and backend technologies.",
             "I specialize in architecting and developing high-scale single-page applications, UI libraries, and SDKs, while also implementing CI/CD pipelines, hosting, and distribution solutions.",
             "I excel at optimizing application performance for improved runtime efficiency and faster load speeds.",
-            "My experience includes leading the development of high-quality technical solutions, fostering cross-team collaboration, conducting technical interviews, and mentoring team members.",
+            "My experience includes leading the development of high-quality technical solutions, conducting technical interviews, and mentoring team members.",
             "I also bring experience in defining project visions, setting development strategies, and prioritizing technologies to align with business goals.",
         ]
     },
