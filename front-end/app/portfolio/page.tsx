@@ -1,18 +1,19 @@
 import React from "react";
+import {Metadata} from "next";
 
-import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
+import {getPagePathByDirName} from "@/lib/files";
 import {PageSchema} from "@/content/pages/portfolio/schema";
 import AllProjects from "@/app/portfolio/all-projects";
 import {content} from "@/app/configuration/content";
 import {getOGImageURL} from "@/lib/image";
 import {environment} from "@/app/configuration/environment";
 import {ensurePathSlash} from "@/lib/utils";
-import {Metadata} from "next";
+import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
 
 const pageSlug = "portfolio";
 
 export async function generateMetadata(): Promise<Metadata> {
-    const {frontMatter} = await readFrontMatterWithContent<PageSchema>(getPagePathByDirName(pageSlug));
+    const frontMatter = await getFrontMatterDataByPath<PageSchema>(getPagePathByDirName(pageSlug));
     const ogImage = getOGImageURL({src: frontMatter.thumbnail});
 
     return {

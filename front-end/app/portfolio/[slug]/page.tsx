@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import {Metadata} from "next";
 
-import {getProjectData, getProjectSEOContent, getProjectSlugs} from "@/lib/articles";
+import {getProjectSlugs} from "@/lib/articles";
 import {Gallery} from "@/components/image/gallery";
 import Tag from "@/components/primitive/Tag";
 import {getInsideImageURL, getOGImageURL, readBlurredImageSrcPair} from "@/lib/image";
@@ -10,6 +10,9 @@ import {content} from "@/app/configuration/content";
 import {ArticleContainer} from "@/components/ArticleContainer";
 import {environment} from "@/app/configuration/environment";
 import {ensurePathSlash} from "@/lib/utils";
+import {getProjectPathByDirName} from "@/lib/files";
+import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
+import {ProjectsSchema} from "@/content/projects/projects-schema";
 import {ProjectSection} from "./project-section";
 
 export async function generateStaticParams() {
@@ -23,7 +26,7 @@ type StaticProps = {
 }
 
 export const generateMetadata = async (props: StaticProps): Promise<Metadata> => {
-  const {frontMatter} = await getProjectSEOContent({slug: (await props.params).slug});
+  const frontMatter = await getFrontMatterDataByPath<ProjectsSchema>(getProjectPathByDirName((await props.params).slug));
   const ogImage = getOGImageURL({src: frontMatter.thumbnail});
 
   return {
@@ -44,7 +47,7 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
 }
 
 export default async function Post(props: StaticProps) {
-  const {frontMatter} = await getProjectData({slug: (await props.params).slug});
+  const frontMatter = await getFrontMatterDataByPath<ProjectsSchema>(getProjectPathByDirName((await props.params).slug));
   const imageCfgs: Gallery.Props["imageCfgs"] = await Promise.all(frontMatter.gallery.map(async image => {
     const blurredImageSrcPair = await readBlurredImageSrcPair({src: image});
     const imageURL = getInsideImageURL({src: image, width: 250, height: 250, quality: 75});

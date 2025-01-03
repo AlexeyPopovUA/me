@@ -5,16 +5,17 @@ import {Metadata} from "next";
 import LatestArticles from "@/app/latest-articles";
 import {getOGImageURL, readBlurredImageSrcPair} from "@/lib/image";
 import {imageLoader} from "@/components/image/image-loader";
-import {getPagePathByDirName, readFrontMatterWithContent} from "@/lib/files";
+import {getPagePathByDirName} from "@/lib/files";
 import {PageSchema} from "@/content/pages/resume/schema";
 import {environment} from "@/app/configuration/environment";
 import {ThumbnailImage} from "@/components/image/animated-image-loading/thumbnail-image";
 import data from "@/app/resume/data/data";
+import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
 
 const pageSlug = "home";
 
 export async function generateMetadata(): Promise<Metadata> {
-    const {frontMatter} = await readFrontMatterWithContent<PageSchema>(getPagePathByDirName(pageSlug));
+    const frontMatter = await getFrontMatterDataByPath<PageSchema>(getPagePathByDirName(pageSlug));
     const ogImage = getOGImageURL({src: frontMatter.thumbnail});
 
     return {
