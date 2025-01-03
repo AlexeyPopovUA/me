@@ -5,10 +5,13 @@ import {getArticleSEOContent, getArticlesSlugs} from "@/lib/articles";
 import GoTop from "@/components/ScrollUpButton";
 import {content} from "@/app/configuration/content";
 import {getOGImageURL} from "@/lib/image";
-import {ArticleContent} from "@/components/article-content";
 import {ArticleContainer} from "@/components/ArticleContainer";
 import {environment} from "@/app/configuration/environment";
 import {ensurePathSlash} from "@/lib/utils";
+import {getArticleMdxDataByPath} from "@/lib/mdx-utils";
+import {getArticlePathByDirName} from "@/lib/files";
+import {readTOC} from "@/lib/toc-parser";
+import TableOfContents from "@/components/TableOfContents";
 
 export async function generateStaticParams() {
   const allSlugs = await getArticlesSlugs();
@@ -43,10 +46,34 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
 }
 
 export default async function Post(props: StaticProps) {
+  const slug = (await props.params).slug;
+  const path = getArticlePathByDirName(slug);
+
+  // TODO Avoid double file reading
+  const {content} = await getArticleMdxDataByPath({path});
+  const toc = await readTOC({path});
+
   return (
-    (<ArticleContainer>
-      <ArticleContent slug={(await props.params).slug}/>
+    <ArticleContainer>
+      {content}
+
       <GoTop/>
-    </ArticleContainer>)
+
+      {/* Fixed sidebar TOC */}
+      <div className="fixed top-24 left-4 w-60 hidden xl:block">
+        <TableOfContents
+          heading={toc!}
+          className="bg-slate-50 p-4 rounded-lg"
+        />
+      </div>
+
+      {/* Mobile/responsive TOC */}
+      {/*<div className="lg:hidden mb-8">
+        <TableOfContents
+          heading={toc!}
+          className="bg-gray-50 p-4 rounded-lg"
+        />
+      </div>*/}
+    </ArticleContainer>
   );
 }

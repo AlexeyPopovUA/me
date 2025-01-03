@@ -3,12 +3,11 @@ import {Metadata} from "next";
 
 import {getPagePathByDirName} from "@/lib/files";
 import {PageSchema} from "@/content/pages/contact/schema";
-import {PageContent} from "@/components/page-content";
 import {content} from "@/app/configuration/content";
 import {getOGImageURL} from "@/lib/image";
 import {environment} from "@/app/configuration/environment";
 import {ensurePathSlash} from "@/lib/utils";
-import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
+import {getFrontMatterDataByPath, getPageMdxDataByPath} from "@/lib/mdx-utils";
 
 const pageSlug = "contact";
 
@@ -34,9 +33,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Post() {
+    const {content} = await getPageMdxDataByPath({path: getPagePathByDirName(pageSlug)});
+
     return (
         <article className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4'>
-            <PageContent slug={pageSlug}/>
+            {content}
         </article>
     );
 }

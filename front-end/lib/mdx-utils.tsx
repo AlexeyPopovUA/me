@@ -90,12 +90,12 @@ export async function getFrontMatterDataByPath<T>(path: string) {
   const source = await read(path);
 
   // TODO Think about simply reading the frontmatter instead of compiling the whole MDX
-  const result = await compileMDX({
+  const result = await compileMDX<T>({
     source,
     options: {
       parseFrontmatter: true
     }
   });
 
-  return result.frontmatter as T;
+  return result.frontmatter;
 }
