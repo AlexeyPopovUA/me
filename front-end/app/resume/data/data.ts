@@ -15,6 +15,7 @@ const data = Object.seal({
         title: "About Me",
         description: [
             "I'm a full-stack software developer with over 13 years of experience, including 7 in senior roles, with focus on front-end development and delivering robust software solutions.",
+            "I'm eager to join Innervate and contribute to their mission by tackling exciting and complex projects that will both challenge and strengthen my experience. I'm particularly drawn to the opportunity to initiate new ideas and experiments aimed at improving customer experience, product quality, and overall performance.",
             "I build user-centric products, leveraging my expertise across frontend, cloud-native, and backend technologies.",
             "I specialize in architecting and developing high-scale single-page applications, UI libraries, and SDKs, while also implementing CI/CD pipelines, hosting, and distribution solutions.",
             "I excel at optimizing application performance for improved runtime efficiency and faster load speeds.",
