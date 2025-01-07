@@ -15,18 +15,24 @@ export default function Header(props: Props) {
 
             <div className="flex flex-col sm:flex-row text-left">
                 <div className=" mb-4 sm:mb-0 mr-8">
-                    <div className="max-w-sm whitespace-nowrap">{props.user.Address}</div>
-                    <div className="max-w-sm whitespace-nowrap"><a
+                    <div className="max-w-sm whitespace-nowrap">🇦🇹&nbsp;{props.user.Address}</div>
+                    <div className="max-w-sm whitespace-nowrap">📨&nbsp;<a
                         href={`mailto:${props.user.Email}`}>{props.user.Email}</a></div>
-                    <div className="max-w-sm whitespace-nowrap">{`I speak ${props.contacts["I speak"]}`}</div>
+                    <div className="max-w-sm whitespace-nowrap">🌍&nbsp;I speak {props.contacts["I speak"]}</div>
                 </div>
                 <div>
-                    <a className="block underline whitespace-nowrap"
-                       href={props.user.Website.url}>{props.user.Website.title}</a>
-                    <a className="block underline whitespace-nowrap"
-                       href={props.user.GitHub.url}>{props.user.GitHub.title}</a>
-                    <a className="block underline whitespace-nowrap"
-                       href={props.user.LinkedIn.url}>{props.user.LinkedIn.title}</a>
+                    <div>
+                        💼&nbsp;<a className="underline whitespace-nowrap"
+                           href={props.user.Website.url}>{props.user.Website.title}</a>
+                    </div>
+                    <div>
+                        👨🏻‍💻&nbsp;<a className="underline whitespace-nowrap"
+                           href={props.user.GitHub.url}>{props.user.GitHub.title}</a>
+                    </div>
+                    <div>
+                        🪪&nbsp;<a className="underline whitespace-nowrap"
+                           href={props.user.LinkedIn.url}>{props.user.LinkedIn.title}</a>
+                    </div>
                 </div>
             </div>
         </div>
