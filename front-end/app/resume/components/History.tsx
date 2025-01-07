@@ -1,15 +1,14 @@
-import React from "react";
-import moment from "moment";
-import clsx from "clsx";
+import React from 'react';
+import moment from 'moment';
+import clsx from 'clsx';
 
-import CVSection from "./CVSection";
-import data from "../data/data";
-import Tag from "@/components/primitive/Tag";
+import CVSection from './CVSection';
+import data from '../data/data';
+import Tag from '@/components/primitive/Tag';
 
 type Props = {
     experience: typeof data.experience;
 };
-
 
 /**
  * Converts "moment" module duration object into the humanized string
@@ -26,41 +25,43 @@ function getHumanizedDuration(duration: moment.Duration) {
     if (months > 0) {
         result.push(months === 1 ? `${months} month` : `${months} months`);
     }
-    return result.join(" ");
+    return result.join(' ');
 }
 
-function Description(props: { description: string | string[], className?: string }) {
+function Description(props: { description: string | string[]; className?: string }) {
     if (Array.isArray(props.description)) {
         return (
-            <div className={clsx("flex flex-col gap-2", props.className)}>
+            <div className={clsx('flex flex-col gap-2', props.className)}>
                 {props.description.map((descr, i) => (
                     <div
                         key={descr.slice(0, 20)}
-                        className={clsx("flex flex-col gap-2", {
-                            "border-b": i !== props.description.length - 1
-                        })}>{descr}</div>
+                        className={clsx('flex flex-col gap-2', {
+                            'border-b': i !== props.description.length - 1,
+                        })}
+                    >
+                        {descr}
+                    </div>
                 ))}
             </div>
         );
     }
 
-    return <div className="description col-start-2 col-span-3 pb-2">{props.description}</div>;
+    return <div className="description col-span-3 col-start-2 pb-2">{props.description}</div>;
 }
 
 function Stack(props: { stack: string }) {
     return (
-        <div className="description flex flex-row flex-wrap gap-2">{props.stack.split(", ").map(item =>
-            <Tag key={item} item={item}/>)}</div>
+        <div className="description flex flex-row flex-wrap gap-2">
+            {props.stack.split(', ').map((item) => (
+                <Tag key={item} item={item} />
+            ))}
+        </div>
     );
 }
 
 export default function History(props: Props) {
     const historyDurations = props.experience.map((item) =>
-        moment.duration(
-            (item.dateEnd ? moment(item.dateEnd, "MMM YYYY", "en") : moment()).diff(
-                moment(item.dateStart, "MMM YYYY", "en")
-            )
-        )
+        moment.duration((item.dateEnd ? moment(item.dateEnd, 'MMM YYYY', 'en') : moment()).diff(moment(item.dateStart, 'MMM YYYY', 'en'))),
     );
     const historyDurationValues = historyDurations.map((duration) => getHumanizedDuration(duration));
 
@@ -73,19 +74,30 @@ export default function History(props: Props) {
         <CVSection cls="history" title={`Work history (${getHumanizedDuration(totalDuration)})`}>
             {props.experience.map((item, index) => (
                 <section key={`${item.company}-${item.company}`} className="history-section flex flex-col gap-2">
-                    <h3 className="company-name font-bold">{item.company}</h3>
-                    <div
-                        className="font-bold">{`${item.dateStart} - ${item.dateEnd ? item.dateEnd : "Now"} (${historyDurationValues[index]})`}</div>
-                    <Description description={item.description} className="italic"/>
-                    <Stack stack={item.stack}/>
-                    {
-                        item.positions && item.positions.map((position) => (
+                    <h3 className="company-name font-bold">
+                        {item.website ? (
+                            <a className="no-underline" href={item.website}>
+                                {item.company}
+                            </a>
+                        ) : (
+                            item.company
+                        )}
+                    </h3>
+                    <div className="font-bold">{`${item.dateStart} - ${item.dateEnd ? item.dateEnd : 'Now'} (${historyDurationValues[index]})`}</div>
+                    <Description description={item.description} className="italic" />
+                    {item.website ? (
+                        <a href={item.website} className="mb-2 text-sm italic">
+                            {item.website}
+                        </a>
+                    ) : null}
+                    <Stack stack={item.stack} />
+                    {item.positions &&
+                        item.positions.map((position) => (
                             <div key={position.title} className="project">
                                 <h4 className="title">&gt; {position.title}</h4>
-                                <Description description={position.description}/>
+                                <Description description={position.description} />
                             </div>
-                        ))
-                    }
+                        ))}
                 </section>
             ))}
         </CVSection>

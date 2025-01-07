@@ -80,6 +80,7 @@ const data = Object.seal({
     experience: [
         {
             company: "Dynatrace (Klagenfurt am Wörthersee, Austria) 🇦🇹",
+            website: "https://www.dynatrace.com/",
             dateStart: "October 2023",
             dateEnd: "",
             positions: [
@@ -100,6 +101,7 @@ const data = Object.seal({
         },
         {
             company: "TomTom (Amsterdam, Netherlands) 🇳🇱",
+            website: "https://www.tomtom.com/",
             dateStart: "January 2019",
             dateEnd: "September 2023",
             positions: [
@@ -137,6 +139,7 @@ const data = Object.seal({
         },
         {
             company: "Albelli (Amsterdam, Netherlands) 🇳🇱",
+            website: "https://www.albelli.nl/",
             dateStart: "April 2016",
             dateEnd: "January 2019",
             positions: [
@@ -158,6 +161,7 @@ const data = Object.seal({
         },
         {
             company: "Insoft Global (Kharkiv, Ukraine) 🇺🇦",
+            website: "",
             dateStart: "April 2013",
             dateEnd: "April 2016",
             positions: [
@@ -179,6 +183,7 @@ const data = Object.seal({
         },
         {
             company: "Various companies (web studios and outsourcing) 🇺🇦",
+            website: "",
             dateStart: "August 2011",
             dateEnd: "March 2013",
             positions: [

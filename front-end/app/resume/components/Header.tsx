@@ -14,7 +14,7 @@ export default function Header(props: Props) {
             <div className="text-2xl text-center mb-4">{props.user.position}</div>
 
             <div className="flex flex-col sm:flex-row text-left">
-                <div className=" mb-4 sm:mb-0 mr-8">
+                <div className="mb-4 sm:mb-0 mr-8">
                     <div className="max-w-sm whitespace-nowrap">🇦🇹&nbsp;{props.user.Address}</div>
                     <div className="max-w-sm whitespace-nowrap">📨&nbsp;<a
                         href={`mailto:${props.user.Email}`}>{props.user.Email}</a></div>
