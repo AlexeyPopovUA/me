@@ -90,7 +90,7 @@ export default function History(props: Props) {
                             {item.website}
                         </a>
                     ) : null}
-                    <Stack stack={item.stack} />
+                    {item.stack ? <Stack stack={item.stack} /> : null}
                     {item.positions &&
                         item.positions.map((position) => (
                             <div key={position.title} className="project">
