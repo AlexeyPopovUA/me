@@ -5,123 +5,123 @@ const data = Object.seal({
         initials: "O.O.",
         position: "Marketing Manager",
         Email: "alenatymchenko@gmail.com",
-        Address: "Klagenfurt am Wörthersee, Austria",
+        Address: "Klagenfurt am Wörthersee, Österreich",
         Phone: "+43 676 540 84 32",
         EducationLevel: "MSc"
     },
     intro: {
-        title: "Intro",
+        title: "Einführung",
         description: [
-            "I am a skilled  ...bla bla",
+            "Ich bin eine erfahrene ...bla bla",
         ]
     },
     contacts: {
-        Nationality: "Dutch and Ukrainian",
-        "I speak": "English, German (B1), Dutch, Ukrainian, Russian"
+        Nationality: "Niederländisch und Ukrainisch",
+        "I speak": "Englisch, Deutsch (B1), Niederländisch, Ukrainisch, Russisch"
     },
     skills: [
         {
             name: "SEO",
-            description: "Analysis of website structure, optimization of web pages, copyrighting, communication with website visitors, internet marketing, user analysis, reporting"
+            description: "Analyse der Website-Struktur, Optimierung von Webseiten, Texterstellung, Kommunikation mit Website-Besuchern, Internet-Marketing, Benutzeranalyse, Berichterstellung"
         },
         {
-            name: "Banking experience",
-            description: "Performed data analysis in money transfer reporting. Worked with transfer systems (CONTACT, Western Union, UNIStream, Lider, Anelik, MIGOM, SWIFT). Supported individuals and businesses (bank transfer, account opening, money management, mortgage, deposits, and loans). Administrative work"
+            name: "Bankerfahrung",
+            description: "Durchführung von Datenanalysen im Geldtransferbericht. Arbeit mit Transfersystemen (CONTACT, Western Union, UNIStream, Lider, Anelik, MIGOM, SWIFT). Unterstützung von Privatpersonen und Unternehmen (Banküberweisung, Kontoeröffnung, Geldverwaltung, Hypotheken, Einlagen und Kredite). Administrative Arbeit"
         }
     ],
     certificates: [],
     experience: [
         {
-            company: "Ukrainian hosting (Kharkiv, Ukraine) 🇺🇦",
+            company: "Ukrainisches Hosting (Charkiw, Ukraine) 🇺🇦",
             dateStart: "April 2010",
             dateEnd: "May 2016",
             positions: [
                 {
-                    title: "SEO optimizer",
+                    title: "SEO-Optimierer",
                     dateStart: "April 2010",
                     dateEnd: "May 2016",
                     description: [
-                        "Web page optimization for better positioning in Google and Yandex"
+                        "Optimierung von Webseiten für eine bessere Positionierung in Google und Yandex"
                     ]
                 }
             ],
-            description: "Hosting and IT services company",
+            description: "Hosting- und IT-Dienstleistungsunternehmen",
             stack: ""
         },
         {
-            company: "FC Bank (Kharkiv, Ukraine) 🇺🇦",
+            company: "FC Bank (Charkiw, Ukraine) 🇺🇦",
             website: undefined,
             dateStart: "December 2009",
             dateEnd: "March 2010",
             positions: [
                 {
-                    title: "Economist",
+                    title: "Ökonom",
                     dateStart: "December 2009",
                     dateEnd: "March 2010",
                     description: [
-                        "Writing reports, working with databases, cash flow control"
+                        "Berichterstellung, Arbeit mit Datenbanken, Kontrolle des Geldflusses"
                     ]
                 }
             ],
-            description: "Commercial bank",
+            description: "Kommerzielle Bank",
             stack: ""
         },
         {
-            company: "ProCredit Bank (Kharkiv, Ukraine) 🇺🇦",
+            company: "ProCredit Bank (Charkiw, Ukraine) 🇺🇦",
             website: undefined,
             dateStart: "August 2008",
             dateEnd: "August 2009",
             positions: [
                 {
-                    title: "Customer service representative",
+                    title: "Kundenbetreuer",
                     dateStart: "August 2008",
                     dateEnd: "August 2009",
                     description: [
-                        "Writing reports, working with customers, account management, deposit portfolio, loan portfolio, working with plastic cards"
+                        "Berichterstellung, Arbeit mit Kunden, Kontoverwaltung, Einlagenportfolio, Kreditportfolio, Arbeit mit Plastikkarten"
                     ]
                 }
             ],
-            description: "Commercial bank",
+            description: "Kommerzielle Bank",
             stack: ""
         },
         {
-            company: "TNS-Ukraine (Kharkiv, Ukraine) 🇺🇦",
+            company: "TNS-Ukraine (Charkiw, Ukraine) 🇺🇦",
             website: undefined,
             dateStart: "2004",
             dateEnd: "2008",
             positions: [
                 {
-                    title: "Operator interviewer",
+                    title: "Operator-Interviewer",
                     dateStart: "2004",
                     dateEnd: "2008",
                     description: [
-                        "Collection and primary processing of data for further sociological research"
+                        "Sammlung und primäre Verarbeitung von Daten für weitere soziologische Forschung"
                     ]
                 }
             ],
-            description: "Marketing agency",
+            description: "Marketingagentur",
             stack: ""
         }
     ],
     education: [
         {
-            company: "Kharkiv University of Banking (Ukraine)",
+            company: "Charkiwer Universität für Bankwesen (Ukraine)",
             title: "Master of Science (MSc)",
             date: "2007 - 2008",
-            description: "Banking"
+            description: "Bankwesen"
         },
         {
-            company: "Kharkiv University of Banking (Ukraine)",
+            company: "Charkiwer Universität für Bankwesen (Ukraine)",
             title: "Bachelor of Science (BSc)",
             date: "2003 - 2007",
-            description: "Banking"
+            description: "Bankwesen"
         }
     ],
     ownProjects: [
         {
-            name: "My hobby blog",
+            name: "Mein Hobby-Blog",
             description:
-                "My hobby blog about interesting places in the Netherlands",
+                "Mein Hobby-Blog über interessante Orte in den Niederlanden",
             links: [
                 {
                     name: "Website",
