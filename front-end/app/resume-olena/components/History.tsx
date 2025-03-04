@@ -20,10 +20,10 @@ function getHumanizedDuration(duration: moment.Duration) {
     //formatted output
     const result = [];
     if (years > 0) {
-        result.push(years === 1 ? `${years} year` : `${years} years`);
+        result.push(years === 1 ? `${years} Jahr` : `${years} Jahre`);
     }
     if (months > 0) {
-        result.push(months === 1 ? `${months} month` : `${months} months`);
+        result.push(months === 1 ? `${months} Monat` : `${months} Monate`);
     }
     return result.join(' ');
 }
@@ -71,7 +71,7 @@ export default function History(props: Props) {
     }
 
     return (
-        <CVSection cls="history" title={`Work history (${getHumanizedDuration(totalDuration)})`}>
+        <CVSection cls="history" title={`Berufserfahrung (${getHumanizedDuration(totalDuration)})`}>
             {props.experience.map((item, index) => (
                 <section key={`${item.company}-${item.company}`} className="history-section flex flex-col gap-2">
                     <h3 className="company-name font-bold">
@@ -83,7 +83,7 @@ export default function History(props: Props) {
                             item.company
                         )}
                     </h3>
-                    <div className="font-bold">{`${item.dateStart} - ${item.dateEnd ? item.dateEnd : 'Now'} (${historyDurationValues[index]})`}</div>
+                    <div className="font-bold">{`${item.dateStart} - ${item.dateEnd ? item.dateEnd : 'Jetzt'} (${historyDurationValues[index]})`}</div>
                     <Description description={item.description} className="italic" />
                     {item.website ? (
                         <a href={item.website} className="mb-2 text-sm italic">
