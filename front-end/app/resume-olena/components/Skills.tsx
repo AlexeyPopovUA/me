@@ -9,7 +9,7 @@ type Props = {
 };
 
 const Skills = (props: Props) => (
-    <CVSection title="Skills" cls="skills">
+    <CVSection title="Kenntnisse" cls="skills">
         {props.skills.map((item) => (
             <Fragment key={item.name}>
                 <h3>{item.name}</h3>

@@ -41,8 +41,8 @@ export default async function Header(props: Props) {
                     <div className="max-w-sm whitespace-nowrap">
                         &#128222;&nbsp;<a href={`callto:${props.user.Phone}`}>{props.user.Phone}</a>
                     </div>
-                    <div className="max-w-sm whitespace-nowrap">🌍&nbsp;I speak {props.contacts['I speak']}</div>
-                    <div className="max-w-sm whitespace-nowrap">🇳🇱&nbsp;🇺🇦&nbsp;Nationality: {props.contacts.Nationality}</div>
+                    <div className="max-w-sm whitespace-nowrap">🌍&nbsp;Ich spreche {props.contacts['I speak']}</div>
+                    <div className="max-w-sm whitespace-nowrap">🇳🇱&nbsp;🇺🇦&nbsp;Nationalität: {props.contacts.Nationality}</div>
                 </div>
             </div>
         </div>

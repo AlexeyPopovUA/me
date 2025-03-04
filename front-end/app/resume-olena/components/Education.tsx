@@ -8,7 +8,7 @@ type Props = {
 };
 
 const Education = (props: Props) => (
-    <CVSection title="Education" cls="history">
+    <CVSection title="Bildung" cls="history">
         {props.education.map((item) => (
             <Fragment key={item.title}>
                 <h3 className="title">{item.title}</h3>
