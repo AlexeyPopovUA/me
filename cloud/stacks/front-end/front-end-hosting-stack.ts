@@ -130,6 +130,12 @@ export class FrontEndHostingStack extends Stack {
             domainName: configuration.HOSTING.staticDomainName
         });
 
+        new CnameRecord(this, `${project}-record-cname-www`, {
+          recordName: `www.${configuration.HOSTING.staticDomainName}.`,
+          zone: hostedZone,
+          domainName: configuration.HOSTING.staticDomainName
+        });
+
         new ARecord(this, `${project}-record-a`, {
             recordName: configuration.HOSTING.staticDomainName,
             zone: hostedZone,
