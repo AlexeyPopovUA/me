@@ -79,15 +79,35 @@ const data = Object.seal({
     ],
     experience: [
         {
-            company: "Dynatrace (Klagenfurt am Wörthersee, Austria) 🇦🇹",
-            website: "https://www.dynatrace.com/",
-            dateStart: "October 2023",
+            company: "Innervate (Remote)",
+            website: "https://www.innervate.com/",
+            dateStart: "April 2025",
             dateEnd: "",
             positions: [
                 {
                     title: "Senior Software Developer",
-                    dateStart: "October 2023",
+                    dateStart: "April 2025",
                     dateEnd: "",
+                    description: [
+                        "Maintenance of multiple web applications and their CI/CD systems.",
+                    ]
+                }
+            ],
+            description: [
+                "Innervate (former RevJet) is a company that provides a platform for digital advertising and marketing solutions."
+            ],
+            stack: "React, Typescript, Docker, Kubernetes, Node.js, GitLab"
+        },
+        {
+            company: "Dynatrace (Klagenfurt am Wörthersee, Austria) 🇦🇹",
+            website: "https://www.dynatrace.com/",
+            dateStart: "October 2023",
+            dateEnd: "March 2025",
+            positions: [
+                {
+                    title: "Senior Software Developer",
+                    dateStart: "October 2023",
+                    dateEnd: "March 2025",
                     description: [
                         "Maintenance of a new Dynatrace Kubernetes web application, related services and libraries. Profiling and improvements of React application performance.",
                         "Code review, code refactoring, technical interviews for different teams."

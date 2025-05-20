@@ -70,8 +70,8 @@ export default async function Home() {
                     </div>
                     <p className="mb-4">
                         I provide expert software development and consulting services. Whether you need to boost your
-                        web app&apos;s performance, accelerate development, enhance code quality, or streamline your CI/CD
-                        infrastructure on AWS, I can help.
+                        web app&apos;s performance, accelerate development, enhance code quality, improve your CI/CD
+                        infrastructure on AWS, review your projects, hire and build a front-end team, I can help.
                         <br/>
                         <Link className="font-bold" href={`mailto:${data.user.Email}`}>
                             Contact me via email
