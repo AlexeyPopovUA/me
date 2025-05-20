@@ -14,6 +14,7 @@ export default {
         imageProxyDomainName: "images.oleksiipopov.com",
         imageProxyOriginDomain: "dqdoi2i9o4m2u.cloudfront.net",
         imageProxyOriginalsPath: "originals",
+        imageProxyRobotsTXTPath: "robots.txt",
         imageBucketName: "serverless-image-handler-image-source",
         imageBucketRegion: "us-east-1",
     }

@@ -114,6 +114,18 @@ export class ImageServiceProxyStack extends Stack {
               eventType: FunctionEventType.VIEWER_REQUEST
             }
           ]
+        },
+        [`/${configuration.HOSTING.imageProxyRobotsTXTPath}`]: {
+          allowedMethods: AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+          cachePolicy,
+          cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
+          compress: true,
+          viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          origin: S3BucketOrigin.withOriginAccessIdentity(s3Bucket, {
+            originAccessIdentity,
+            originShieldRegion: configuration.HOSTING.imageBucketRegion,
+            originPath: "/"
+          })
         }
       }
     });
