@@ -5,10 +5,10 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.758.0",
-    "@aws-sdk/lib-dynamodb": "^3.758.0",
+    "@aws-sdk/client-dynamodb": "^3.812.0",
+    "@aws-sdk/lib-dynamodb": "^3.812.0",
     "@vendia/serverless-express": "^4.12.6",
-    "aws-cdk-lib": "^2.182.0",
+    "aws-cdk-lib": "^2.196.1",
     "constructs": "^10.4.2",
     "cors": "^2.8.5",
     "express": "^4.21.2",
@@ -18,9 +18,9 @@
     "update-dependencies": "npx npm-check-updates -u --packageFile package.json"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   }
 }
