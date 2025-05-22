@@ -1,8 +1,9 @@
-import React from "react";
+import React, { PropsWithChildren } from 'react';
 import emoji from "remark-emoji";
 import rehypeRaw from "rehype-raw";
 import remarkUnwrapImages from "remark-unwrap-images";
-import {compileMDX} from "next-mdx-remote/rsc";
+import {compileMDX, MDXRemoteProps} from "next-mdx-remote/rsc";
+import Link from 'next/link';
 import {read} from "to-vfile";
 import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug';
@@ -14,23 +15,32 @@ import {remarkCode} from "@/lib/RemarkCodeHighlightingPlugin";
 import {getInsideImageURL} from "@/lib/image";
 import {getOriginalVideoURL} from "@/lib/video";
 
-const componentsForArticles = {
-  // Note, that MDXImage is a server component, therefore wrapped to match types
-  // @ts-expect-error - todo > add proper types later
-  img: (props) => <MDXImage {...props} />,
-  // @ts-expect-error - todo > add proper types later
-  table: (props) => <div className="table-wrapper">
-    <table {...props} />
-  </div>,
-  ArticleVideo: (props: React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>) => {
-    const poster = props.poster ? getInsideImageURL({src: props.poster, width: 1000, height: 1000 / 1.736}) : undefined;
-    const originalVideoURL = props.src ? getOriginalVideoURL({src: props.src as string}) : "";
+const componentsForArticles: MDXRemoteProps['components'] = {
+    // Note, that MDXImage is a server component, therefore wrapped to match types
+    img: (props) => <MDXImage {...props} />,
+    table: (props) => (
+        <div className="table-wrapper">
+            <table {...props} />
+        </div>
+    ),
+    a: (props: PropsWithChildren<{href: string}>) => {
+        if (props.href?.includes('.examples.oleksiipopov.com')) {
+            return <Link rel="nofollow" href={props.href}>{props.children}</Link>;
+        }
 
-    return <video className="cursor-pointer" width="100%" poster={poster} controls preload="none" loop muted>
-      <source src={originalVideoURL}/>
-      Your browser does not support the video tag.
-    </video>;
-  },
+        return <Link href={props.href}>{props.children}</Link>;
+    },
+    ArticleVideo: (props: React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>) => {
+        const poster = props.poster ? getInsideImageURL({ src: props.poster, width: 1000, height: 1000 / 1.736 }) : undefined;
+        const originalVideoURL = props.src ? getOriginalVideoURL({ src: props.src as string }) : '';
+
+        return (
+            <video className="cursor-pointer" width="100%" poster={poster} controls preload="none" loop muted>
+                <source src={originalVideoURL} />
+                Your browser does not support the video tag.
+            </video>
+        );
+    },
 };
 
 export async function getArticleMdxDataByPath({path}: { path: string }) {
