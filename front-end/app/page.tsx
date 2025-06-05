@@ -63,21 +63,27 @@ export default async function Home() {
                                 Front-End-Heavy Full-Stack Software Developer
                             </div>
                             <div className="mb-4">
-                                With 13+ years of experience crafting robust software solutions using React, Node.js,
+                                with 13+ years of experience crafting robust software solutions using React, Node.js,
                                 JavaScript, TypeScript, and AWS.
                             </div>
                         </div>
                     </div>
-                    <p className="mb-4">
-                        I provide expert software development and consulting services. Whether you need to boost your
-                        web app&apos;s performance, accelerate development, enhance code quality, improve your CI/CD
-                        infrastructure on AWS, review your projects, hire and build a front-end team, I can help.
+                    <div className="mb-4">
+                        I can help you with:
+                        <ul className="list-none pl-6 space-y-1 mt-2">
+                            <li>⚡️ Boosting your web app&apos;s performance</li>
+                            <li>🚀 Accelerating development & delivery</li>
+                            <li>🧹 Enhancing code quality & maintainability</li>
+                            <li>☁️ Improving CI/CD & AWS infrastructure</li>
+                            <li>🔍 Reviewing your projects & codebases</li>
+                            <li>👥 Hiring & building front-end teams</li>
+                        </ul>
                         <br/>
                         <Link className="font-bold" href={`mailto:${data.user.Email}`}>
                             Contact me via email
                         </Link>{" "}
-                        to discuss your project.
-                    </p>
+                        to chat about your project!
+                    </div>
                     <p className="mb-4">
                         Curious about my professional journey?{" "}
                         <Link className="font-bold" href={"/resume"}>
