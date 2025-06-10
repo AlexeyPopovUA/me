@@ -13,8 +13,10 @@ function handler(event) {
     if (host.match(/^w{1,3}\..+/)) {
         // this case does 2 things:
         // * supports typos in "www", i.e. https://w.oleksiipopov.com -> https://oleksiipopov.com, https://ww.oleksiipopov.com -> https://oleksiipopov.com
-        // * redirects to a path with a trailing slash
-        var location = `https://${host.replace(/^w{1,3}\./, "")}${request.uri.endsWith("/") ? request.uri : `${request.uri}/`}`;
+        // * only adds a trailing slash for navigation requests (not for files)
+        var nakedDomain = host.replace(/^w{1,3}\./, "");
+        var isFile = FILE_REGEX.test(request.uri);
+        var location = `https://${nakedDomain}${isFile ? request.uri : (request.uri.endsWith("/") ? request.uri : `${request.uri}/`)}`;
 
         // redirection. Request will not be passed to any edge function or origin
         return {
