@@ -1,79 +1,90 @@
-import React from "react";
-import {Metadata} from "next";
+import React from 'react';
+import { Metadata } from 'next';
 
-import {getArticleSEOContent, getArticlesSlugs} from "@/lib/articles";
-import GoTop from "@/components/ScrollUpButton";
-import {content} from "@/app/configuration/content";
-import {getOGImageURL} from "@/lib/image";
-import {ArticleContainer} from "@/components/ArticleContainer";
-import {environment} from "@/app/configuration/environment";
-import {ensurePathSlash} from "@/lib/utils";
-import {getArticleMdxDataByPath} from "@/lib/mdx-utils";
-import {getArticlePathByDirName} from "@/lib/files";
-import {readTOC} from "@/lib/toc-parser";
-import TableOfContents from "@/components/TableOfContents";
+import { getArticleSEOContent, getArticlesSlugs } from '@/lib/articles';
+import GoTop from '@/components/ScrollUpButton';
+import { content } from '@/app/configuration/content';
+import { getOGImageURL } from '@/lib/image';
+import { ArticleContainer } from '@/components/ArticleContainer';
+import { environment } from '@/app/configuration/environment';
+import { ensurePathSlash } from '@/lib/utils';
+import { getArticleMdxDataByPath } from '@/lib/mdx-utils';
+import { getArticlePathByDirName } from '@/lib/files';
+import { readTOC } from '@/lib/toc-parser';
+import TableOfContents from '@/components/TableOfContents';
+import { BlogPostStructuredData } from '@/components/BlogPostStructuredData';
 
 export async function generateStaticParams() {
-  const allSlugs = await getArticlesSlugs();
-  return allSlugs.map(slug => ({slug}));
+    const allSlugs = await getArticlesSlugs();
+    return allSlugs.map((slug) => ({ slug }));
 }
 
 type StaticParams = Awaited<ReturnType<typeof generateStaticParams>>[number];
 type StaticProps = {
-  params: Promise<StaticParams>;
-}
+    params: Promise<StaticParams>;
+};
 
 export const generateMetadata = async (props: StaticProps): Promise<Metadata> => {
-  const post = await getArticleSEOContent({slug: (await props.params).slug});
-  const ogImage = getOGImageURL({src: post.thumbnail});
+    const post = await getArticleSEOContent({ slug: (await props.params).slug });
+    const ogImage = getOGImageURL({ src: post.thumbnail });
 
-  return {
-    title: `${post.title} - ${content.authorName}`,
-    description: post.description,
-    metadataBase: new URL(environment.url),
-    alternates: {
-      canonical: ensurePathSlash(`/blog/${(await props.params).slug}`)
-    },
-    keywords: post.keywords,
-    openGraph: {
-      title: `${post.title} - ${content.authorName}`,
-      description: post.description,
-      images: [
-        ogImage
-      ]
-    }
-  };
-}
+    return {
+        title: `${post.title} - ${content.authorName}`,
+        description: post.description,
+        metadataBase: new URL(environment.url),
+        alternates: {
+            canonical: ensurePathSlash(`/blog/${(await props.params).slug}`),
+        },
+        keywords: post.keywords,
+        openGraph: {
+            title: `${post.title} - ${content.authorName}`,
+            description: post.description,
+            images: [ogImage],
+        },
+    };
+};
 
 export default async function Post(props: StaticProps) {
-  const slug = (await props.params).slug;
-  const path = getArticlePathByDirName(slug);
+    const slug = (await props.params).slug;
+    const path = getArticlePathByDirName(slug);
 
-  // TODO Avoid double file reading
-  const {content} = await getArticleMdxDataByPath({path});
-  const toc = await readTOC({path});
+    // TODO Avoid double file reading
+    const { content, frontmatter } = await getArticleMdxDataByPath({ path });
+    const toc = await readTOC({ path });
+    // Build canonical URL
+    const url = ensurePathSlash(`${environment.url}/blog/${slug}`);
+    // Use post.thumbnail for image if available
+    const image = frontmatter.thumbnail ? getOGImageURL({ src: frontmatter.thumbnail }) : undefined;
 
-  return (
-    <ArticleContainer>
-      {content}
+    return (
+        <>
+            <BlogPostStructuredData
+                title={frontmatter.title}
+                description={frontmatter.description}
+                datePublished={frontmatter.date}
+                dateModified={frontmatter.lastMod || frontmatter.date}
+                author={frontmatter.author}
+                url={url}
+                image={image}
+            />
+            <ArticleContainer>
+                {content}
 
-      <GoTop/>
+                <GoTop />
 
-      {/* Fixed sidebar TOC */}
-      <div className="fixed top-24 left-4 w-60 hidden xl:block">
-        <TableOfContents
-          heading={toc!}
-          className="bg-slate-50 p-4 rounded-lg"
-        />
-      </div>
+                {/* Fixed sidebar TOC */}
+                <div className="fixed top-24 left-4 hidden w-60 xl:block">
+                    <TableOfContents heading={toc!} className="rounded-lg bg-slate-50 p-4" />
+                </div>
 
-      {/* Mobile/responsive TOC */}
-      {/*<div className="lg:hidden mb-8">
-        <TableOfContents
-          heading={toc!}
-          className="bg-gray-50 p-4 rounded-lg"
-        />
-      </div>*/}
-    </ArticleContainer>
-  );
+                {/* Mobile/responsive TOC */}
+                {/*<div className="lg:hidden mb-8">
+                  <TableOfContents
+                    heading={toc!}
+                    className="bg-gray-50 p-4 rounded-lg"
+                  />
+                </div>*/}
+            </ArticleContainer>
+        </>
+    );
 }

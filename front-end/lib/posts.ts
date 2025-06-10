@@ -5,7 +5,9 @@ export type PostType = typeof availablePostTypes[number];
 export type CommonPostSchema = {
     title: string;
     slug: string;
-    date: Date;
+    date: string;
+    lastMod?: string;
+    author?: string;
     draft?: boolean;
     description: string;
     thumbnail: string;

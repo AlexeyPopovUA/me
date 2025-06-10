@@ -14,6 +14,7 @@ import {remarkMermaid} from "@/lib/RemarkMermaidPlugin";
 import {remarkCode} from "@/lib/RemarkCodeHighlightingPlugin";
 import {getInsideImageURL} from "@/lib/image";
 import {getOriginalVideoURL} from "@/lib/video";
+import { ArticlesSchema } from '@/content/articles/articles-schema';
 
 const componentsForArticles: MDXRemoteProps['components'] = {
     // Note, that MDXImage is a server component, therefore wrapped to match types
@@ -46,7 +47,7 @@ const componentsForArticles: MDXRemoteProps['components'] = {
 export async function getArticleMdxDataByPath({path}: { path: string }) {
   const source = await read(path);
 
-  return compileMDX({
+  return compileMDX<ArticlesSchema>({
     source,
     options: {
       parseFrontmatter: true,
