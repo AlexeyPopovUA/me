@@ -96,6 +96,13 @@ export default async function Home() {
                                 Contact me via email
                             </Link>{" "}
                             to chat about your project!
+                            <br/>
+                            <br/>
+                            Or{" "}
+                            <Link className="font-bold" href={content.services.scheduleCall.url} target="_blank">
+                                {content.services.scheduleCall.title}
+                            </Link>{" "}
+                            if you prefer a quick video chat.
                         </div>
                         <p className="mb-4">
                             Curious about my professional journey?{" "}
