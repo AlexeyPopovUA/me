@@ -79,7 +79,7 @@ const data = Object.seal({
     ],
     experience: [
         {
-            company: "Innervate (Remote)",
+            company: "Innervate (Remote) 🌍",
             website: "https://www.innervate.com/",
             dateStart: "April 2025",
             dateEnd: "",

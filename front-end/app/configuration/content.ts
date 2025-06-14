@@ -11,5 +11,13 @@ export const content = {
             title: 'schedule a quick call with me',
             url: 'https://oleksiipopov.gumroad.com/l/intro-call-15-30-min',
         },
+        technicalInterview: {
+            title: 'book a technical interview',
+            url: 'https://oleksiipopov.gumroad.com/l/fe-tech-interview'
+        },
+        workFor1Hour: {
+            title: 'Expert 1-Hour Web Development & DevOps Consultation',
+            url: 'https://oleksiipopov.gumroad.com/l/1-hour-web-dev-and-ops-consultation',
+        },
     },
 } as const;

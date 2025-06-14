@@ -84,12 +84,12 @@ export default async function Home() {
                         <div className="mb-4">
                             I can help you with:
                             <ul className="list-none pl-6 space-y-1 mt-2">
-                                <li>⚡️ Boosting your web app&apos;s performance</li>
-                                <li>🚀 Accelerating development & delivery</li>
-                                <li>🧹 Enhancing code quality & maintainability</li>
-                                <li>☁️ Improving CI/CD & AWS infrastructure</li>
-                                <li>🔍 Reviewing your projects & codebases</li>
-                                <li>👥 Hiring & building front-end teams</li>
+                                <li>⚡️ <Link title={content.services.workFor1Hour.title} href={content.services.workFor1Hour.url}>Boosting your web app&apos;s performance</Link></li>
+                                <li>🚀 <Link title={content.services.workFor1Hour.title} href={content.services.workFor1Hour.url}>Accelerating development & delivery</Link></li>
+                                <li>🧹 <Link title={content.services.workFor1Hour.title} href={content.services.workFor1Hour.url}>Enhancing code quality & maintainability</Link></li>
+                                <li>☁️ <Link title={content.services.workFor1Hour.title} href={content.services.workFor1Hour.url}>Improving CI/CD & AWS infrastructure</Link></li>
+                                <li>🔍 <Link title={content.services.workFor1Hour.title} href={content.services.workFor1Hour.url}>Reviewing your projects & codebases</Link></li>
+                                <li>👥 <Link title={content.services.technicalInterview.title} href={content.services.technicalInterview.url}>Hiring & building front-end teams</Link></li>
                             </ul>
                             <br/>
                             <Link className="font-bold" href={`mailto:${data.user.Email}`}>
