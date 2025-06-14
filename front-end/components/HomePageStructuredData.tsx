@@ -20,7 +20,15 @@ export function HomePageStructuredData({ description, name, jobTitle, url, image
         jobTitle: jobTitle,
         description: description,
         url: url,
-        sameAs: [content.socialLinks.github, content.socialLinks.linkedin, content.socialLinks.twitter, content.socialLinks.gumroad],
+        sameAs: [
+            content.socialLinks.github,
+            content.socialLinks.linkedin,
+            content.socialLinks.twitter,
+            content.socialLinks.gumroad,
+            content.socialLinks.rok,
+            content.socialLinks.medium,
+            content.socialLinks.wko,
+        ],
         ...(image ? { image: image } : {}),
         mainEntityOfPage: {
             '@type': 'WebPage',

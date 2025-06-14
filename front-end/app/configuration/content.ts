@@ -5,6 +5,9 @@ export const content = {
         linkedin: 'https://linkedin.com/in/oleksii-popov',
         twitter: 'https://x.com/Oleksii__Popov',
         gumroad: 'https://oleksiipopov.gumroad.com',
+        rok: 'https://remoteok.com/@oleksiipopov',
+        medium: 'https://medium.com/@oleksii-popov-dev',
+        wko: 'https://firmen.wko.at/oleksii-yuriiovych-popov/k%c3%a4rnten/?firmaid=77a31ef0-e8f0-4993-90fd-b71445513875&standortid=6&standortname=k%c3%a4rnten%20%28bundesland%29&suchbegriff=oleksii%20yuriiovych%20popov',
     },
     services: {
         scheduleCall: {
