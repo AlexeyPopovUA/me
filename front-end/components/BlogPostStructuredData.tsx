@@ -1,4 +1,6 @@
 import React from 'react';
+import { BlogPosting, WithContext } from 'schema-dts';
+
 import { environment } from '@/app/configuration/environment';
 import { content } from '@/app/configuration/content';
 
@@ -13,7 +15,7 @@ interface BlogPostStructuredDataProps {
 }
 
 export function BlogPostStructuredData({ title, description, datePublished, dateModified, author, url, image }: BlogPostStructuredDataProps) {
-    const jsonLd = {
+    const jsonLd: WithContext<BlogPosting> = {
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
         headline: title,

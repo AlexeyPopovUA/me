@@ -1,4 +1,6 @@
 import React from 'react';
+import { Person, WithContext } from 'schema-dts';
+
 import { content } from '@/app/configuration/content';
 
 interface HomePageStructuredDataProps {
@@ -11,19 +13,14 @@ interface HomePageStructuredDataProps {
 }
 
 export function HomePageStructuredData({ description, name, jobTitle, url, image }: HomePageStructuredDataProps) {
-    const jsonLd = {
+    const jsonLd: WithContext<Person> = {
         '@context': 'https://schema.org',
         '@type': 'Person',
         name: name,
         jobTitle: jobTitle,
         description: description,
         url: url,
-        sameAs: [
-            content.socialLinks.github,
-            content.socialLinks.linkedin,
-            content.socialLinks.twitter,
-            content.socialLinks.gumroad,
-        ],
+        sameAs: [content.socialLinks.github, content.socialLinks.linkedin, content.socialLinks.twitter, content.socialLinks.gumroad],
         ...(image ? { image: image } : {}),
         mainEntityOfPage: {
             '@type': 'WebPage',
