@@ -8,6 +8,7 @@ export const content = {
         rok: 'https://remoteok.com/@oleksiipopov',
         medium: 'https://medium.com/@oleksii-popov-dev',
         wko: 'https://firmen.wko.at/oleksii-yuriiovych-popov/k%c3%a4rnten/?firmaid=77a31ef0-e8f0-4993-90fd-b71445513875&standortid=6&standortname=k%c3%a4rnten%20%28bundesland%29&suchbegriff=oleksii%20yuriiovych%20popov',
+        devto: 'https://dev.to/oleksii_popov',
     },
     services: {
         scheduleCall: {

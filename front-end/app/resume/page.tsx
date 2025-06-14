@@ -13,6 +13,7 @@ import {environment} from "@/app/configuration/environment";
 import {ensurePathSlash} from "@/lib/utils";
 import {getOGImageURL} from "@/lib/image";
 import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
+import {ResumeStructuredData} from "@/components/ResumeStructuredData";
 
 const pageSlug = "resume";
 
@@ -39,13 +40,27 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Post() {
+    const frontMatter = await getFrontMatterDataByPath<PageSchema>(getPagePathByDirName(pageSlug));
+    const ogImage = getOGImageURL({src: frontMatter.thumbnail});
+    const resumeUrl = `${environment.url}${ensurePathSlash(`/${pageSlug}`)}`;
+
     return (
-        <article
-            className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4 print:p-0 print:pt-2'>
-            <Header user={renderData.user} contacts={renderData.contacts}/>
-            <Intro intro={renderData.intro}/>
-            <Skills skills={renderData.skills}/>
-            <History experience={renderData.experience}/>
-        </article>
+        <>
+            <ResumeStructuredData
+                title={`${frontMatter.title} - ${content.authorName}`}
+                description={frontMatter.description}
+                url={resumeUrl}
+                personName={`${renderData.user.name} ${renderData.user.surname}`}
+                jobTitle={renderData.user.position}
+                image={ogImage}
+            />
+            <article
+                className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4 print:p-0 print:pt-2'>
+                <Header user={renderData.user} contacts={renderData.contacts}/>
+                <Intro intro={renderData.intro}/>
+                <Skills skills={renderData.skills}/>
+                <History experience={renderData.experience}/>
+            </article>
+        </>
     );
 }
