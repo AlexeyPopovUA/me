@@ -66,6 +66,7 @@ export default async function Home() {
                                     height={300}
                                     src={src}
                                     alt="Profile photo of Oleksii Popov"
+                                    title="Profile photo of Oleksii Popov"
                                 />
                             </div>
                             <div className="flex flex-col justify-center">
