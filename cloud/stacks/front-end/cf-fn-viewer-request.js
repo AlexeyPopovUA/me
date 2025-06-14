@@ -20,7 +20,7 @@ function handler(event) {
 
         // redirection. Request will not be passed to any edge function or origin
         return {
-            statusCode: 308,
+            statusCode: 301,
             statusDescription: "Permanent redirection",
             headers: {
                 "location": {
