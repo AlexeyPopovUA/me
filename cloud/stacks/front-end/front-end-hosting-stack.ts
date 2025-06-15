@@ -14,7 +14,8 @@ import {
     OriginAccessIdentity,
     FunctionCode,
     Function as CFFunction,
-    FunctionEventType, ResponseHeadersPolicy
+    FunctionEventType,
+    ResponseHeadersPolicy
 } from "aws-cdk-lib/aws-cloudfront";
 import {S3BucketOrigin} from "aws-cdk-lib/aws-cloudfront-origins";
 import {Certificate, CertificateValidation} from "aws-cdk-lib/aws-certificatemanager";
@@ -121,7 +122,21 @@ export class FrontEndHostingStack extends Stack {
                         eventType: FunctionEventType.VIEWER_REQUEST
                     }
                 ]
-            }
+            },
+            errorResponses: [
+                {
+                    httpStatus: 403,
+                    responseHttpStatus: 404,
+                    responsePagePath: '/404.html',
+                    ttl: Duration.minutes(30)
+                },
+                {
+                    httpStatus: 404,
+                    responseHttpStatus: 404,
+                    responsePagePath: '/404.html',
+                    ttl: Duration.minutes(30)
+                }
+            ]
         });
 
         new CnameRecord(this, `${project}-record-cname-all`, {
