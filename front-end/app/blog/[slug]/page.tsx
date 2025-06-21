@@ -24,6 +24,10 @@ type StaticProps = {
     params: Promise<StaticParams>;
 };
 
+function getSEOTitleName(title: string) {
+    return `${title} - ${content.authorName}`;
+}
+
 export const generateMetadata = async (props: StaticProps): Promise<Metadata> => {
     const post = await getArticleSEOContent({ slug: (await props.params).slug });
     const ogImage = getOGImageURL({ src: post.thumbnail });
@@ -37,7 +41,7 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
         },
         keywords: post.keywords,
         openGraph: {
-            title: `${post.title} - ${content.authorName}`,
+            title: getSEOTitleName(post.title),
             description: post.description,
             images: [ogImage],
         },
@@ -59,7 +63,7 @@ export default async function Post(props: StaticProps) {
     return (
         <>
             <BlogPostStructuredData
-                title={frontmatter.title}
+                title={getSEOTitleName(frontmatter.title)}
                 description={frontmatter.description}
                 datePublished={frontmatter.date}
                 dateModified={frontmatter.lastMod || frontmatter.date}
