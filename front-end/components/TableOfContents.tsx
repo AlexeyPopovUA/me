@@ -7,19 +7,19 @@ interface TableOfContentsProps {
   onHeadingClick?: (id: string) => void;
 }
 
-// TODO Refactpor this to use React components (See the recursive case)
+// TODO Refactor this to use React components (See the recursive case)
 function TableOfContents({heading, className = ''}: TableOfContentsProps) {
   const renderHeading = (heading: TOCHeading) =>
     (
       <li key={heading.id ?? heading.title} className="">
         <a
           href={`#${heading.id}`}
-          className="hover:text-amber-600 no-underline"
+          className="hover:text-amber-600 no-underline block"
         >
           {heading.title}
         </a>
         {heading.children && heading.children.length > 0 && (
-          <ul className="list-none">
+          <ul>
             {heading.children.map(child => renderHeading(child))}
           </ul>
         )}
@@ -29,9 +29,11 @@ function TableOfContents({heading, className = ''}: TableOfContentsProps) {
   return (
     <nav className={`toc ${className}`} aria-label="Table of contents">
       <div className="text-md font-semibold mb-4">Table of Contents</div>
-      <ul className="text-sm list-none">
-        {heading.children?.map(heading => renderHeading(heading))}
-      </ul>
+      <div className="toc-first-container max-h-[70vh] overflow-y-auto overflow-x-hidden">
+        <ul className="text-sm">
+          {heading.children?.map(heading => renderHeading(heading))}
+        </ul>
+      </div>
     </nav>
   );
 }

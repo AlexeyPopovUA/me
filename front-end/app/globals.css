@@ -172,3 +172,14 @@ pre.shiki {
     }
   }
 }
+
+.toc {
+  ul {
+    @apply list-none;
+  }
+
+  .toc-first-container > ul {
+    @apply max-h-[calc(70vh)];
+    @apply ps-0;
+  }
+}
