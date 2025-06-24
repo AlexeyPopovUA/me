@@ -74,7 +74,7 @@ export default async function Post(props: StaticProps) {
             <ArticleContainer>
                 {content}
 
-                <GoTop />
+                <GoTop cls={"fixed xl:hidden"} />
 
                 {/* Fixed sidebar TOC */}
                 <div className="fixed top-24 left-4 hidden w-64 xl:block">

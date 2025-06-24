@@ -1,25 +1,27 @@
-"use client";
+'use client';
 
-import {useCallback} from "react";
-import {useRouter} from "next/navigation";
+import React, { useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import clsx from 'clsx';
 
-const GoTop = () => {
+const GoTop = (props: { cls?: string }) => {
+    const cls = clsx('right-2 bottom-2 rounded-md border-2 bg-white', props.cls);
     const router = useRouter();
 
     const handleBackToBlogClick = useCallback(() => {
-        router.push("/blog");
+        router.push('/blog');
     }, [router]);
 
     const handleUpClick = useCallback(() => {
-        window.scrollTo({top: 0});
+        window.scrollTo({ top: 0 });
     }, []);
 
     return (
-        <div className="fixed bottom-2 right-2 bg-white rounded-md border-2">
-            <button className="underline p-2 mr-4" onClick={handleBackToBlogClick}>
+        <div className={cls}>
+            <button className="mr-4 p-2 underline cursor-pointer" onClick={handleBackToBlogClick}>
                 &larr; To Blog
             </button>
-            <button className="underline p-2" onClick={handleUpClick}>
+            <button className="p-2 underline cursor-pointer" onClick={handleUpClick}>
                 &uarr; UP
             </button>
         </div>
