@@ -79,22 +79,23 @@ const data = Object.seal({
     ],
     experience: [
         {
-            company: "Innervate (Remote) 🌍",
-            website: "https://www.innervate.com/",
+            company: "Self-employed (Remote) 🌍",
             dateStart: "April 2025",
             dateEnd: "",
             positions: [
                 {
-                    title: "Senior Software Developer",
+                    title: "Senior Software Developer at Innervate (Remote) 🌍",
                     dateStart: "April 2025",
                     dateEnd: "",
+                    website: "https://www.innervate.com/",
+                    companyDescription: "Innervate (former RevJet) is a company that provides a platform for digital advertising and marketing solutions.",
                     description: [
-                        "Maintenance of multiple web applications and their CI/CD systems.",
+                        "Maintenance of multiple web applications",
+                        "Implementation of new GitLab CI/CD systems",
                     ]
                 }
             ],
             description: [
-                "Innervate (former RevJet) is a company that provides a platform for digital advertising and marketing solutions."
             ],
             stack: "React, Typescript, Docker, Kubernetes, Node.js, GitLab"
         },
