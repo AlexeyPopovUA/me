@@ -77,7 +77,7 @@ export default async function Post(props: StaticProps) {
                 <GoTop cls={"fixed xl:hidden"} />
 
                 {/* Fixed sidebar TOC */}
-                <div className="fixed top-24 left-4 hidden w-64 xl:block">
+                <div className="fixed top-24 left-4 hidden w-60 xl:block">
                     <TableOfContents heading={toc!} className="rounded-lg bg-slate-50 p-4" />
                 </div>
 

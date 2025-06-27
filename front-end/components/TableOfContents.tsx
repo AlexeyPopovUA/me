@@ -21,9 +21,11 @@ function TableOfContents({ heading, className = '' }: TableOfContentsProps) {
 
     return (
         <nav className={`toc ${className}`} aria-label="Table of contents">
-            <div className="text-md mb-4 font-semibold">Table of Contents</div>
-            <GoTop cls='mb-4' />
-            <div className="toc-first-container max-h-[70vh] overflow-x-hidden overflow-y-auto">
+            <div className="text-md mb-2 font-bold text-center">Table of Contents</div>
+            <div className="text-sm mb-4 text-center">Navigate through the article</div>
+            <GoTop cls='mb-4 border-none bg-none' />
+            <div className="text-sm">📋 Content </div>
+            <div className="toc-first-container max-h-[65vh] overflow-x-hidden overflow-y-auto">
                 <ul className="text-sm">{heading.children?.map((heading) => renderHeading(heading))}</ul>
             </div>
         </nav>

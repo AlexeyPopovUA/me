@@ -18,10 +18,10 @@ const GoTop = (props: { cls?: string }) => {
 
     return (
         <div className={cls}>
-            <button className="mr-4 p-2 underline cursor-pointer" onClick={handleBackToBlogClick}>
+            <button className="mr-4 p-2 cursor-pointer" onClick={handleBackToBlogClick}>
                 &larr; To Blog
             </button>
-            <button className="p-2 underline cursor-pointer" onClick={handleUpClick}>
+            <button className="p-2 cursor-pointer" onClick={handleUpClick}>
                 &uarr; UP
             </button>
         </div>
