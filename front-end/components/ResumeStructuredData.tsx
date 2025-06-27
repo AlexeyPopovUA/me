@@ -39,6 +39,7 @@ export function ResumeStructuredData({
             content.socialLinks.medium,
             content.socialLinks.wko,
             content.socialLinks.devto,
+            content.socialLinks.braintrust,
         ],
         ...(image ? { image: image } : {}),
         //...(skills.length > 0 ? { knowsAbout: skills.join(', ') } : {}),
