@@ -11,6 +11,7 @@ import { ensurePathSlash } from '@/lib/utils';
 import { getArticleMdxDataByPath } from '@/lib/mdx-utils';
 import { getArticlePathByDirName } from '@/lib/files';
 import { readTOC } from '@/lib/toc-parser';
+import { getRssMetadataObject } from '@/lib/rss';
 import TableOfContents from '@/components/TableOfContents';
 import { BlogPostStructuredData } from '@/components/BlogPostStructuredData';
 
@@ -38,6 +39,7 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
         metadataBase: new URL(environment.url),
         alternates: {
             canonical: ensurePathSlash(`/blog/${(await props.params).slug}`),
+            types: getRssMetadataObject(),
         },
         keywords: post.keywords,
         openGraph: {

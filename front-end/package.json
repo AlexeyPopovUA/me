@@ -20,6 +20,8 @@
     "@types/react-dom": "19.1.6",
     "autoprefixer": "10.4.21",
     "clsx": "^2.1.1",
+    "feed": "^5.1.0",
+    "front-end": "^0.1.0",
     "github-slugger": "^2.0.0",
     "hast": "^0.0.2",
     "jimp": "^0.22.12",
