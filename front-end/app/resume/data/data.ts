@@ -88,7 +88,7 @@ const data = Object.seal({
                     dateStart: "April 2025",
                     dateEnd: "",
                     website: "https://www.innervate.com/",
-                    companyDescription: "Innervate (former RevJet) is a company that provides a platform for digital advertising and marketing solutions.",
+                    positionDescription: "Innervate (former RevJet) is a company that provides a platform for digital advertising and marketing solutions.",
                     description: [
                         "Maintenance of multiple web applications",
                         "Implementation of new GitLab CI/CD systems",
@@ -109,6 +109,8 @@ const data = Object.seal({
                     title: "Senior Software Developer",
                     dateStart: "October 2023",
                     dateEnd: "March 2025",
+                    website: "",
+                    positionDescription: "",
                     description: [
                         "Maintenance of a new Dynatrace Kubernetes web application, related services and libraries. Profiling and improvements of React application performance.",
                         "Code review, code refactoring, technical interviews for different teams."
@@ -130,6 +132,8 @@ const data = Object.seal({
                     title: "Expert Software Developer",
                     dateStart: "March 2021",
                     dateEnd: "September 2023",
+                    website: "",
+                    positionDescription: "",
                     description: [
                         "Developed the core part of a new route planning web application https://plan.tomtom.com.",
                         "Started development of the new web SDK for TomTom public services and it's distribution infrastructure.",
@@ -142,6 +146,8 @@ const data = Object.seal({
                     title: "Senior Software Developer",
                     dateStart: "January 2019",
                     dateEnd: "March 2021",
+                    website: "",
+                    positionDescription: "",
                     description: [
                         "Started a new development team, participated in hiring, onboarding and mentorship.",
                         "Bootstrapped and developed the core part of a next generation Road Trips web application with pre-rendering, server-side rendering, lazy loading and localization.",
@@ -168,6 +174,8 @@ const data = Object.seal({
                     title: "Software developer > Senior software developer",
                     dateStart: "April 2016",
                     dateEnd: "January 2019",
+                    website: "",
+                    positionDescription: "",
                     description: [
                         "Participated in development and maintenance of online photo editors and hybrid mobile application.",
                         "Developed different tools for debugging, logging and fixing customer issues.",
@@ -190,6 +198,8 @@ const data = Object.seal({
                     title: "JavaScript Developer",
                     dateStart: "April 2013",
                     dateEnd: "April 2016",
+                    website: "",
+                    positionDescription: "",
                     description: [
                         "Participated in front end and server side development of cloud management platforms, energy management and infrastructure management platforms.",
                         "Implemented POC of a hybrid mobile application",
@@ -212,6 +222,8 @@ const data = Object.seal({
                     title: "QA > Junior PHP > JavaScript Developer",
                     dateStart: "August 2011",
                     dateEnd: "March 2013",
+                    website: "",
+                    positionDescription: "",
                     description: [
                         "Participated in front end development of an e-commerce project",
                         "Developed numerous websites using Wordpress and OpenCart. Implemented plugins, widgets and themes for Wordpress. Preliminary project analysis. Tasks estimation. User guides writing",

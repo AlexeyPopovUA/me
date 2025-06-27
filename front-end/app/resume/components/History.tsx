@@ -46,7 +46,7 @@ function Description(props: { description: string | string[]; className?: string
         );
     }
 
-    return <div className="description col-span-3 col-start-2 pb-2">{props.description}</div>;
+    return props.description ? <div className={clsx("description col-span-3 col-start-2 pb-2", props.className)}>{props.description}</div> : null;
 }
 
 function Stack(props: { stack: string }) {
@@ -95,6 +95,12 @@ export default function History(props: Props) {
                         item.positions.map((position) => (
                             <div key={position.title} className="project">
                                 <h4 className="title">&gt; {position.title}</h4>
+                                <Description description={position.positionDescription} className="italic" />
+                                {position?.website ? (
+                                    <a href={position?.website} className="mb-2 text-sm italic">
+                                        {position?.website}
+                                    </a>
+                                ) : null}
                                 <Description description={position.description} />
                             </div>
                         ))}
