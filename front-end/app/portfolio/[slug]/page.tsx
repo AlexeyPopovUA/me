@@ -3,7 +3,7 @@ import Link from "next/link";
 import {Metadata} from "next";
 
 import {getProjectSlugs} from "@/lib/articles";
-import {Gallery} from "@/components/image/gallery";
+import {Carousel} from "@/components/image/carousel";
 import Tag from "@/components/primitive/Tag";
 import {getInsideImageURL, getOGImageURL, readBlurredImageSrcPair} from "@/lib/image";
 import {content} from "@/app/configuration/content";
@@ -48,9 +48,9 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
 
 export default async function Post(props: StaticProps) {
   const frontMatter = await getFrontMatterDataByPath<ProjectsSchema>(getProjectPathByDirName((await props.params).slug));
-  const imageCfgs: Gallery.Props["imageCfgs"] = await Promise.all(frontMatter.gallery.map(async image => {
+  const imageCfgs: Carousel.Props["imageCfgs"] = await Promise.all(frontMatter.gallery.map(async image => {
     const blurredImageSrcPair = await readBlurredImageSrcPair({src: image});
-    const imageURL = getInsideImageURL({src: image, width: 250, height: 250, quality: 75});
+    const imageURL = getInsideImageURL({src: image, width: 500, height: 500, quality: 90});
 
     return {
       imageURL,
@@ -63,7 +63,7 @@ export default async function Post(props: StaticProps) {
   return (
     <ArticleContainer>
       <h1>{frontMatter.title}</h1>
-      <Gallery imageCfgs={imageCfgs}/>
+      <Carousel imageCfgs={imageCfgs}/>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 sm:gap-x-8 gap-y-2 sm:gap-y-10">
         <ProjectSection headerText="Type">
           {frontMatter.type}
