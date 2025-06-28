@@ -1,6 +1,6 @@
 "use client";
 
-import {useMemo, useState} from "react";
+import {useMemo, useState, useRef, useCallback} from "react";
 import type {Slide} from "yet-another-react-lightbox";
 
 import {ThumbnailImage} from "@/components/image/animated-image-loading/thumbnail-image";
@@ -21,6 +21,9 @@ export namespace Carousel {
 export function Carousel(props: Carousel.Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lightboxIndex, setLightboxIndex] = useState(-1);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+  const minSwipeDistance = 50;
   const lightBoxSlides = useMemo(() => generateLBSlides(props.imageCfgs.map(image => image.src)), [props.imageCfgs]) as Slide[];
   const {openLightbox, renderLightbox} = useLightbox();
 
@@ -41,6 +44,29 @@ export function Carousel(props: Carousel.Props) {
     openLightbox();
   };
 
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchEndX.current = null;
+    touchStartX.current = e.targetTouches[0].clientX;
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    if (!touchStartX.current || !touchEndX.current) return;
+
+    const distance = touchStartX.current - touchEndX.current;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && props.imageCfgs.length > 1) {
+      nextSlide();
+    } else if (isRightSwipe && props.imageCfgs.length > 1) {
+      prevSlide();
+    }
+  }, [nextSlide, prevSlide, props.imageCfgs.length]);
+
   if (props.imageCfgs.length === 0) {
     return null;
   }
@@ -49,7 +75,12 @@ export function Carousel(props: Carousel.Props) {
     <>
       <div className="relative w-full max-w-4xl mx-auto">
         {/* Main carousel container */}
-        <div className="relative h-64 md:h-80 lg:h-96 bg-slate-100 rounded-lg overflow-hidden">
+        <div
+          className="relative h-64 md:h-80 lg:h-96 bg-slate-100 rounded-lg overflow-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           {/* Images */}
           <div
             className="flex transition-transform duration-300 ease-in-out h-full"
