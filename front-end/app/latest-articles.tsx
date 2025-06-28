@@ -1,17 +1,46 @@
 import Link from "next/link";
 import {getLastArticles} from "@/lib/articles";
+import {ThumbnailImage} from "@/components/image/animated-image-loading/thumbnail-image";
+import {getInsideImageURL, readBlurredImageSrcPair} from "@/lib/image";
 
 const LatestArticles = async () => {
     const lastNArticles = await getLastArticles({limit: 5});
 
+    const articlesWithImages = await Promise.all(
+        lastNArticles.map(async (article) => {
+            const {blurDataURL, ratio} = await readBlurredImageSrcPair({src: article.thumbnail});
+            const imageURL = getInsideImageURL({ src: article.thumbnail, width: 160, height: 160, quality: 90 });
+
+            return {
+                ...article,
+                imageURL,
+                blurDataURL,
+                ratio
+            };
+        })
+    );
+
     return (
-        <ul className="list-disc">
-            {lastNArticles.map(article => (
-                <li className='font-bold underline' key={article.slug}>
-                    <Link href={`/blog/${article.slug}`} passHref key={article.slug} className="py-4">{article.title}</Link>
-                </li>
+        <div className="list-none">
+            {articlesWithImages.map((article) => (
+                <div className='font-bold underline' key={article.slug}>
+                    <Link href={`/blog/${article.slug}`} passHref className="py-4 flex items-center gap-3">
+                        <ThumbnailImage
+                            className="flex-shrink-0"
+                            imageClassName="rounded-md object-cover"
+                            unoptimized={true}
+                            src={article.imageURL}
+                            blurDataURL={article.blurDataURL}
+                            alt={article.title}
+                            loading="lazy"
+                            width={160}
+                            height={160 / article.ratio}
+                        />
+                        <span>{article.title}</span>
+                    </Link>
+                </div>
             ))}
-        </ul>
+        </div>
     );
 };
 
