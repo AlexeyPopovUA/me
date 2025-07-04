@@ -100,8 +100,8 @@ export function Carousel(props: Carousel.Props) {
                   className="w-full h-full"
                   imageClassName="w-full h-full object-contain"
                   loading="lazy"
-                  width={500}
-                  height={500 / imageCfg.ratio}
+                  width={900}
+                  height={900 / imageCfg.ratio}
                 />
               </div>
             ))}

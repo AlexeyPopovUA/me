@@ -50,7 +50,7 @@ export default async function Post(props: StaticProps) {
   const frontMatter = await getFrontMatterDataByPath<ProjectsSchema>(getProjectPathByDirName((await props.params).slug));
   const imageCfgs: Carousel.Props["imageCfgs"] = await Promise.all(frontMatter.gallery.map(async image => {
     const blurredImageSrcPair = await readBlurredImageSrcPair({src: image});
-    const imageURL = getInsideImageURL({src: image, width: 500, height: 500, quality: 90});
+    const imageURL = getInsideImageURL({src: image, width: 900, height: 900, quality: 75});
 
     return {
       imageURL,
