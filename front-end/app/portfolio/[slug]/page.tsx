@@ -11,9 +11,8 @@ import {ArticleContainer} from "@/components/ArticleContainer";
 import {environment} from "@/app/configuration/environment";
 import {ensurePathSlash} from "@/lib/utils";
 import {getProjectPathByDirName} from "@/lib/files";
-import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
+import {getFrontMatterDataByPath, getProjectMdxDataByPath} from "@/lib/mdx-utils";
 import {ProjectsSchema} from "@/content/projects/projects-schema";
-import {ProjectSection} from "./project-section";
 
 export async function generateStaticParams() {
   const allSlugs = await getProjectSlugs();
@@ -47,8 +46,13 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
 }
 
 export default async function Post(props: StaticProps) {
-  const frontMatter = await getFrontMatterDataByPath<ProjectsSchema>(getProjectPathByDirName((await props.params).slug));
-  const imageCfgs: Carousel.Props["imageCfgs"] = await Promise.all(frontMatter.gallery.map(async image => {
+  const slug = (await props.params).slug;
+  const projectPath = getProjectPathByDirName(slug);
+
+  // Get both frontmatter and MDX content
+  const { content: mdxContent, frontmatter } = await getProjectMdxDataByPath({path: projectPath});
+
+  const imageCfgs: Carousel.Props["imageCfgs"] = await Promise.all(frontmatter.gallery.map(async image => {
     const blurredImageSrcPair = await readBlurredImageSrcPair({src: image});
     const imageURL = getInsideImageURL({src: image, width: 900, height: 900, quality: 75});
 
@@ -62,40 +66,11 @@ export default async function Post(props: StaticProps) {
 
   return (
     <ArticleContainer>
-      <h1>{frontMatter.title}</h1>
+      <h1>{frontmatter.title}</h1>
       <Carousel imageCfgs={imageCfgs}/>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 sm:gap-x-8 gap-y-2 sm:gap-y-10">
-        <ProjectSection headerText="Type">
-          {frontMatter.type}
-        </ProjectSection>
-        {frontMatter.company ? <ProjectSection headerText="Company">
-          {frontMatter.company}
-        </ProjectSection> : null}
-        <ProjectSection headerText="Description">
-          {frontMatter.description}
-        </ProjectSection>
-        <ProjectSection headerText="Technologies">
-          <div className="flex flex-row flex-wrap gap-2">
-            {frontMatter.technologies.map(item => <Tag key={item} item={item}/>)}
-          </div>
-        </ProjectSection>
-        <ProjectSection headerText="Main features">
-          <ul>
-            {frontMatter["main-features"].map(item => <li key={item}>{item}</li>)}
-          </ul>
-        </ProjectSection>
-        <ProjectSection headerText="My commitment">
-          <ul>
-            {frontMatter["my-commitment"].map(item => <li key={item}>{item}</li>)}
-          </ul>
-        </ProjectSection>
-        {frontMatter.URL ? <ProjectSection headerText="Links">
-          <Link href={frontMatter.URL}>{frontMatter.URL}</Link>
-        </ProjectSection> : null}
-        {frontMatter.state ? <ProjectSection headerText="Project phase">
-          {frontMatter.state}
-        </ProjectSection> : null}
-      </div>
+
+      {/* Render MDX content instead of structured sections */}
+      {mdxContent}
     </ArticleContainer>
   );
 }

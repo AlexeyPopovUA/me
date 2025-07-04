@@ -15,6 +15,7 @@ import {remarkCode} from "@/lib/RemarkCodeHighlightingPlugin";
 import {getInsideImageURL} from "@/lib/image";
 import {getOriginalVideoURL} from "@/lib/video";
 import { ArticlesSchema } from '@/content/articles/articles-schema';
+import { ProjectsSchema } from '@/content/projects/projects-schema';
 
 const componentsForArticles: MDXRemoteProps['components'] = {
     // Note, that MDXImage is a server component, therefore wrapped to match types
@@ -71,6 +72,39 @@ export async function getArticleMdxDataByPath({path}: { path: string }) {
           [emoji, {accessible: true, emoticon: false}],
           [remarkUnwrapImages],
           [remarkCode],
+          [remarkGfm],
+        ],
+      }
+    },
+    components: componentsForArticles
+  });
+}
+
+export async function getProjectMdxDataByPath({path}: { path: string }) {
+  const source = await read(path);
+
+  return compileMDX<ProjectsSchema>({
+    source,
+    options: {
+      parseFrontmatter: true,
+      mdxOptions: {
+        rehypePlugins: [
+          [
+            rehypeRaw,
+            {
+              passThrough: ['mdxJsxTextElement', 'mdxJsxFlowElement'],
+              allowDangerousHtml: true
+            },
+          ],
+          rehypeSlug,
+          [rehypeAutolinkHeadings, {
+            behavior: 'wrap',
+            test: (node: Parameters<TestFunction>[0]) => node.tagName !== 'h1' // Skip h1 headings
+          }],
+        ],
+        remarkPlugins: [
+          [emoji, {accessible: true, emoticon: false}],
+          [remarkUnwrapImages],
           [remarkGfm],
         ],
       }
