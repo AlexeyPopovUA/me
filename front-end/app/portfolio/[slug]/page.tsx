@@ -11,6 +11,7 @@ import {ensurePathSlash} from "@/lib/utils";
 import {getProjectPathByDirName} from "@/lib/files";
 import {getFrontMatterDataByPath, getProjectMdxDataByPath} from "@/lib/mdx-utils";
 import {ProjectsSchema} from "@/content/projects/projects-schema";
+import Tag from "@/components/primitive/Tag";
 
 export async function generateStaticParams() {
   const allSlugs = await getProjectSlugs();
@@ -66,6 +67,13 @@ export default async function Post(props: StaticProps) {
     <ArticleContainer>
       <h1>{frontmatter.title}</h1>
       <Carousel imageCfgs={imageCfgs} projectType={frontmatter.type} />
+
+      {/* Technologies tag list */}
+      {frontmatter.technologies && frontmatter.technologies.length > 0 && (
+        <div className="text-md text-gray-600 mt-8 flex flex-row flex-wrap gap-2 justify-center max-w-4xl mx-auto">
+          {frontmatter.technologies.map(tech => <Tag key={tech} item={tech}/>)}
+        </div>
+      )}
 
       {/* Render MDX content instead of structured sections */}
       {mdxContent}
