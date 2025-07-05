@@ -15,6 +15,7 @@ export namespace Carousel {
       blurDataURL: string;
       ratio: number;
     }[];
+    projectType?: string;
   };
 }
 
@@ -129,6 +130,13 @@ export function Carousel(props: Carousel.Props) {
                 </svg>
               </button>
             </>
+          )}
+
+          {/* Own project mark */}
+          {props.projectType === "Own project" && (
+            <div className="absolute top-0 left-0 bg-amber-500 text-white px-2 py-1 rounded text-sm font-medium shadow-lg z-10">
+              Own project
+            </div>
           )}
 
           {/* Image counter */}

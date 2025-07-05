@@ -10,7 +10,8 @@ const AllProjects = async () => {
                 (
                     <PostCard key={post.slug} type="project" title={post.title} slug={post.slug}
                               thumbnail={post.thumbnail} description={post.description}
-                              link={`/portfolio/${post.slug}`} tags={post.technologies}/>
+                              link={`/portfolio/${post.slug}`} tags={post.technologies}
+                              projectType={post.type}/>
                 ))}
         </div>
     );

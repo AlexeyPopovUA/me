@@ -1,10 +1,8 @@
 import React from "react";
-import Link from "next/link";
 import {Metadata} from "next";
 
 import {getProjectSlugs} from "@/lib/articles";
 import {Carousel} from "@/components/image/carousel";
-import Tag from "@/components/primitive/Tag";
 import {getInsideImageURL, getOGImageURL, readBlurredImageSrcPair} from "@/lib/image";
 import {content} from "@/app/configuration/content";
 import {ArticleContainer} from "@/components/ArticleContainer";
@@ -67,7 +65,7 @@ export default async function Post(props: StaticProps) {
   return (
     <ArticleContainer>
       <h1>{frontmatter.title}</h1>
-      <Carousel imageCfgs={imageCfgs}/>
+      <Carousel imageCfgs={imageCfgs} projectType={frontmatter.type} />
 
       {/* Render MDX content instead of structured sections */}
       {mdxContent}

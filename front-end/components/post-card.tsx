@@ -14,6 +14,7 @@ type Props = {
   thumbnail: string;
   link: string;
   tags?: string[];
+  projectType?: string;
 };
 
 export async function PostCard(props: Props) {
@@ -21,9 +22,16 @@ export async function PostCard(props: Props) {
   const imageURL = getInsideImageURL({ src: props.thumbnail, width: 560, height: 560, quality: 75 });
 
   return (
-    <Link className="hover:text-amber-600 hover:border-amber-500 border-2 rounded-md p-4" href={props.link}
+    <Link className="hover:text-amber-600 hover:border-amber-500 border-2 rounded-md p-4 relative" href={props.link}
           passHref>
-      <div className="flex flex-col items-stretch pb-4 hover:text-amber-600">
+      <div className="flex flex-col items-stretch pb-4 hover:text-amber-600 ">
+        {/* Own project mark */}
+        {props.projectType === "Own project" && (
+          <div className="absolute top-2 left-2 bg-amber-500 text-white px-2 py-1 rounded text-sm font-medium shadow-lg z-10">
+            Own project
+          </div>
+        )}
+
         <ThumbnailImage
           className="mx-auto h-56 mb-4"
           imageClassName="h-56 object-contain"
