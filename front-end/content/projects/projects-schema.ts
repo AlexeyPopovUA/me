@@ -7,4 +7,5 @@ export interface ProjectsSchema extends CommonPostSchema {
     technologies: string[];
     URL?: string;
     state?: string;
+    featured?: boolean;
 }

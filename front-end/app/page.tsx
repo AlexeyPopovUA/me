@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 
 import LatestArticles from '@/app/latest-articles';
+import FeaturedProjects from '@/app/featured-projects';
 import { getOGImageURL, readBlurredImageSrcPair } from '@/lib/image';
 import { getFrontMatterDataByPath } from '@/lib/mdx-utils';
 import { getPagePathByDirName } from '@/lib/files';
@@ -146,14 +147,14 @@ export default async function Home() {
                             </Link>
                             .
                         </p>
+                        <FeaturedProjects />
                         <p className="mb-4">
                             I share insights on front-end, cloud, and back-end development{' '}
                             <Link className="font-bold" href={'/blog'}>
                                 on my blog
                             </Link>
-                            .
+                            . Check out some of my latest articles:
                         </p>
-                        <p className="mb-4">Check out some of my latest articles:</p>
                         <LatestArticles />
                     </section>
                 </div>

@@ -71,6 +71,28 @@ export async function getLastArticles(cfg?: { limit?: number }) {
   return result;
 }
 
+export async function getFeaturedProjects(cfg?: { limit?: number }) {
+  const projectDirs = await listDirNames(getProjectsBasePath());
+
+  // read frontmatter data from all project files
+  const frontMatterList = await Promise.all(projectDirs
+    .map(dir => getFrontMatterDataByPath<ProjectsSchema>(getProjectPathByDirName(dir))));
+
+  // filter out drafts and get only featured projects
+  let result = frontMatterList
+    .filter((frontMatter) => !frontMatter.draft && frontMatter.featured);
+
+  // sort by date
+  result.sort(reverseTimeSorter);
+
+  // take first N
+  if (cfg && cfg.limit && cfg.limit > 0) {
+    result = result.slice(0, cfg.limit);
+  }
+
+  return result;
+}
+
 export async function getAllArticles() {
   const postDirs = await listDirNames(getArticlesBasePath());
 
