@@ -24,7 +24,6 @@ function TableOfContents({ heading, className = '' }: TableOfContentsProps) {
             <div className="text-md mb-2 font-bold text-center">Table of Contents</div>
             <div className="text-sm mb-4 text-center">Navigate through the article</div>
             <GoTop cls='mb-4 border-none bg-none' />
-            <div className="text-sm">📋 Content </div>
             <div className="toc-first-container max-h-[65vh] overflow-x-hidden overflow-y-auto">
                 <ul className="text-sm">{heading.children?.map((heading) => renderHeading(heading))}</ul>
             </div>
