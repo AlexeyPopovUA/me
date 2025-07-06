@@ -28,13 +28,13 @@ export function Carousel(props: Carousel.Props) {
   const lightBoxSlides = useMemo(() => generateLBSlides(props.imageCfgs.map(image => image.src)), [props.imageCfgs]) as Slide[];
   const {openLightbox, renderLightbox} = useLightbox();
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % props.imageCfgs.length);
-  };
+  }, [props.imageCfgs.length]);
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev - 1 + props.imageCfgs.length) % props.imageCfgs.length);
-  };
+  }, [props.imageCfgs.length]);
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
