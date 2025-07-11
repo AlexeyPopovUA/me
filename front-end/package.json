@@ -23,7 +23,7 @@
     "feed": "^5.1.0",
     "github-slugger": "^2.0.0",
     "hast": "^0.0.2",
-    "jimp": "^0.22.12",
+    "jimp": "^1.0.0",
     "mdast-util-from-markdown": "^2.0.2",
     "moment": "^2.30.1",
     "next": "15.3.5",
