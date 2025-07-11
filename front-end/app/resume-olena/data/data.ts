@@ -3,7 +3,7 @@ const data = Object.seal({
         name: "Olena",
         surname: "Tymchenko",
         initials: "O.O.",
-        position: "Marketing Manager",
+        position: "Pflegerische Hilfskraft",
         Email: "alenatymchenko@gmail.com",
         Address: "Klagenfurt am Wörthersee, Österreich",
         Phone: "+43 676 540 84 32",
@@ -21,16 +21,33 @@ const data = Object.seal({
     },
     skills: [
         {
+            name: "Bankerfahrung",
+            description: "Administrative Arbeit. Durchführung von Datenanalysen im Geldtransferbericht. Arbeit mit Transfersystemen (CONTACT, Western Union, UNIStream, Lider, Anelik, MIGOM, SWIFT). Unterstützung von Privatpersonen und Unternehmen (Banküberweisung, Kontoeröffnung, Geldverwaltung, Hypotheken, Einlagen und Kredite)."
+        },
+        {
             name: "SEO",
             description: "Analyse der Website-Struktur, Optimierung von Webseiten, Texterstellung, Kommunikation mit Website-Besuchern, Internet-Marketing, Benutzeranalyse, Berichterstellung"
         },
-        {
-            name: "Bankerfahrung",
-            description: "Durchführung von Datenanalysen im Geldtransferbericht. Arbeit mit Transfersystemen (CONTACT, Western Union, UNIStream, Lider, Anelik, MIGOM, SWIFT). Unterstützung von Privatpersonen und Unternehmen (Banküberweisung, Kontoeröffnung, Geldverwaltung, Hypotheken, Einlagen und Kredite). Administrative Arbeit"
-        }
     ],
     certificates: [],
     experience: [
+        {
+            company: "Reinaldahuis Woonzorg (Haarlem, Niederlande) 🇳🇱",
+            dateStart: "2017",
+            dateEnd: "2017",
+            positions: [
+                {
+                    title: "Freiwilliger",
+                    dateStart: "2017",
+                    dateEnd: "2017",
+                    description: [
+                        "Mitarbeit in der Küche eines Seniorenheims"
+                    ]
+                }
+            ],
+            description: "Pflegeheim, Altenpflege",
+            stack: ""
+        },
         {
             company: "Ukrainisches Hosting (Charkiw, Ukraine) 🇺🇦",
             dateStart: "April 2010",
