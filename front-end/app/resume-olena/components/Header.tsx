@@ -32,7 +32,7 @@ export default async function Header(props: Props) {
                     width={insideUrlProps.width}
                     height={insideUrlProps.height}
                 />
-                <div className="flex-4 mb-4 mr-8 text-left sm:mb-0">
+                <div className="flex-4 mb-4 text-left sm:mb-0">
                     <div className="mb-4 text-3xl">{props.user.position}</div>
                     <div className="max-w-sm whitespace-nowrap">🇦🇹&nbsp;{props.user.Address}</div>
                     <div className="max-w-sm whitespace-nowrap">
@@ -41,7 +41,7 @@ export default async function Header(props: Props) {
                     <div className="max-w-sm whitespace-nowrap">
                         &#128222;&nbsp;<a href={`callto:${props.user.Phone}`}>{props.user.Phone}</a>
                     </div>
-                    <div className="max-w-sm whitespace-nowrap">🌍&nbsp;Ich spreche {props.contacts['I speak']}</div>
+                    <div className="max-w-sm whitespace-nowrap">🌍&nbsp;Sprache: {props.contacts['I speak']}</div>
                     <div className="max-w-sm whitespace-nowrap">🇳🇱&nbsp;🇺🇦&nbsp;Nationalität: {props.contacts.Nationality}</div>
                 </div>
             </div>
