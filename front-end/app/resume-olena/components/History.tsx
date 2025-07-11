@@ -73,7 +73,7 @@ export default function History(props: Props) {
     return (
         <CVSection cls="history" title={`Berufserfahrung (${getHumanizedDuration(totalDuration)})`}>
             {props.experience.map((item, index) => (
-                <section key={`${item.company}-${item.company}`} className="history-section flex flex-col gap-2">
+                <section key={item.company} className="history-section flex flex-col gap-2">
                     <h3 className="company-name font-bold">
                         {item.website ? (
                             <a className="no-underline" href={item.website}>
@@ -83,7 +83,7 @@ export default function History(props: Props) {
                             item.company
                         )}
                     </h3>
-                    <div className="font-bold">{`${item.dateStart} - ${item.dateEnd ? item.dateEnd : 'Jetzt'} (${historyDurationValues[index]})`}</div>
+                    <div className="font-bold">{`${item.dateStart} - ${item.dateEnd ? item.dateEnd : 'Jetzt'} ${historyDurationValues[index] ? `${historyDurationValues[index]}` : ''}`}</div>
                     <Description description={item.description} className="italic" />
                     {item.website ? (
                         <a href={item.website} className="mb-2 text-sm italic">
