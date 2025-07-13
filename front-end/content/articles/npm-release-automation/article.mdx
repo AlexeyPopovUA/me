@@ -1,0 +1,615 @@
+---
+title: "The Ultimate Guide to NPM Release Automation: Semantic Release vs Release Please vs Changesets"
+slug: npm-release-automation
+date: 2025-07-13
+lastMod: 2025-07-13
+draft: true
+description: The article provides a comprehensive, hands-on guide that experienced junior developers can use to implement any of these release automation approaches in their projects. It leverages all the work we've done with the three demo repositories and includes real examples they can test immediately.
+thumbnail: /articles/npm-release-automation/hero.svg
+tags:
+    - NPM
+    - Release Automation
+    - Semantic Release
+    - Release Please
+    - Changesets
+keywords:
+    - NPM
+    - Release Automation
+    - Semantic Release
+    - Release Please
+    - Changesets
+---
+
+![Article hero: Next.js, TypeScript, AWS](/articles/npm-release-automation/hero.svg)
+
+# The Ultimate Guide to NPM Release Automation: Semantic Release vs Release Please vs Changesets
+
+*A hands-on comparison of the three most popular NPM release automation tools*
+
+---
+
+As a JavaScript developer, you've probably found yourself in this situation: you've just finished implementing a new feature, merged your PR, and now you need to release a new version to NPM. You bump the version in `package.json`, write some changelog entries, create a git tag, push everything, and finally run `npm publish`. Rinse and repeat for every single release.
+
+Sound tedious? It absolutely is. And it's error-prone too.
+
+Today, we're going to explore three powerful tools that can automate this entire process: **Semantic Release**, **Release Please**, and **Changesets**. By the end of this article, you'll understand which tool fits your workflow best and how to implement any of them in your projects.
+
+## Why Automate NPM Releases?
+
+Before diving into the tools, let's establish why release automation matters:
+
+- **Consistency**: No more forgotten version bumps or inconsistent changelog formats
+- **Efficiency**: Save hours of manual work per month
+- **Reliability**: Reduce human errors in the release process
+- **Team Collaboration**: Standardize release processes across your team
+- **Feature Branch Support**: Test pre-release versions without affecting main releases
+
+## The Contenders: Three Approaches to Release Automation
+
+I've built three identical demo libraries to showcase each approach in action. Each implements the same simple API but uses a different release automation strategy:
+
+### 1. Semantic Release - The Fully Automated Approach
+**Repository**: [npm-demo-semantic-release](https://github.com/AlexeyPopovUA/npm-demo-semantic-release)
+**NPM Package**: [npm-demo-semantic-release](https://npmjs.com/package/npm-demo-semantic-release)
+
+### 2. Release Please - The PR-Based Approach
+**Repository**: [npm-demo-release-please](https://github.com/AlexeyPopovUA/npm-demo-release-please)
+**NPM Package**: [npm-demo-release-please](https://npmjs.com/package/npm-demo-release-please)
+
+### 3. Changesets - The Manual Control Approach
+**Repository**: [npm-demo-changesets](https://github.com/AlexeyPopovUA/npm-demo-changesets)
+**NPM Package**: [npm-demo-changesets](https://npmjs.com/package/npm-demo-changesets)
+
+---
+
+## Semantic Release: Set It and Forget It
+
+**Philosophy**: "Commit messages drive everything"
+
+Semantic Release is the most automated solution. It analyzes your commit messages, determines the next version number, generates changelogs, and publishes to NPM—all without human intervention.
+
+### How It Works
+
+```bash
+# Your commit message determines the release type
+git commit -m "feat: add new greeting function"    # Minor version bump
+git commit -m "fix: handle empty parameters"       # Patch version bump
+git commit -m "feat!: change API signature"        # Major version bump
+```
+
+### Configuration
+
+The magic happens in `.releaserc.json`:
+
+```json
+{
+  "branches": [
+    "main",
+    {
+      "name": "beta",
+      "prerelease": true
+    },
+    {
+      "name": "alpha",
+      "prerelease": true
+    }
+  ],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    "@semantic-release/npm",
+    "@semantic-release/github",
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["CHANGELOG.md", "package.json"]
+      }
+    ]
+  ]
+}
+```
+
+### GitHub Actions Setup
+
+```yaml
+name: Release
+on:
+  push:
+    branches: [main, beta, alpha]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: npm ci
+      - run: npm run build
+
+      - run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+```
+
+### Pros and Cons
+
+**✅ Pros:**
+- Zero manual intervention required
+- Excellent multi-branch support (main, beta, alpha)
+- Rich plugin ecosystem
+- Perfect for teams that strictly follow conventional commits
+
+**❌ Cons:**
+- Less control over release timing
+- Requires team discipline with commit messages
+- Can release unexpectedly if commit messages are wrong
+
+### Feature Branch Support
+
+Want to test your changes before merging? Semantic Release handles feature branches beautifully:
+
+```bash
+# Push to feature/awesome-feature
+git checkout -b feature/awesome-feature
+git commit -m "feat: add awesome feature"
+git push origin feature/awesome-feature
+
+# Automatically publishes: your-package@1.0.0-feature-awesome-feature-1
+npm install your-package@feature-awesome-feature
+```
+
+---
+
+## Release Please: The Google Way
+
+**Philosophy**: "Pull requests are the gateway to releases"
+
+Release Please, created by Google, takes a different approach. It creates and maintains release pull requests based on conventional commits. You get to review and approve every release.
+
+### How It Works
+
+1. **Commit with conventional messages**: Same as Semantic Release
+2. **Bot creates release PR**: Release Please analyzes commits and creates a PR
+3. **Review and merge**: You review the changelog and version bump
+4. **Automatic publish**: Merging the PR triggers the NPM publish
+
+### Configuration
+
+Two simple files control everything:
+
+**release-please-config.json:**
+```json
+{
+  "packages": {
+    ".": {
+      "changelog-path": "CHANGELOG.md",
+      "release-type": "node",
+      "bump-minor-pre-major": false,
+      "bump-patch-for-minor-pre-major": false,
+      "draft": false,
+      "prerelease": false
+    }
+  }
+}
+```
+
+**.release-please-manifest.json:**
+```json
+{
+  ".": "0.0.0"
+}
+```
+
+### GitHub Actions Setup
+
+```yaml
+name: Release Please
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          release-type: node
+          token: ${{ secrets.GH_TOKEN }}
+
+      # Only run publish steps if a release was created
+      - uses: actions/checkout@v4
+        if: ${{ steps.release.outputs.release_created }}
+
+      - uses: actions/setup-node@v4
+        if: ${{ steps.release.outputs.release_created }}
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: npm ci
+        if: ${{ steps.release.outputs.release_created }}
+
+      - run: npm run build
+        if: ${{ steps.release.outputs.release_created }}
+
+      - run: npm publish
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+```
+
+### The Release Please Workflow
+
+Here's what a typical workflow looks like:
+
+```bash
+# 1. Make changes and commit
+git commit -m "feat: add goodbye function"
+git push origin main
+
+# 2. Release Please bot creates/updates a "Release v1.1.0" PR
+# 3. Review the PR - check changelog and version bump
+# 4. Merge the PR - automatic NPM publish happens
+```
+
+### Pros and Cons
+
+**✅ Pros:**
+- Human oversight before every release
+- Clear audit trail through PRs
+- GitHub-native workflow
+- Great for teams that want release approval gates
+
+**❌ Cons:**
+- Requires manual PR merging for releases
+- Less automation than Semantic Release
+- Can accumulate multiple changes in one release PR
+
+---
+
+## Changesets: Maximum Control
+
+**Philosophy**: "Developers should explicitly declare what changed"
+
+Changesets gives you the most control by requiring developers to explicitly create "changeset" files describing their changes. It's perfect for teams that want collaborative changelog creation and fine-grained release control.
+
+### How It Works
+
+```bash
+# 1. Make your code changes
+echo "export const awesome = () => 'Awesome!';" >> src/index.js
+
+# 2. Create a changeset
+npm run changeset
+# CLI prompts you to select change type and write description
+
+# 3. Commit everything together
+git add .
+git commit -m "feat: add awesome function with changeset"
+git push
+```
+
+### Setup and Configuration
+
+**Installation:**
+```bash
+npm install --save-dev @changesets/cli
+npx changeset init
+```
+
+**package.json scripts:**
+```json
+{
+  "scripts": {
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "changeset publish"
+  }
+}
+```
+
+**.changeset/config.json:**
+```json
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": []
+}
+```
+
+### GitHub Actions Setup
+
+```yaml
+name: Release
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Create Release Pull Request or Publish
+        uses: changesets/action@v1
+        with:
+          publish: npm run release
+          version: npm run version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+```
+
+### The Changeset Workflow
+
+```bash
+# 1. Create a changeset file
+npm run changeset
+? What kind of change is this for your-package? (current version is 1.0.0)
+❯ patch   # Bug fixes
+  minor   # New features
+  major   # Breaking changes
+
+? Please enter a summary for this change
+> Add awesome function to improve developer experience
+
+# 2. This creates .changeset/funny-cats-dance.md
+---
+"your-package": minor
+---
+
+Add awesome function to improve developer experience
+
+# 3. Commit and push
+git add .
+git commit -m "feat: add awesome function"
+git push
+
+# 4. Changesets bot creates "Version Packages" PR
+# 5. Merge PR to release
+```
+
+### Pros and Cons
+
+**✅ Pros:**
+- Maximum control over releases and changelogs
+- Collaborative changelog creation
+- Explicit change declaration prevents surprises
+- Great for complex release coordination
+
+**❌ Cons:**
+- Requires extra step (creating changesets)
+- More manual work compared to other tools
+- Can be forgotten by developers
+
+---
+
+## Feature Branch Support: Testing Before You Merge
+
+All three tools support feature branch publishing with NPM dist-tags. This is incredibly useful for testing changes before they hit your main branch.
+
+### How It Works
+
+When you push to a feature branch, each tool publishes a pre-release version with a custom NPM tag:
+
+```bash
+# Push to feature/demo-branch triggers:
+# Semantic Release:  your-package@1.0.1-feature-demo-branch-1
+# Release Please:    your-package@1.0.1-feature-demo-branch-1
+# Changesets:        your-package@1.0.1-feature-demo-branch-1
+
+# Install and test the feature branch version
+npm install your-package@feature-demo-branch
+```
+
+### Feature Branch GitHub Action
+
+Here's the workflow used by all three demos:
+
+```yaml
+name: Feature Branch Release
+on:
+  push:
+    branches: ['feature/**', 'feat/**']
+
+jobs:
+  feature-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Get branch name
+        id: branch
+        run: echo "name=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Publish feature branch
+        run: |
+          BRANCH_NAME=$(echo "${{ steps.branch.outputs.name }}" | sed 's/\//-/g')
+          npm version prerelease --preid=$BRANCH_NAME-${{ github.run_number }} --no-git-tag-version
+          npm publish --tag $BRANCH_NAME
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+```
+
+### Checking Available Versions
+
+```bash
+# See all available dist-tags
+npm view npm-demo-semantic-release dist-tags
+# Output:
+# {
+#   latest: '1.0.0',
+#   'feature-demo-branch': '0.0.1-feature-demo-branch-2.0'
+# }
+
+# Install specific versions
+npm install npm-demo-semantic-release@latest           # Stable release
+npm install npm-demo-semantic-release@feature-demo-branch  # Feature branch
+```
+
+---
+
+## Live Examples: See Them in Action
+
+I've set up working examples of all three approaches. Here's how to test them:
+
+### Test the Packages
+
+```bash
+# Install all three demo packages
+npm install npm-demo-semantic-release npm-demo-release-please npm-demo-changesets
+
+# Test the APIs (they're identical)
+node -e "
+const sr = require('npm-demo-semantic-release');
+const rp = require('npm-demo-release-please');
+const cs = require('npm-demo-changesets');
+
+console.log('Semantic Release:', sr.hello('World'));
+console.log('Release Please:', rp.hello('World'));
+console.log('Changesets:', cs.hello('World'));
+"
+```
+
+### Test Feature Branch Versions
+
+```bash
+# Install feature branch versions
+npm install npm-demo-semantic-release@feature-demo-branch
+npm install npm-demo-release-please@feature-demo-branch
+npm install npm-demo-changesets@feature-demo-branch
+
+# These include the demo() function with "v2" updates
+node -e "console.log(require('npm-demo-semantic-release').demo())"
+# Output: "Demo branch feature v2!"
+```
+
+---
+
+## Which Tool Should You Choose?
+
+### Choose Semantic Release if:
+- You want maximum automation
+- Your team consistently follows conventional commits
+- You need robust multi-branch support (main, beta, alpha)
+- You're comfortable with fully automated releases
+
+### Choose Release Please if:
+- You want human oversight before releases
+- You prefer GitHub-native workflows
+- You want the reliability of Google's battle-tested approach
+- You need a balance between automation and control
+
+### Choose Changesets if:
+- You want maximum control over releases
+- You need collaborative changelog creation
+- You work on complex projects requiring careful release coordination
+- You don't mind the extra step of creating changesets
+
+---
+
+## Implementation Tips and Best Practices
+
+### 1. Start with Proper Commit Messages
+
+All three tools rely on conventional commits. Set up commit message linting:
+
+```bash
+npm install --save-dev @commitlint/cli @commitlint/config-conventional
+echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitlint.config.js
+```
+
+### 2. Set Up Required Secrets
+
+All approaches need these GitHub repository secrets:
+- `GH_TOKEN`: GitHub personal access token with repo and workflow permissions
+- `NPM_TOKEN`: NPM automation token for publishing
+
+### 3. Consider Your Team's Workflow
+
+- **Fast-moving teams**: Semantic Release
+- **Review-heavy teams**: Release Please
+- **Complex coordinated releases**: Changesets
+
+### 4. Branch Protection Rules
+
+Set up branch protection on `main` to require PR reviews. This ensures quality while allowing automated releases.
+
+---
+
+## Conclusion
+
+Release automation isn't just about saving time—it's about creating a consistent, reliable, and collaborative development experience. Whether you choose the full automation of Semantic Release, the controlled approach of Release Please, or the fine-grained control of Changesets, you'll eliminate manual errors and standardize your release process.
+
+The key is choosing the tool that matches your team's workflow and comfort level with automation. Start with one of the demo repositories I've created, experiment with the workflows, and see which approach feels most natural for your project.
+
+### Useful Resources
+
+- **Demo Repositories**:
+  - [Semantic Release Demo](https://github.com/AlexeyPopovUA/npm-demo-semantic-release)
+  - [Release Please Demo](https://github.com/AlexeyPopovUA/npm-demo-release-please)
+  - [Changesets Demo](https://github.com/AlexeyPopovUA/npm-demo-changesets)
+
+- **NPM Packages**:
+  - [npm-demo-semantic-release](https://npmjs.com/package/npm-demo-semantic-release)
+  - [npm-demo-release-please](https://npmjs.com/package/npm-demo-release-please)
+  - [npm-demo-changesets](https://npmjs.com/package/npm-demo-changesets)
+
+- **Official Documentation**:
+  - [Semantic Release](https://semantic-release.gitbook.io/)
+  - [Release Please](https://github.com/googleapis/release-please)
+  - [Changesets](https://github.com/changesets/changesets)
+
+Happy automating! 🚀
+
+---
