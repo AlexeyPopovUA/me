@@ -22,6 +22,7 @@ export function HomePageStructuredData({ description, name, jobTitle, url, image
         url: url,
         sameAs: [
             content.socialLinks.github,
+            content.socialLinks.npm,
             content.socialLinks.linkedin,
             content.socialLinks.twitter,
             content.socialLinks.gumroad,

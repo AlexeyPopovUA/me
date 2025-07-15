@@ -32,6 +32,7 @@ export function ResumeStructuredData({
         // additionalType: 'https://schema.org/Resume',
         sameAs: [
             content.socialLinks.github,
+            content.socialLinks.npm,
             content.socialLinks.linkedin,
             content.socialLinks.twitter,
             content.socialLinks.gumroad,
