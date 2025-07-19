@@ -2,6 +2,7 @@ export const content = {
     authorName: 'Oleksii Popov',
     socialLinks: {
         github: 'https://github.com/AlexeyPopovUA',
+        gitlab: 'https://gitlab.com/AlexeyPopovUA',
         npm: 'https://www.npmjs.com/~oleksiipopov',
         linkedin: 'https://linkedin.com/in/oleksii-popov',
         twitter: 'https://x.com/Oleksii__Popov',
