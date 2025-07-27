@@ -20,7 +20,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         "contact",
         "blog",
         "portfolio",
-        "resume"
+        "resume",
+        "social-profiles"
     ].map(page =>
       ({
           url: `${environment.url}/${ensurePathSlash(page)}`,
