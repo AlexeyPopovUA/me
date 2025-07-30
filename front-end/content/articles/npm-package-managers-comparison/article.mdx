@@ -21,12 +21,12 @@ The JavaScript ecosystem has evolved significantly over the years, and with it, 
 
 ### Quick Overview
 
-| Package Manager    | Initial Release | Maintained By      | Key Philosophy               |
-|--------------------|-----------------|--------------------|------------------------------|
+| Package Manager    | Initial Release | Maintained By         | Key Philosophy               |
+|--------------------|-----------------|-----------------------|------------------------------|
 | npm                | 2010            | npm, Inc. (Microsoft) | Default, batteries-included  |
-| Yarn Classic (1.x) | 2016            | Meta (Facebook)    | Fast, reliable, secure       |
-| Yarn Berry (2.x+)  | 2020            | Yarn Team          | Plug'n'Play, zero-installs   |
-| pnpm               | 2017            | Zoltan Kochan      | Efficient disk usage, strict |
+| Yarn Classic (1.x) | 2016            | Meta (Facebook)       | Fast, reliable, secure       |
+| Yarn Berry (2.x+)  | 2020            | Yarn Team             | Plug'n'Play, zero-installs   |
+| pnpm               | 2017            | Zoltan Kochan         | Efficient disk usage, strict |
 
 ## Popularity and Adoption
 
@@ -690,28 +690,168 @@ pnpm import
 pnpm install
 ```
 
-### Final Verdict
+## Migration Complexity Analysis
 
-- **npm**: Best for beginners and simple projects
-- **Yarn Classic**: Good for stability-focused teams
-- **Yarn Berry**: Excellent for advanced users willing to adapt
-- **pnpm**: Best overall for monorepos and performance
+### Migration from npm to pnpm
 
-### Key Takeaways
+**Complexity Level: Low to Medium**
 
-1. **For monorepos**: pnpm offers the best balance of features and performance
-2. **For compatibility**: npm remains the safest choice
-3. **For innovation**: Yarn Berry pushes boundaries but requires commitment
-4. **For migration**: pnpm provides the smoothest path from other managers
+**Steps Required:**
+1. **Import existing lockfile**: `npx pnpm import` (converts package-lock.json)
+2. **Create workspace configuration** (for monorepos):
+   ```yaml
+   # pnpm-workspace.yaml
+   packages:
+     - 'packages/*'
+     - 'apps/*'
+   ```
+3. **Update CI/CD scripts**: Replace `npm` commands with `pnpm`
+4. **Handle peer dependencies**: pnpm auto-installs them (may require adjustments)
 
-The JavaScript package management landscape continues to evolve, with each tool carving out its niche. Choose based on your project's specific needs, team expertise, and performance requirements.
+**Key Differences to Address:**
 
-## References
+| Aspect         | npm                    | pnpm                             | Migration Action          |
+|----------------|------------------------|----------------------------------|---------------------------|
+| Install        | `npm install`          | `pnpm install`                   | Update scripts            |
+| Add package    | `npm install pkg`      | `pnpm add pkg`                   | Update scripts            |
+| Add dev dep    | `npm install -D pkg`   | `pnpm add -D pkg`                | Update scripts            |
+| Remove package | `npm uninstall pkg`    | `pnpm remove pkg`                | Update scripts            |
+| Update         | `npm update`           | `pnpm update`                    | Update scripts            |
+| Clean install  | `npm ci`               | `pnpm install --frozen-lockfile` | Update CI/CD              |
+| Workspaces     | `package.json`         | `pnpm-workspace.yaml`            | Create new config file    |
+| Workspace run  | `npm run --workspaces` | `pnpm -r run`                    | Update scripts            |
+| Lockfile       | `package-lock.json`    | `pnpm-lock.yaml`                 | Import with `pnpm import` |
+| Node modules   | Hoisted                | Symlinked                        | May break phantom deps    |
 
-[^1]: https://dev.to/hamzakhan/npm-vs-yarn-vs-pnpm-which-package-manager-should-you-use-in-2025-2f1g - State of Frontend Report 2024 market share data
+**Potential Issues:**
+- **Phantom dependencies**: Code relying on undeclared dependencies will break
+- **Different hoisting**: Some imports may need explicit declaration
+- **Shamefully-hoist flag**: May be needed for problematic packages
+- **Node.js version**: Requires Node.js 16.14+ for latest pnpm
 
-[^2]: https://programmingly.dev/npm-vs-yarn-vs-pnpm-choosing-the-right-package-manager-for-your-project/ - pnpm growth predictions and developer preference analysis
+### Migration from npm to Yarn Berry
 
-[^3]: https://pnpm.io/benchmarks - Performance benchmarks data (2025)
+**Complexity Level: Medium to High**
 
-[^4]: https://dev.to/wojtekmaj/package-manager-wars-the-real-picture-e9p - Disk space efficiency analysis
+**Steps Required:**
+1. **Install Yarn Berry**: `npm install -g yarn && yarn set version berry`
+2. **Configure PnP or node_modules**: Choose installation strategy
+3. **Update editor settings**: VSCode/IDE support for PnP
+4. **Migrate scripts**: Update package.json scripts
+5. **Configure constraints** (optional): Define dependency rules
+
+**Key Differences to Address:**
+
+| Aspect         | npm                 | Yarn Berry                 | Migration Action          |
+|----------------|---------------------|----------------------------|---------------------------|
+| Install        | `npm install`       | `yarn install`             | No change                 |
+| Add package    | `npm install pkg`   | `yarn add pkg`             | Update scripts            |
+| Remove package | `npm uninstall pkg` | `yarn remove pkg`          | Update scripts            |
+| Update         | `npm update`        | `yarn up`                  | Update scripts            |
+| Clean install  | `npm ci`            | `yarn install --immutable` | Update CI/CD              |
+| Node modules   | Physical files      | PnP (ZIP files)            | Configure nodeLinker      |
+| Cache          | `~/.npm`            | `.yarn/cache`              | Project-local cache       |
+| Lockfile       | `package-lock.json` | `yarn.lock`                | Regenerate on install     |
+| Scripts        | `npm run script`    | `yarn script`              | Optional optimization     |
+| Overrides      | `overrides`         | `resolutions`              | Rename field              |
+| Editor support | Native              | Requires PnP plugin        | Install editor extensions |
+
+**Configuration Decisions:**
+```yaml
+# .yarnrc.yml
+nodeLinker: pnp # or 'node-modules'
+enableGlobalCache: true
+enableMirror: true
+compressionLevel: mixed
+
+plugins:
+  - path: .yarn/plugins/@yarnpkg/plugin-interactive-tools.cjs
+    spec: "@yarnpkg/plugin-interactive-tools"
+```
+
+**Potential Issues:**
+- **PnP compatibility**: Some packages don't work with Plug'n'Play
+- **Tool integration**: Build tools may need configuration updates
+- **Learning curve**: New concepts (protocols, constraints, plugins)
+- **Bundle size**: .yarn folder can be large if committing cache
+
+### Migration from Yarn Classic to pnpm
+
+**Complexity Level: Low to Medium**
+
+**Steps Required:**
+1. **Remove Yarn artifacts**: `rm -rf node_modules yarn.lock`
+2. **Install pnpm**: `npm install -g pnpm`
+3. **Create workspace config**: Convert `workspaces` to `pnpm-workspace.yaml`
+4. **Install dependencies**: `pnpm install`
+5. **Update scripts**: Replace `yarn` with `pnpm` in package.json
+
+**Key Differences to Address:**
+
+| Aspect              | Yarn Classic                     | pnpm                             | Migration Action       |
+|---------------------|----------------------------------|----------------------------------|------------------------|
+| Install             | `yarn install`                   | `pnpm install`                   | Update scripts         |
+| Add package         | `yarn add pkg`                   | `pnpm add pkg`                   | Update scripts         |
+| Remove package      | `yarn remove pkg`                | `pnpm remove pkg`                | No change              |
+| Update              | `yarn upgrade`                   | `pnpm update`                    | Update scripts         |
+| Interactive upgrade | `yarn upgrade-interactive`       | `pnpm update -i`                 | Update scripts         |
+| Clean install       | `yarn install --frozen-lockfile` | `pnpm install --frozen-lockfile` | No change              |
+| Workspaces          | `package.json`                   | `pnpm-workspace.yaml`            | Create new config file |
+| Workspace run       | `yarn workspaces run`            | `pnpm -r run`                    | Update scripts         |
+| Workspace add       | `yarn workspace pkg add`         | `pnpm add --filter pkg`          | Update syntax          |
+| Lockfile            | `yarn.lock`                      | `pnpm-lock.yaml`                 | Regenerate on install  |
+| Cache               | Global cache                     | Content-addressable store        | More efficient storage |
+| Resolutions         | `resolutions`                    | `pnpm.overrides`                 | Move to pnpm section   |
+
+**Migration Configuration:**
+```yaml
+# .yarnrc.yml for gradual migration
+nodeLinker: node-modules  # Start with familiar structure
+enableGlobalCache: true
+enableMirror: false
+
+# Gradually enable advanced features
+# nodeLinker: pnp
+# enableScripts: false
+# enableImmutableInstalls: true
+```
+
+### Common Migration Challenges
+
+**Phantom Dependencies:**
+```bash
+# Problem: Code importing undeclared dependencies
+import _ from 'lodash' # Not in package.json but works with npm/Yarn
+
+# Solution: Declare all dependencies explicitly
+pnpm add lodash
+```
+
+**CI/CD Updates:**
+```yaml
+# GitHub Actions example
+- name: Install dependencies
+  run: |
+    corepack enable
+    pnpm install --frozen-lockfile
+
+# or for Yarn Berry
+- name: Install dependencies
+  run: |
+    corepack enable
+    yarn install --immutable
+```
+
+**Tool Configuration:**
+```json
+// TypeScript module resolution for PnP
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "types": ["node", "@types/node"]
+  },
+  "ts-node": {
+    "esm": true
+  }
+}
+```
