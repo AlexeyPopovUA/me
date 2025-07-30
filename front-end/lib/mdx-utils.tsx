@@ -1,9 +1,8 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import emoji from "remark-emoji";
 import rehypeRaw from "rehype-raw";
 import remarkUnwrapImages from "remark-unwrap-images";
 import {compileMDX, MDXRemoteProps} from "next-mdx-remote/rsc";
-import Link from 'next/link';
 import {read} from "to-vfile";
 import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug';
