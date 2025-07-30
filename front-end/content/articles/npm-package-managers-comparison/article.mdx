@@ -23,8 +23,8 @@ The JavaScript ecosystem has evolved significantly over the years, and with it, 
 
 | Package Manager    | Initial Release | Maintained By      | Key Philosophy               |
 |--------------------|-----------------|--------------------|------------------------------|
-| npm                | 2010            | npm, Inc. (GitHub) | Default, batteries-included  |
-| Yarn Classic (1.x) | 2016            | Facebook (Meta)    | Fast, reliable, secure       |
+| npm                | 2010            | npm, Inc. (Microsoft) | Default, batteries-included  |
+| Yarn Classic (1.x) | 2016            | Meta (Facebook)    | Fast, reliable, secure       |
 | Yarn Berry (2.x+)  | 2020            | Yarn Team          | Plug'n'Play, zero-installs   |
 | pnpm               | 2017            | Zoltan Kochan      | Efficient disk usage, strict |
 
@@ -33,11 +33,29 @@ The JavaScript ecosystem has evolved significantly over the years, and with it, 
 ### Market Share and Trends
 
 ```mermaid
-graph LR
-    A[2016] -->|npm dominance| B[2017-2019]
-    B -->|Yarn Classic growth| C[2020-2021]
-    C -->|pnpm emergence| D[2022-2024]
-    D -->|Diverse ecosystem| E[Current]
+gantt
+    title Package Manager Evolution Timeline
+    dateFormat  YYYY
+    axisFormat  %Y
+
+    section npm
+    Dominance Period    :active, npm1, 2010, 2017
+    Stable Ecosystem    :npm2, 2017, 2025
+
+    section Yarn Classic
+    Initial Release     :milestone, yarn-release, 2016, 0d
+    Growth Period       :active, yarn1, 2017, 2020
+    Legacy Maintenance  :yarn2, 2020, 2025
+
+    section Yarn Berry
+    Development         :berry1, 2018, 2020
+    Initial Release     :milestone, berry-release, 2020, 0d
+    Modern Features     :active, berry2, 2020, 2025
+
+    section pnpm
+    Initial Release     :milestone, pnpm-release, 2017, 0d
+    Emergence Period    :pnpm1, 2020, 2022
+    Rapid Adoption      :active, pnpm2, 2022, 2025
 ```
 
 | Metric              | npm                  | Yarn Classic | Yarn Berry  | pnpm         |
