@@ -77,13 +77,28 @@ According to the State of Frontend Report 2024[^1]:
 ### Benchmark Comparison
 
 ```mermaid
-graph TD
-    A[Clean Install] -->|No cache| B[Download packages]
-    B --> C[Extract files]
-    C --> D[Link dependencies]
-    
-    E[Cached Install] -->|Cache hit| F[Copy/Link from cache]
-    F --> D
+sequenceDiagram
+    participant User
+    participant PM as Package Manager
+    participant Cache
+    participant Registry
+    participant FS as File System
+
+    Note over User, FS: Clean Install (No Cache)
+    User->>PM: install command
+    PM->>Registry: Download packages
+    Registry-->>PM: Package files
+    PM->>FS: Extract files
+    PM->>FS: Link dependencies
+    PM-->>User: Installation complete
+
+    Note over User, FS: Cached Install
+    User->>PM: install command
+    PM->>Cache: Check cache
+    Cache-->>PM: Cache hit
+    PM->>FS: Copy/Link from cache
+    PM->>FS: Link dependencies
+    PM-->>User: Installation complete
 ```
 
 | Scenario                     | npm   | Yarn Classic | Yarn Berry | pnpm       |
@@ -120,18 +135,6 @@ graph TD
 
 ## Cache Management
 
-### Cache Workflows
-
-```mermaid
-flowchart LR
-    A[Package Request] --> B{Cache Check}
-    B -->|Hit| C[Link/Copy from Cache]
-    B -->|Miss| D[Download from Registry]
-    D --> E[Store in Cache]
-    E --> C
-    C --> F[Project node_modules]
-```
-
 ### Cache Location and Structure
 
 | Package Manager | Cache Location          | Structure                      |
@@ -145,22 +148,32 @@ flowchart LR
 
 ```shell
 # npm
+# Forcefully clears the entire npm cache
 npm cache clean --force
+# Verifies cache integrity and cleans up corrupted entries
 npm cache verify
+# Lists cached packages (deprecated in newer versions, use npm cache verify instead)
 npm cache ls
 
 # Yarn Classic
+# Removes all cached packages
 yarn cache clean
+# Shows all cached packages
 yarn cache list
+# Displays the cache directory path
 yarn cache dir
 
 # Yarn Berry
+# Removes all cached packages (--all flag clears everything)
+# Cache is project-local in .yarn/cache directory
 yarn cache clean --all
-# Cache is project-local
 
 # pnpm
+# Removes unreferenced packages from the store
 pnpm store prune
+# Shows information about the store (size, integrity)
 pnpm store status
+# Displays the path to the pnpm store
 pnpm store path
 ```
 
