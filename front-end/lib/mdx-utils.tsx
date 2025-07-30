@@ -25,13 +25,6 @@ const componentsForArticles: MDXRemoteProps['components'] = {
             <table {...props} />
         </div>
     ),
-    a: (props: PropsWithChildren<{href: string}>) => {
-        if (props.href?.includes('.examples.oleksiipopov.com')) {
-            return <Link rel="nofollow" href={props.href}>{props.children}</Link>;
-        }
-
-        return <Link href={props.href}>{props.children}</Link>;
-    },
     ArticleVideo: (props: React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>) => {
         const poster = props.poster ? getInsideImageURL({ src: props.poster, width: 1000, height: 1000 / 1.736 }) : undefined;
         const originalVideoURL = props.src ? getOriginalVideoURL({ src: props.src as string }) : '';
