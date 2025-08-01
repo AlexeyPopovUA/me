@@ -15,8 +15,7 @@ function handler(event) {
         // * supports typos in "www", i.e. https://w.oleksiipopov.com -> https://oleksiipopov.com, https://ww.oleksiipopov.com -> https://oleksiipopov.com
         // * only adds a trailing slash for navigation requests (not for files)
         var nakedDomain = host.replace(/^w{1,3}\./, "");
-        var isFile = FILE_REGEX.test(request.uri);
-        var location = `https://${nakedDomain}${isFile ? request.uri : (request.uri.endsWith("/") ? request.uri : `${request.uri}/`)}`;
+        var location = `https://${nakedDomain}${request.uri}`;
 
         // redirection. Request will not be passed to any edge function or origin
         return {
@@ -35,21 +34,7 @@ function handler(event) {
 
     // If not a file, then it is a navigation request
     if (!FILE_REGEX.test(request.uri)) {
-        if (request.uri.endsWith("/")) {
-            // if ends with "/", then just point request at the html file
-            request.uri = `${request.uri}index.html`;
-        } else {
-            // redirect to a path with a trailing slash otherwise
-            return {
-                statusCode: 301,
-                statusDescription: "Moved Permanently",
-                headers: {
-                    location: {
-                        value: `${request.uri}/`
-                    }
-                }
-            };
-        }
+        request.uri = request.uri.endsWith("/") ? `${request.uri}index.html` : `${request.uri}/index.html`;
     }
 
     return request;
