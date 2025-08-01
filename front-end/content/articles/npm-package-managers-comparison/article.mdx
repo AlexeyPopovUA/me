@@ -459,34 +459,40 @@ graph LR
 
 ### GitLab CI
 
+**npm:**
 ```yaml
-# npm
-install:
+install-npm:
   script:
     - npm ci
   cache:
     paths:
       - .npm/
+```
 
-# Yarn Classic
-install:
+**Yarn Classic:**
+```yaml
+install-yarn-classic:
   script:
     - yarn install --frozen-lockfile
   cache:
     paths:
       - .yarn-cache/
+```
 
-# Yarn Berry
-install:
+**Yarn Berry:**
+```yaml
+install-yarn-berry:
   script:
     - corepack enable
     - yarn install --immutable
   cache:
     paths:
       - .yarn/cache/
+```
 
-# pnpm
-install:
+**pnpm:**
+```yaml
+install-pnpm:
   script:
     - corepack enable
     - pnpm install --frozen-lockfile
@@ -665,16 +671,27 @@ app/node_modules/
 | pnpm            | Complete          | Strict isolation by default              |
 
 **Resolution Examples:**
-```json
-// Force all lodash to specific version
-"overrides": { "lodash": "4.17.21" }              // npm
-"resolutions": { "**/lodash": "4.17.21" }         // Yarn
-"pnpm": { "overrides": { "lodash": "4.17.21" } }  // pnpm
 
-// Target specific dependency paths
-"overrides": { "package-a": { "lodash": "3.10.1" } }  // npm
-"resolutions": { "package-a/lodash": "3.10.1" }       // Yarn  
-"pnpm": { "overrides": { "package-a>lodash": "3.10.1" } }  // pnpm
+Force all lodash to specific version:
+```json
+"overrides": { "lodash": "4.17.21" }
+```
+```json
+"resolutions": { "**/lodash": "4.17.21" }
+```
+```json
+"pnpm": { "overrides": { "lodash": "4.17.21" } }
+```
+
+Target specific dependency paths:
+```json
+"overrides": { "package-a": { "lodash": "3.10.1" } }
+```
+```json
+"resolutions": { "package-a/lodash": "3.10.1" }
+```
+```json
+"pnpm": { "overrides": { "package-a>lodash": "3.10.1" } }
 ```
 
 ### Outstanding Features by Package Manager
@@ -917,8 +934,9 @@ pnpm add lodash
 ```
 
 **Tool Configuration:**
+
+TypeScript module resolution for PnP (tsconfig.json):
 ```json
-// TypeScript module resolution for PnP
 {
   "compilerOptions": {
     "moduleResolution": "node",
