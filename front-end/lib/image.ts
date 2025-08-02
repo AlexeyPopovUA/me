@@ -198,9 +198,24 @@ async function getImageDimensionsRatio(props: { src: string }) {
     },
   });
 
-  const blob = await (await fetch(url)).arrayBuffer();
-  const imgData = await Jimp.read(Buffer.from(blob));
-  return imgData.getWidth() / imgData.getHeight();
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+    }
+
+    const blob = await response.arrayBuffer();
+    if (!blob || blob.byteLength === 0) {
+      throw new Error('Empty or invalid image data received');
+    }
+
+    const imgData = await Jimp.read(Buffer.from(blob));
+    return imgData.getWidth() / imgData.getHeight();
+  } catch (error) {
+    console.error('Error getting image dimensions ratio:', error);
+    // Return a default aspect ratio (16:9) as fallback
+    return 16 / 9;
+  }
 }
 
 async function getBlurDataURL({src, width, height}: { src: string, width: number, height: number }) {
@@ -217,9 +232,25 @@ async function getBlurDataURL({src, width, height}: { src: string, width: number
       }
     }
   });
-  const blob = await (await fetch(payloadURL)).arrayBuffer();
-  const imgData = await Jimp.read(Buffer.from(blob));
-  return imgData.getBase64Async(-1);
+
+  try {
+    const response = await fetch(payloadURL);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+    }
+
+    const blob = await response.arrayBuffer();
+    if (!blob || blob.byteLength === 0) {
+      throw new Error('Empty or invalid image data received');
+    }
+
+    const imgData = await Jimp.read(Buffer.from(blob));
+    return imgData.getBase64Async(-1);
+  } catch (error) {
+    console.error('Error generating blur data URL:', error);
+    // Return a default blur data URL (1x1 transparent pixel)
+    return 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+  }
 }
 
 export const readBlurredImageSrcPair = async ({src}: { src: string; }) => {
