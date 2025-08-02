@@ -1,35 +1,35 @@
 ---
 title: "NPM Package Managers Comparison: npm vs Yarn vs pnpm"
 slug: npm-package-managers-comparison
-date: 2025-07-30
-lastMod: 2025-07-30
+date: 2025-08-02
+lastMod: 2025-08-02
 draft: true
-description: A comprehensive comparison of JavaScript package managers (npm, Yarn Classic, Yarn Berry, and pnpm) covering performance, features, monorepo support, and migration strategies to help you choose the right tool for your project.
-thumbnail: /articles/npm-package-managers-comparison/article-hero.png
+description: "A comprehensive comparison of JavaScript package managers (npm, Yarn Classic, Yarn Berry, and pnpm) covering performance, features, monorepo support, and migration strategies to help you choose the right tool for your project."
+thumbnail: "/articles/npm-package-managers-comparison/article-hero.png"
 tags:
-    - NPM
-    - JavaScript
-    - Package Management
-    - Monorepo
-    - DevOps
-    - Frontend
-    - Node.js
+  - NPM
+  - JavaScript
+  - Package Management
+  - Monorepo
+  - DevOps
+  - Frontend
+  - Node.js
 keywords:
-    - NPM
-    - Yarn
-    - pnpm
-    - package manager comparison
-    - JavaScript dependency management
-    - monorepo tools
-    - npm vs yarn vs pnpm
+  - NPM
+  - Yarn
+  - pnpm
+  - package manager comparison
+  - JavaScript dependency management
+  - monorepo tools
+  - npm vs yarn vs pnpm
 ---
-
 
 # NPM Package Managers Comparison: npm vs Yarn vs pnpm
 
 ## Introduction
 
-The JavaScript ecosystem has evolved significantly over the years, and with it, the tools for managing dependencies. This article provides a comprehensive comparison of the four major package managers: **npm**, **Yarn Classic (1.x)**, **Yarn Berry (2.x+)**, and **pnpm**, with a special focus on monorepo management capabilities.
+The JavaScript ecosystem has evolved significantly over the years, and with it, the tools for managing dependencies.
+This article provides a comprehensive comparison of the four major package managers: **npm**, **Yarn Classic (1.x)**, **Yarn Berry (2.x+)**, and **pnpm**, with a special focus on monorepo management capabilities.
 
 ### TL;DR - Which Package Manager Should I Use?
 
@@ -39,6 +39,7 @@ The JavaScript ecosystem has evolved significantly over the years, and with it, 
 - **Yarn Berry**: Cutting-edge features with PnP, but requires ecosystem compatibility
 
 **Quick Decision Guide:**
+
 - Small project, getting started → **npm**
 - Large monorepo or multiple projects → **pnpm**
 - Need specific Yarn features → **Yarn Berry**
@@ -60,27 +61,27 @@ The JavaScript ecosystem has evolved significantly over the years, and with it, 
 ```mermaid
 gantt
     title Package Manager Evolution Timeline
-    dateFormat  YYYY
-    axisFormat  %Y
+    dateFormat YYYY
+    axisFormat %Y
 
     section npm
-    Dominance Period    :active, npm1, 2010, 2017
-    Stable Ecosystem    :npm2, 2017, 2025
+        Dominance Period: active, npm1, 2010, 2017
+        Stable Ecosystem: npm2, 2017, 2025
 
     section Yarn Classic
-    Initial Release     :milestone, yarn-release, 2016, 0d
-    Growth Period       :active, yarn1, 2017, 2020
-    Legacy Maintenance  :yarn2, 2020, 2025
+        Initial Release: milestone, yarn-release, 2016, 0d
+        Growth Period: active, yarn1, 2017, 2020
+        Legacy Maintenance: yarn2, 2020, 2025
 
     section Yarn Berry
-    Development         :berry1, 2018, 2020
-    Initial Release     :milestone, berry-release, 2020, 0d
-    Modern Features     :active, berry2, 2020, 2025
+        Development: berry1, 2018, 2020
+        Initial Release: milestone, berry-release, 2020, 0d
+        Modern Features: active, berry2, 2020, 2025
 
     section pnpm
-    Initial Release     :milestone, pnpm-release, 2017, 0d
-    Emergence Period    :pnpm1, 2020, 2022
-    Rapid Adoption      :active, pnpm2, 2022, 2025
+        Initial Release: milestone, pnpm-release, 2017, 0d
+        Emergence Period: pnpm1, 2020, 2022
+        Rapid Adoption: active, pnpm2, 2022, 2025
 ```
 
 | Metric              | npm                  | Yarn Classic | Yarn Berry  | pnpm         |
@@ -91,7 +92,9 @@ gantt
 | Community Sentiment | Stable               | Legacy       | Polarizing  | Enthusiastic |
 
 ### Usage Statistics (2024)
+
 According to the State of Frontend Report 2024[^1]:
+
 - **npm**: 56.6% market share (default choice)
 - **Yarn Classic**: 21.5% (legacy but stable)
 - **pnpm**: 19.9% (rapidly growing, predicted to reach 25-30% by end of 2025[^2])
@@ -108,22 +111,20 @@ sequenceDiagram
     participant Cache
     participant Registry
     participant FS as File System
-
     Note over User, FS: Clean Install (No Cache)
-    User->>PM: install command
-    PM->>Registry: Download packages
-    Registry-->>PM: Package files
-    PM->>FS: Extract files
-    PM->>FS: Link dependencies
-    PM-->>User: Installation complete
-
+    User ->> PM: install command
+    PM ->> Registry: Download packages
+    Registry -->> PM: Package files
+    PM ->> FS: Extract files
+    PM ->> FS: Link dependencies
+    PM -->> User: Installation complete
     Note over User, FS: Cached Install
-    User->>PM: install command
-    PM->>Cache: Check cache
-    Cache-->>PM: Cache hit
-    PM->>FS: Copy/Link from cache
-    PM->>FS: Link dependencies
-    PM-->>User: Installation complete
+    User ->> PM: install command
+    PM ->> Cache: Check cache
+    Cache -->> PM: Cache hit
+    PM ->> FS: Copy/Link from cache
+    PM ->> FS: Link dependencies
+    PM -->> User: Installation complete
 ```
 
 | Scenario                     | npm   | Yarn Classic | Yarn Berry | pnpm       |
@@ -138,21 +139,25 @@ sequenceDiagram
 ### Performance Characteristics
 
 **npm**
+
 - Moderate speed
 - Improved significantly in v7+
 - Parallel downloads since v5
 
 **Yarn Classic**
+
 - Parallel package downloads
 - Deterministic installs
 - Offline mode support
 
 **Yarn Berry**
+
 - Plug'n'Play eliminates node_modules
 - Near-instant installs with zero-installs
 - Requires ecosystem compatibility
 
 **pnpm**
+
 - Content-addressable storage
 - Hard links save disk space (up to 80% reduction)[^4]
 - Fastest for monorepos
@@ -205,22 +210,26 @@ pnpm store path
 ### Cache Policies
 
 **npm**
+
 - Automatic cache management
 - Corruption detection (`npm cache verify`)
 - TTL-based invalidation
 
 **Yarn Classic**
+
 - Persistent cache
 - Offline mirror support
 - Manual cleanup required
 - Integrity check with `yarn check --integrity`
 
 **Yarn Berry**
+
 - Zero-installs philosophy
 - Commit cache to git (optional)
 - Predictable CI builds
 
 **pnpm**
+
 - Global store deduplication
 - Automatic garbage collection (`pnpm store prune`)
 - Hard link optimization
@@ -231,6 +240,7 @@ pnpm store path
 ### Directory Structures
 
 **npm/Yarn Classic - Nested Structure:**
+
 ```text
 project/
 ├── node_modules/
@@ -245,6 +255,7 @@ project/
 ```
 
 **pnpm - Flat with Symlinks:**
+
 ```text
 project/
 ├── node_modules/
@@ -258,6 +269,7 @@ project/
 ```
 
 **Yarn Berry - Plug'n'Play:**
+
 ```text
 project/
 ├── .yarn/
@@ -299,21 +311,10 @@ pnpm link ../my-package
 
 ## Monorepo Management
 
-### Native Workspace Support
-
-```mermaid
-graph TD
-    A[Monorepo Root] --> B[Package A]
-    A --> C[Package B]
-    A --> D[Package C]
-    B --> E[Shared Dependencies]
-    C --> E
-    D --> E
-```
-
 ### Workspace Configuration
 
 **npm/Yarn Classic - package.json:**
+
 ```json
 {
   "workspaces": [
@@ -324,6 +325,7 @@ graph TD
 ```
 
 **Yarn Berry - package.json:**
+
 ```json
 {
   "workspaces": [
@@ -334,6 +336,7 @@ graph TD
 ```
 
 **pnpm - pnpm-workspace.yaml:**
+
 ```yaml
 packages:
   - 'packages/*'
@@ -380,17 +383,19 @@ pnpm run --filter "./packages/**" test
 ### Advanced Monorepo Features
 
 **npm**
+
 - Basic workspace support
 - Limited filtering options
-- No parallel execution
 - Use `npm ls` to visualize workspace dependencies
 
 **Yarn Classic**
+
 - Mature workspace implementation
 - Good inter-package resolution
 - Limited tooling
 
 **Yarn Berry**
+
 - Constraints engine for validation (enforces dependency rules)
 - Protocol support (workspace:, portal:, exec:, patch:)
 - Advanced plugin system
@@ -398,6 +403,7 @@ pnpm run --filter "./packages/**" test
 - `yarn explain` for peer dependency debugging
 
 **pnpm**
+
 - Powerful filtering syntax
 - Catalog protocol for version management
 - Excellent performance at scale
@@ -419,40 +425,44 @@ graph LR
 ### GitHub Actions
 
 **npm:**
+
 ```yaml
-- uses: actions/setup-node@v3
+- uses: actions/setup-node@v4
   with:
-    node-version: '18'
+    node-version: '22'
     cache: 'npm'
 - run: npm ci
 ```
 
 **Yarn Classic:**
+
 ```yaml
-- uses: actions/setup-node@v3
+- uses: actions/setup-node@v4
   with:
-    node-version: '18'
+    node-version: '22'
     cache: 'yarn'
 - run: yarn install --frozen-lockfile
 ```
 
 **Yarn Berry:**
+
 ```yaml
-- uses: actions/setup-node@v3
+- uses: actions/setup-node@v4
   with:
-    node-version: '18'
+    node-version: '22'
 - run: corepack enable
 - run: yarn install --immutable
 ```
 
 **pnpm:**
+
 ```yaml
-- uses: pnpm/action-setup@v2
+- uses: pnpm/action-setup@v4
   with:
-    version: 8
-- uses: actions/setup-node@v3
+    version: 10
+- uses: actions/setup-node@v4
   with:
-    node-version: '18'
+    node-version: '22'
     cache: 'pnpm'
 - run: pnpm install --frozen-lockfile
 ```
@@ -460,57 +470,92 @@ graph LR
 ### GitLab CI
 
 **npm:**
+
 ```yaml
 install-npm:
+  image: node:22-alpine
   script:
     - npm ci
   cache:
+    key: npm-$CI_COMMIT_REF_SLUG
     paths:
       - .npm/
 ```
 
 **Yarn Classic:**
+
 ```yaml
 install-yarn-classic:
+  image: node:22-alpine
   script:
     - yarn install --frozen-lockfile
   cache:
+    key: yarn-$CI_COMMIT_REF_SLUG
     paths:
       - .yarn-cache/
 ```
 
 **Yarn Berry:**
+
 ```yaml
 install-yarn-berry:
+  image: node:22-alpine
   script:
     - corepack enable
     - yarn install --immutable
   cache:
+    key: yarn-berry-$CI_COMMIT_REF_SLUG
     paths:
       - .yarn/cache/
 ```
 
 **pnpm:**
+
 ```yaml
 install-pnpm:
+  image: node:22-alpine
   script:
     - corepack enable
     - pnpm install --frozen-lockfile
   cache:
+    key: pnpm-$CI_COMMIT_REF_SLUG
     paths:
       - .pnpm-store/
 ```
 
-### CI Performance Comparison
+### Docker Integration
 
-| Aspect              | npm  | Yarn Classic | Yarn Berry | pnpm      |
-|---------------------|------|--------------|------------|-----------|
-| Cache restoration   | Slow | Medium       | Fast*      | Fast      |
-| Install speed       | Slow | Medium       | Instant*   | Fast      |
-| Lockfile validation | Good | Good         | Excellent  | Excellent |
-| Reproducibility     | Good | Good         | Excellent  | Excellent |
+**Multi-stage Dockerfile example:**
 
-*With zero-installs enabled
+```dockerfile
+# Use Node.js 22
+FROM node:22-alpine AS base
+
+# Install dependencies only when needed
+FROM base AS deps
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+# Choose your package manager
+RUN npm ci --only=production
+
+# Development image
+FROM base AS dev
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+CMD ["npm", "run", "dev"]
+
+# Production image
+FROM base AS production
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
+CMD ["npm", "start"]
+```
 
 ## Dependency Management Commands
 
@@ -531,6 +576,7 @@ install-pnpm:
 ### Upgrading All Dependencies
 
 **npm:**
+
 ```bash
 # Update to latest allowed by package.json
 npm update
@@ -541,6 +587,7 @@ npm install
 ```
 
 **Yarn Classic:**
+
 ```bash
 # Interactive
 yarn upgrade-interactive --latest
@@ -550,6 +597,7 @@ yarn upgrade --latest
 ```
 
 **Yarn Berry:**
+
 ```bash
 # Interactive with groups
 yarn upgrade-interactive
@@ -560,6 +608,7 @@ yarn upgrade-interactive
 ```
 
 **pnpm:**
+
 ```bash
 # Interactive
 pnpm update --interactive --latest
@@ -613,19 +662,23 @@ pnpm version-packages
 ### Unique Features
 
 **npm:**
+
 - `npm doctor` - Diagnoses npm installation issues
 - `npm ci` - Clean install for CI environments
 
 **Yarn Classic:**
+
 - Global resolutions field
 - `yarn check --integrity` - Verify lockfile
 
 **Yarn Berry:**
+
 - Constraints engine (`.yarn/constraints.pro`)
 - Resolution protocols (portal:, patch:, exec:)
 - PnP prevents phantom dependencies
 
 **pnpm:**
+
 - Strictest by default (no phantom deps)
 - Content-addressable store (`pnpm store`)
 - Peer dependency auto-installation
@@ -633,6 +686,7 @@ pnpm version-packages
 ### Common Problems Quick Reference
 
 **Version Conflicts:**
+
 ```bash
 npm ls package-name      # npm
 yarn why package-name    # Yarn
@@ -640,6 +694,7 @@ pnpm why package-name    # pnpm
 ```
 
 **Security Issues:**
+
 ```bash
 npm audit fix            # npm
 yarn upgrade pkg@ver     # Yarn (manual)
@@ -647,6 +702,7 @@ pnpm audit --fix        # pnpm
 ```
 
 **Phantom Dependencies:**
+
 - npm/Yarn Classic: No protection
 - Yarn Berry: Use PnP mode
 - pnpm: Protected by default
@@ -656,6 +712,7 @@ pnpm audit --fix        # pnpm
 ### Dependency Shadowing & Resolution
 
 **Shadowing Problem:** When different versions of the same package exist in nested node_modules:
+
 ```text
 app/node_modules/
 ├── lodash@4.17.21
@@ -673,42 +730,51 @@ app/node_modules/
 **Resolution Examples:**
 
 Force all lodash to specific version:
+
 ```json
-"overrides": { "lodash": "4.17.21" }
+"overrides": {"lodash": "4.17.21"}
 ```
+
 ```json
-"resolutions": { "**/lodash": "4.17.21" }
+"resolutions": {"**/lodash": "4.17.21"}
 ```
+
 ```json
-"pnpm": { "overrides": { "lodash": "4.17.21" } }
+"pnpm": {"overrides": {"lodash": "4.17.21"}}
 ```
 
 Target specific dependency paths:
+
 ```json
-"overrides": { "package-a": { "lodash": "3.10.1" } }
+"overrides": {"package-a": {"lodash": "3.10.1"}}
 ```
+
 ```json
-"resolutions": { "package-a/lodash": "3.10.1" }
+"resolutions": {"package-a/lodash": "3.10.1"}
 ```
+
 ```json
-"pnpm": { "overrides": { "package-a>lodash": "3.10.1" } }
+"pnpm": {"overrides": {"package-a>lodash": "3.10.1"}}
 ```
 
 ### Outstanding Features by Package Manager
 
 **npm:**
+
 - Default with Node.js
 - Largest ecosystem
 - Workspaces support (v7+)
 - Fund command for OSS support
 
 **Yarn Classic:**
+
 - Yarn.lock for determinism
 - Offline mirror
 - License checker
 - Selective version resolutions
 
 **Yarn Berry:**
+
 - Plug'n'Play (no node_modules)
 - Zero-installs
 - Constraints engine
@@ -717,6 +783,7 @@ Target specific dependency paths:
 - Plugin architecture
 
 **pnpm:**
+
 - Content-addressable storage
 - Strictest dependency isolation (prevents phantom dependencies by default)
 - Fastest for monorepos
@@ -736,21 +803,6 @@ Target specific dependency paths:
 *Configurable
 
 ## Summary and Recommendations
-
-### Decision Matrix
-
-```mermaid
-graph TD
-    A[Choose Package Manager] --> B{Project Type?}
-    B -->|Simple Project| C[npm]
-    B -->|Large Monorepo| D[pnpm]
-    B -->|Enterprise Legacy| E[Yarn Classic]
-    B -->|Modern Monorepo| F[Yarn Berry or pnpm]
-    
-    F --> G{Ecosystem Ready?}
-    G -->|Yes| H[Yarn Berry]
-    G -->|No| I[pnpm]
-```
 
 ### Recommendations by Use Case
 
@@ -788,6 +840,7 @@ pnpm install
 **Complexity Level: Low to Medium**
 
 **Steps Required:**
+
 1. **Import existing lockfile**: `npx pnpm import` (converts package-lock.json)
 2. **Create workspace configuration** (for monorepos):
    ```yaml
@@ -815,6 +868,7 @@ pnpm install
 | Node modules   | Hoisted                | Symlinked                        | May break phantom deps    |
 
 **Potential Issues:**
+
 - **Phantom dependencies**: Code relying on undeclared dependencies will break
 - **Different hoisting**: Some imports may need explicit declaration
 - **Shamefully-hoist flag**: May be needed for problematic packages
@@ -825,6 +879,7 @@ pnpm install
 **Complexity Level: Medium to High**
 
 **Steps Required:**
+
 1. **Install Yarn Berry**: `npm install -g yarn && yarn set version berry`
 2. **Configure PnP or node_modules**: Choose installation strategy
 3. **Update editor settings**: VSCode/IDE support for PnP
@@ -848,6 +903,7 @@ pnpm install
 | Editor support | Native              | Requires PnP plugin        | Install editor extensions |
 
 **Configuration Decisions:**
+
 ```yaml
 # .yarnrc.yml
 nodeLinker: pnp # or 'node-modules'
@@ -861,6 +917,7 @@ plugins:
 ```
 
 **Potential Issues:**
+
 - **PnP compatibility**: Some packages don't work with Plug'n'Play
 - **Tool integration**: Build tools may need configuration updates
 - **Learning curve**: New concepts (protocols, constraints, plugins)
@@ -871,6 +928,7 @@ plugins:
 **Complexity Level: Low to Medium**
 
 **Steps Required:**
+
 1. **Remove Yarn artifacts**: `rm -rf node_modules yarn.lock`
 2. **Install pnpm**: `npm install -g pnpm`
 3. **Create workspace config**: Convert `workspaces` to `pnpm-workspace.yaml`
@@ -895,6 +953,7 @@ plugins:
 | Resolutions         | `resolutions`                    | `pnpm.overrides`                 | Move to pnpm section   |
 
 **Migration Configuration:**
+
 ```yaml
 # .yarnrc.yml for gradual migration
 nodeLinker: node-modules  # Start with familiar structure
@@ -910,6 +969,7 @@ enableMirror: false
 ### Common Migration Challenges
 
 **Phantom Dependencies:**
+
 ```bash
 # Problem: Code importing undeclared dependencies
 import _ from 'lodash' # Not in package.json but works with npm/Yarn
@@ -919,6 +979,7 @@ pnpm add lodash
 ```
 
 **CI/CD Updates:**
+
 ```yaml
 # GitHub Actions example
 - name: Install dependencies
@@ -936,11 +997,15 @@ pnpm add lodash
 **Tool Configuration:**
 
 TypeScript module resolution for PnP (tsconfig.json):
+
 ```json
 {
   "compilerOptions": {
     "moduleResolution": "node",
-    "types": ["node", "@types/node"]
+    "types": [
+      "node",
+      "@types/node"
+    ]
   },
   "ts-node": {
     "esm": true
@@ -952,8 +1017,11 @@ TypeScript module resolution for PnP (tsconfig.json):
 
 [^1]: State of Frontend 2024 Report - The Software House. Survey of 3,000+ developers on tool preferences and trends.
 
-[^2]: Based on npm download statistics and GitHub activity trends analysis from npm trends and State of JS 2024 survey data.
+[^2]: Based on npm download statistics and GitHub activity trends analysis from npm trends and State of JS 2024 survey
+data.
 
-[^3]: pnpm.io official benchmarks (2025). Tests performed on a medium-sized project with 1,000 dependencies on GitHub Actions runners. Available at: https://pnpm.io/benchmarks
+[^3]: pnpm.io official benchmarks (2025). Tests performed on a medium-sized project with 1,000 dependencies on GitHub
+Actions runners. Available at: https://pnpm.io/benchmarks
 
-[^4]: Disk space measurements from real-world monorepo projects. Savings depend on dependency overlap between projects. Source: pnpm documentation on symlinks and hard links.
+[^4]: Disk space measurements from real-world monorepo projects. Savings depend on dependency overlap between projects.
+Source: pnpm documentation on symlinks and hard links.
