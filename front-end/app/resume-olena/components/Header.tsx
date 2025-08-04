@@ -33,7 +33,7 @@ export default async function Header(props: Props) {
                     height={insideUrlProps.height}
                 />
                 <div className="flex-4 mb-4 text-left sm:mb-0">
-                    <div className="mb-4 text-3xl">{props.user.position}</div>
+                    {props.user.position ? <div className="mb-4 text-3xl">{props.user.position}</div> : null}
                     <div className="max-w-sm whitespace-nowrap">🇦🇹&nbsp;{props.user.Address}</div>
                     <div className="max-w-sm whitespace-nowrap">
                         📨&nbsp;<a href={`mailto:${props.user.Email}`}>{props.user.Email}</a>
