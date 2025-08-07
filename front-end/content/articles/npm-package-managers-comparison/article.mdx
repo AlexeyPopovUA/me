@@ -5,7 +5,7 @@ date: 2025-08-06
 lastMod: 2025-08-06
 draft: true
 description: "A comprehensive comparison of JavaScript package managers (npm, Yarn Classic, Yarn Berry, and pnpm) covering performance, features, monorepo support, and migration strategies to help you choose the right tool for your project."
-thumbnail: "/articles/npm-package-managers-comparison/article-hero.png"
+thumbnail: "/articles/npm-package-managers-comparison/yarn-npm-pnpm-hero.png"
 tags:
   - NPM
   - JavaScript
@@ -23,6 +23,8 @@ keywords:
   - monorepo tools
   - npm vs yarn vs pnpm
 ---
+
+![Article hero: NPM Package Managers Comparison: npm vs Yarn vs pnpm](/articles/npm-package-managers-comparison/yarn-npm-pnpm-hero.png)
 
 # NPM Package Managers Comparison: npm vs Yarn vs pnpm
 
@@ -95,13 +97,13 @@ gantt
 
 According to independent reviews and survey results:
 
-- **npm**: 56.6% market share (default choice)[1][2]
-- **Yarn Classic**: 21.5% (legacy but stable)[1][2]
-- **pnpm**: 19.9% (rapidly growing—predicted to reach 25-30% by end of 2025 but predictions are speculative)[1][2][5]
-- **Yarn Berry**: Remains a niche tool with low market share; specific numbers are rarely published, but industry discussion places it below npm, Yarn Classic, and pnpm[1][2]
+- **npm**: 56.6% market share (default choice)[^1][^2]
+- **Yarn Classic**: 21.5% (legacy but stable)[^1][^2]
+- **pnpm**: 19.9% (rapidly growing—predicted to reach 25-30% by end of 2025 but predictions are speculative)[^1][^2][^3]
+- **Yarn Berry**: Remains a niche tool with low market share; specific numbers are rarely published, but industry discussion places it below npm, Yarn Classic, and pnpm[^1][^2]
 
 > The Software House's 2024 State of Frontend Report (over 6,000 developers):  
-> "npm is the most widely used package manager (56.6% of votes), followed by Yarn Classic (21.5%) and pnpm (19.9%)"[1][2].
+> "npm is the most widely used package manager (56.6% of votes), followed by Yarn Classic (21.5%) and pnpm (19.9%)"[^1][^2].
 
 ## Installation Speed and Performance
 
@@ -137,16 +139,16 @@ sequenceDiagram
 | Clean install (no cache) | ~28.6s | ~8.5s        | ~7.0s      | 3–9s                 |
 | Cached install           | ~1.3s  | ~4.9s        | ~1.3s      | ~0.73s               |
 | Monorepo install*        | High   | Moderate     | Lower      | Lowest               |
-| Disk space usage         | 100%   | 100%         | ~80%       | 20-30%[6][7][11][17] |
+| Disk space usage         | 100%   | 100%         | ~80%       | 20-30%[^4][^5][^8][^12] |
 
-*Monorepo install values are relative: pnpm is consistently the fastest and most space-efficient, especially as the number of projects grows[6][7][11][17].
+*Monorepo install values are relative: pnpm is consistently the fastest and most space-efficient, especially as the number of projects grows[^4][^5][^8][^12].
 
 #### Performance Characteristics
 
-- **npm**: Moderate speed, improved in v7+, now supports parallel downloads since v5[11].
-- **Yarn Classic**: Parallel package downloads, deterministic installs, stable but not actively developed[11].
-- **Yarn Berry**: Plug'n'Play technology, zero-installs, fastest in some scenarios, ecosystem compatibility needs attention[11].
-- **pnpm**: Content-addressable storage and global hard links drastically reduce disk space in multi-project setups (up to 70–80% savings); fastest for monorepos and cached installs[6][7][12][17].
+- **npm**: Moderate speed, improved in v7+, now supports parallel downloads since v5[^8].
+- **Yarn Classic**: Parallel package downloads, deterministic installs, stable but not actively developed[^8].
+- **Yarn Berry**: Plug'n'Play technology, zero-installs, fastest in some scenarios, ecosystem compatibility needs attention[^8].
+- **pnpm**: Content-addressable storage and global hard links drastically reduce disk space in multi-project setups (up to 70–80% savings); fastest for monorepos and cached installs[^4][^5][^9][^12].
 
 ### Performance Characteristics
 
@@ -171,9 +173,9 @@ sequenceDiagram
 **pnpm**
 
 - Content-addressable storage
-- Hard links save disk space (up to 80% reduction)[^4]
+- Hard links save disk space (up to 80% reduction)[^4][^5][^9]
 - Fastest for monorepos
-- Fastest cached installs (0.73s)[^3]
+- Fastest cached installs (0.73s)[^8]
 
 ### Cache Management
 
@@ -181,15 +183,15 @@ sequenceDiagram
 
 | Package Manager | Cache Location          | Structure                              |
 |-----------------|-------------------------|----------------------------------------|
-| npm             | `~/.npm`                | Compressed tarballs by package[9][14]  |
-| Yarn Classic    | `~/.cache/yarn`         | Compressed tarballs + metadata[13]     |
-| Yarn Berry      | `.yarn/cache` (project) | ZIP files, can be committed[8]         |
-| pnpm            | `~/.pnpm-store`         | Content-addressable storage[7][12][17] |
+| npm             | `~/.npm`                | Compressed tarballs by package[^7][^11]  |
+| Yarn Classic    | `~/.cache/yarn`         | Compressed tarballs + metadata[^10]     |
+| Yarn Berry      | `.yarn/cache` (project) | ZIP files, can be committed[^6]         |
+| pnpm            | `~/.pnpm-store`         | Content-addressable storage[^5][^9][^12] |
 
-- **npm**: Default cache is `~/.npm` (or `%AppData%\npm-cache` on Windows), stores package tarballs and metadata[9][14].
-- **Yarn Classic**: Caches tarballs and metadata, default `~/.cache/yarn`, but can be customized[13].
-- **Yarn Berry**: Uses `.yarn/cache` directory in each project, storing ZIP archives of dependencies, often committed for offline/CI installs[8].
-- **pnpm**: Global cache at `~/.pnpm-store`, uses hard links or symlinks from global store to each project's `node_modules` (saves ~70% disk space when used across multiple projects)[6][7][12][17].
+- **npm**: Default cache is `~/.npm` (or `%AppData%\npm-cache` on Windows), stores package tarballs and metadata[^7][^11].
+- **Yarn Classic**: Caches tarballs and metadata, default `~/.cache/yarn`, but can be customized[^10].
+- **Yarn Berry**: Uses `.yarn/cache` directory in each project, storing ZIP archives of dependencies, often committed for offline/CI installs[^6].
+- **pnpm**: Global cache at `~/.pnpm-store`, uses hard links or symlinks from global store to each project's `node_modules` (saves ~70% disk space when used across multiple projects)[^4][^5][^9][^12].
 
 ### Cache Commands
 
@@ -1032,15 +1034,15 @@ TypeScript module resolution for PnP (tsconfig.json):
 
 ### References
 
-1. [Is npm Enough? Why Startups are Coming after this JavaScript ... (RedMonk)](https://redmonk.com/kholterhoff/2025/01/30/is-npm-enough/)
-2. [State of Frontend 2024 – The Software House](https://tsh.io/state-of-frontend)
-5. [NPM vs Yarn vs PNPM: Why so many? – DEV.to](https://dev.to/amtheblessed/npm-vs-yarn-vs-pnpm-why-so-many-520e)
-6. [Why pnpm Is the Superior Choice for JavaScript Package ... – DEV.to](https://dev.to/mechcloud_academy/why-pnpm-is-the-superior-choice-for-javascript-package-management-pkp)
-7. [pnpm FAQ – pnpm.io](https://pnpm.io/faq)
-8. [Is Yarn supported for bitbucket-pipelines caching? – Atlassian Community](https://community.atlassian.com/forums/Bitbucket-questions/Is-Yarn-supported-for-bitbucket-pipelines-caching/qaq-p/650816)
-9. [How to Clear npm Cache | phoenixNAP KB](https://phoenixnap.com/kb/npm-clear-cache)
-11. [npm vs Yarn vs pnpm – Which Package Manager Should You Use ... – DEV.to](https://dev.to/hamzakhan/npm-vs-yarn-vs-pnpm-which-package-manager-should-you-use-in-2025-2f1g)
-12. [Why Switching to pnpm Can Save Your Disk Space ... – Hashnode](https://codenamemoe.hashnode.dev/why-switching-to-pnpm-can-save-your-disk-space-and-speed-up-your-development)
-13. [How do I set a custom cache path for Yarn? – Stack Overflow](https://stackoverflow.com/questions/40381112/how-do-i-set-a-custom-cache-path-for-yarn)
-14. [The Ultimate Guide to Configuring NPM – Stack Abuse](https://stackabuse.com/the-ultimate-guide-to-configuring-npm/)
-17. [Why pnpm uses Hard links instead of soft links? – GitHub](https://github.com/orgs/pnpm/discussions/6800)
+[^1]: [Is npm Enough? Why Startups are Coming after this JavaScript ... (RedMonk)](https://redmonk.com/kholterhoff/2025/01/30/is-npm-enough/)
+[^2]: [State of Frontend 2024 – The Software House](https://tsh.io/state-of-frontend)
+[^3]: [NPM vs Yarn vs PNPM: Why so many? – DEV.to](https://dev.to/amtheblessed/npm-vs-yarn-vs-pnpm-why-so-many-520e)
+[^4]: [Why pnpm Is the Superior Choice for JavaScript Package ... – DEV.to](https://dev.to/mechcloud_academy/why-pnpm-is-the-superior-choice-for-javascript-package-management-pkp)
+[^5]: [pnpm FAQ – pnpm.io](https://pnpm.io/faq)
+[^6]: [Is Yarn supported for bitbucket-pipelines caching? – Atlassian Community](https://community.atlassian.com/forums/Bitbucket-questions/Is-Yarn-supported-for-bitbucket-pipelines-caching/qaq-p/650816)
+[^7]: [How to Clear npm Cache | phoenixNAP KB](https://phoenixnap.com/kb/npm-clear-cache)
+[^8]: [npm vs Yarn vs pnpm – Which Package Manager Should You Use ... – DEV.to](https://dev.to/hamzakhan/npm-vs-yarn-vs-pnpm-which-package-manager-should-you-use-in-2025-2f1g)
+[^9]: [Why Switching to pnpm Can Save Your Disk Space ... – Hashnode](https://codenamemoe.hashnode.dev/why-switching-to-pnpm-can-save-your-disk-space-and-speed-up-your-development)
+[^10]: [How do I set a custom cache path for Yarn? – Stack Overflow](https://stackoverflow.com/questions/40381112/how-do-i-set-a-custom-cache-path-for-yarn)
+[^11]: [The Ultimate Guide to Configuring NPM – Stack Abuse](https://stackabuse.com/the-ultimate-guide-to-configuring-npm/)
+[^12]: [Why pnpm uses Hard links instead of soft links? – GitHub](https://github.com/orgs/pnpm/discussions/6800)
