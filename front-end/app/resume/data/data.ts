@@ -84,7 +84,7 @@ const data = Object.seal({
             dateEnd: "",
             positions: [
                 {
-                    title: "Senior Software Developer at Innervate (Remote) 🌍",
+                    title: "Senior Software Developer at Innervate (Remote, contract) 🌍",
                     dateStart: "April 2025",
                     dateEnd: "",
                     website: "https://www.innervate.com/",

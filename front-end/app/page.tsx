@@ -12,7 +12,6 @@ import { imageLoader } from '@/components/image/image-loader';
 import { PageSchema } from '@/content/pages/resume/schema';
 import { environment } from '@/app/configuration/environment';
 import { ThumbnailImage } from '@/components/image/animated-image-loading/thumbnail-image';
-import data from '@/app/resume/data/data';
 import { HomePageStructuredData } from '@/components/HomePageStructuredData';
 import { content } from '@/app/configuration/content';
 
@@ -84,6 +83,12 @@ export default async function Home() {
                             I can help you with:
                             <ul className="mt-2 list-none space-y-1 pl-6">
                                 <li>
+                                    🔧{' '}
+                                    <Link title={content.services.workFor1Hour.title} href={content.services.workFor1Hour.url}>
+                                        Developing a full-stack web app with React, Node.js, and TypeScript and infrastructure on AWS
+                                    </Link>
+                                </li>
+                                <li>
                                     ⚡️{' '}
                                     <Link title={content.services.workFor1Hour.title} href={content.services.workFor1Hour.url}>
                                         Boosting your web app&apos;s performance
@@ -121,17 +126,14 @@ export default async function Home() {
                                 </li>
                             </ul>
                             <br />
-                            <Link className="font-bold" href={`mailto:${data.user.Email}`}>
-                                Contact me via email
-                            </Link>{' '}
-                            to chat about your project!
-                            <br />
-                            <br />
-                            Or{' '}
+                            <Link className="font-bold" href='/contact'>
+                                Contact me&nbsp;
+                            </Link>
+                            to chat about your project or&nbsp;
                             <Link className="font-bold" href={content.services.scheduleCall.url} target="_blank">
                                 {content.services.scheduleCall.title}
                             </Link>{' '}
-                            if you prefer a quick video chat.
+                            right away.
                         </div>
                         <p className="mb-4">
                             Curious about my professional journey?{' '}
