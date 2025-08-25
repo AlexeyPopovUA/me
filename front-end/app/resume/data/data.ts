@@ -47,7 +47,7 @@ const data = Object.seal({
         {
             name: "Other technologies",
             description:
-                "Jest, Selenium, Webpack, Lerna, NPM, Elastic Search & Kibana, Sumologic, NewRelic, SonarQube, sitespeed.io, Lighthouse"
+                "Claude-code, Gemini-cli, GitHub Co-pilot, Jest, Selenium, Webpack, Lerna, NPM, Elastic Search & Kibana, Sumologic, NewRelic, SonarQube, sitespeed.io, Lighthouse"
 
         }
     ],
@@ -90,8 +90,9 @@ const data = Object.seal({
                     website: "https://www.innervate.com/",
                     positionDescription: "Innervate (former RevJet) is a company that provides a platform for digital advertising and marketing solutions.",
                     description: [
-                        "Maintenance of multiple web applications",
-                        "Implementation of new GitLab CI/CD systems",
+                        "Maintenance of multiple full-stack web applications",
+                        "Implemented shared GitLab CI/CD pipeline templates and migrated multiple projects to it",
+                        "Implemented AI-based migration tools",
                     ]
                 }
             ],
