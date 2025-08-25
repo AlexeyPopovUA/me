@@ -9,7 +9,7 @@ type Props = {
 };
 
 const Intro = (props: Props) => (
-    <CVSection title={props.intro.title} cls="intro print:break-after-page">
+    <CVSection title={props.intro.title} cls="intro">
         {props.intro.description.map((item, i, arr) => <div
             key={item.slice(0, 20)}
             className={clsx("description", {
