@@ -3,7 +3,7 @@ title: Feature branches approach in CI/CD of NPM libraries
 slug: feature-branches-approach-in-ci-cd-of-npm-libraries
 date: 2023-03-09
 draft: false
-description: Implementation of feature branches approach in continuous integration and delivery of NPM packages
+description: "How to implement feature-branch CI/CD for npm libraries: branch-specific pre-releases, dist-tags, semantic versioning, and automated publishing with GitHub Actions."
 thumbnail: /articles/feature-branches-npm/feature-branches-for-NPM-modules.png
 tags:
     - CI/CD
@@ -34,6 +34,12 @@ keywords:
   - distribution tags
   - version history
   - workflow automation
+  - npm dist-tags
+  - pre-release tags
+  - release automation
+  - GitHub Actions CI
+  - automated publishing
+  - branch-specific versions
 ---
 
 # Feature branches approach in CI/CD of NPM libraries
@@ -69,7 +75,7 @@ npm install --save fish-atlas-sdk@monkfish
 
 To simplify development and maintenance, it’s a good practice to use npm versions defined as Git tags. You can create a Git tag with the corresponding version string format needed for NPM. This way, you will always be aware of which version corresponds to which commit.
 
-There are also multiple tools available that allow for Git-driven npm package versioning and even automatic version calculation. This convention we can use to make version generation predictable and automatic – [conventionalcommits.org](https://www.conventionalcommits.org/en/v1.0.0/#summary). Other tools such as [standard-version](https://www.npmjs.com/package/standard-version) or [release-please](https://github.com/googleapis/release-please) use it to simplify and implement the release procedures.
+There are also multiple tools available that allow for Git-driven npm package versioning and even automatic version calculation. This convention we can use to make version generation predictable and automatic – [conventionalcommits.org](https://www.conventionalcommits.org/en/v1.0.0/#summary). Other tools such as [standard-version](https://www.npmjs.com/package/standard-version) or [release-please](https://github.com/googleapis/release-please) use it to simplify and implement the release procedures. If you’re looking for a step-by-step setup of automated versioning, changelogs, and publishing with GitHub Actions, see [NPM release automation](/blog/npm-release-automation/).
 
 The feature branches workflow in CI/CD will look like this:
 
@@ -108,3 +114,5 @@ The example Git repository contains all necessary scripts and workflows. Impleme
 ## Conclusion
 
 In this article I have suggested and shared sources of a convenient approach for continuous integration of npm modules that supports feature branches. The continuous integration and deployment workflow for feature branches can be implemented using GitHub actions or any other platform of choice. Also, the *standard-version* cli could be replaced with any other tool that simplifies work with release management. The main idea is to show that it is possible, convenient and empowers developers to do their work and showcase it at any moment of time integrated into the consumer application.
+
+If you need a concrete, step-by-step pipeline for automated versioning and publishing, check out the companion article: [NPM release automation](/blog/npm-release-automation/).
