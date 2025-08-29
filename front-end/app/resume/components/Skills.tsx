@@ -9,16 +9,16 @@ type Props = {
 };
 
 const Skills = (props: Props) => (
-    <CVSection title="Skills" cls="skills">
+    <CVSection title="Skills" cls="skills print:break-after-page">
         {props.skills.map((item) => (
             <Fragment key={item.name}>
-                <h3>{item.name}</h3>
+                <h3 className="print:mb-1 print:mt-2">{item.name}</h3>
                 {Array.isArray(item.description) ? item.description.map((descr, i) => <div
                         key={descr.slice(0, 20)}
-                        className={clsx("description", {
-                            "border-b": i !== item.description.length - 1
+                        className={clsx("description print:mb-1", {
+                            "border-b print:border-b-0": i !== item.description.length - 1
                         })}>{descr}</div>) :
-                    <div className="description">{item.description}</div>}
+                    <div className="description print:mb-1">{item.description}</div>}
             </Fragment>
         ))}
     </CVSection>

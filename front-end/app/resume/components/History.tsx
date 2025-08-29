@@ -36,7 +36,7 @@ function Description(props: { description: string | string[]; className?: string
                     <div
                         key={descr.slice(0, 20)}
                         className={clsx('flex flex-col gap-2', {
-                            'border-b': i !== props.description.length - 1,
+                            'border-b print:border-b-0': i !== props.description.length - 1,
                         })}
                     >
                         {descr}

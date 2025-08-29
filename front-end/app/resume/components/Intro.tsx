@@ -13,7 +13,7 @@ const Intro = (props: Props) => (
         {props.intro.description.map((item, i, arr) => <div
             key={item.slice(0, 20)}
             className={clsx("description", {
-                "border-b": i !== arr.length - 1
+                "border-b print:border-b-0": i !== arr.length - 1
             })}>{item}</div>)}
     </CVSection>
 );
