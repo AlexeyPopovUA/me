@@ -14,13 +14,10 @@ const data = Object.seal({
     intro: {
         title: "About Me",
         description: [
-            "I'm a full-stack software developer with over 13 years of experience, including 7 in senior roles, with focus on front-end development and delivering robust software solutions.",
-            "I build user-centric products, leveraging my expertise across frontend, cloud-native, and backend technologies.",
-            "I specialize in architecting and developing high-scale single-page applications, UI libraries, and SDKs, while also implementing CI/CD pipelines, hosting, and distribution solutions.",
-            "I excel at optimizing application performance for improved runtime efficiency and faster load speeds.",
-            "My experience includes leading the development of high-quality technical solutions, conducting technical interviews, and mentoring team members.",
-            "I also bring experience in defining project visions, setting development strategies, and prioritizing technologies to align with business goals.",
-        ]
+            "Need a seasoned professional? With over 13 years in software development, I deliver robust solutions by transforming business requirements into user-centric products across frontend, cloud-native, and backend technologies.",
+            "I architect high-scale SPAs, UI libraries, and SDKs for complex web applications that need scalability and performance. My expertise includes implementing efficient CI/CD pipelines and optimizing applications for improved runtime efficiency and faster load speeds.",
+            "Looking for technical leadership? I bring experience in leading solutions, conducting technical interviews, and mentoring teams. I help define project visions, set development strategies, and prioritize technologies that align with your business goals."
+        ],
     },
     contacts: {
         Nationality: "Dutch",
@@ -37,18 +34,13 @@ const data = Object.seal({
             description: "React, Redux, TailwindCSS, Next.js, GatsbyJS, Storybook etc."
         },
         {
-            name: "Cloud",
-            description: "AWS, AWS-CDK, AWS-SDK, Serverless"
+            name: "Cloud & Backend",
+            description: "Node.js, AWS, AWS-CDK, AWS-SDK, Serverless, Express JS, SQL and non-SQL DB's"
         },
         {
-            name: "Backend",
-            description: "Node.js, Express JS, GraphQL, MongoDB, DynamoDB, MySQL"
-        },
-        {
-            name: "Other technologies",
+            name: "Other technologies & AI",
             description:
-                "Claude-code, Gemini-cli, GitHub Co-pilot, Jest, Selenium, Webpack, Lerna, NPM, Elastic Search & Kibana, Sumologic, NewRelic, SonarQube, sitespeed.io, Lighthouse"
-
+                "Mastra AI, Claude-code, Gemini-cli, GitHub Co-pilot, Jest, Selenium, Webpack, Lerna, NPM, Elastic Search & Kibana, Sumologic, NewRelic, SonarQube, sitespeed.io, Lighthouse"
         }
     ],
     certificates: [
@@ -92,7 +84,7 @@ const data = Object.seal({
                     description: [
                         "Maintenance of multiple full-stack web applications",
                         "Implemented shared GitLab CI/CD pipeline templates and migrated multiple projects to it",
-                        "Implemented AI-based migration tools",
+                        "Implemented AI-based migration tools, AI RAG system experiments, basic agents and tools",
                     ]
                 }
             ],
