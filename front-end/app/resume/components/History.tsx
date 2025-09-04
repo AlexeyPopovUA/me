@@ -8,16 +8,13 @@ import Tag from '@/components/primitive/Tag';
 
 type Props = {
     experience: typeof data.experience;
+    education: typeof data.education;
 };
 
-/**
- * Converts "moment" module duration object into the humanized string
- */
 function getHumanizedDuration(duration: moment.Duration) {
     const years = duration.years();
     const months = duration.months();
 
-    //formatted output
     const result = [];
     if (years > 0) {
         result.push(years === 1 ? `${years} year` : `${years} years`);
@@ -59,7 +56,22 @@ function Stack(props: { stack: string }) {
     );
 }
 
-export default function History(props: Props) {
+function Education(props: { education: typeof data.education }) {
+    return (
+        <CVSection cls="education" title="Education">
+            {props.education.map((item) => (
+                <section key={item.title} className="education-section flex flex-col gap-2">
+                    <h3 className="company-name font-bold">{item.company}</h3>
+                    <div className="font-bold">{item.date}</div>
+                    <div>{item.title}</div>
+                    <Description description={item.description} className="italic" />
+                </section>
+            ))}
+        </CVSection>
+    );
+}
+
+function WorkHistory(props: { experience: typeof data.experience }) {
     const historyDurations = props.experience.map((item) =>
         moment.duration((item.dateEnd ? moment(item.dateEnd, 'MMM YYYY', 'en') : moment()).diff(moment(item.dateStart, 'MMM YYYY', 'en'))),
     );
@@ -107,5 +119,14 @@ export default function History(props: Props) {
                 </section>
             ))}
         </CVSection>
+    );
+}
+
+export default function History(props: Props) {
+    return (
+        <>
+            <WorkHistory experience={props.experience} />
+            <Education education={props.education} />
+        </>
     );
 }

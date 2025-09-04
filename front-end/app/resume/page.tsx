@@ -59,7 +59,7 @@ export default async function Post() {
                 <Header user={renderData.user} contacts={renderData.contacts}/>
                 <Intro intro={renderData.intro}/>
                 <Skills skills={renderData.skills}/>
-                <History experience={renderData.experience}/>
+                <History experience={renderData.experience} education={renderData.education} />
             </article>
         </>
     );
