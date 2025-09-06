@@ -29,7 +29,7 @@ const data = Object.seal({
     skills: [
         {
             name: 'Programming languages',
-            description: 'Advanced knowledge of JavaScript, TypeScript, Node.js, HTML, CSS, SCSS. Basic knowledge of Java, PHP',
+            description: 'Advanced knowledge of JavaScript, TypeScript, Node.js, HTML, CSS, SCSS',
         },
         {
             name: 'Frontend',
@@ -181,49 +181,29 @@ const data = Object.seal({
             stack: 'JavaScript, TypeScript, SCSS, Node.js, google-closure-library, Mocha, Java, Grunt, Selenium',
         },
         {
-            company: 'Insoft Global (Kharkiv, Ukraine) 🇺🇦',
+            company: 'Various companies (web studios and outsourcing) 🇺🇦',
             website: '',
-            dateStart: 'April 2013',
+            dateStart: 'August 2011',
             dateEnd: 'April 2016',
             positions: [
                 {
-                    title: 'JavaScript Developer',
-                    dateStart: 'April 2013',
+                    title: 'QA > Junior PHP > JavaScript Developer',
+                    dateStart: 'August 2011',
                     dateEnd: 'April 2016',
                     website: '',
                     positionDescription: '',
                     description: [
                         'Developed frontend and server-side components for cloud management and energy management platforms.',
+                        'Built and maintained small to mid-scale web applications, marketing and e-commerce sites using PHP, JavaScript',
+                        'Refactored legacy PHP / jQuery codebases to modular, maintainable architectures, reducing defect rates and easing feature delivery',
                         'Applied data structures and algorithms to optimize application performance.',
-                        'Created a proof-of-concept for a hybrid mobile application.',
-                        'Participated in code reviews, technical interviews, hiring, and mentorship for junior developers.',
+                        'Collaborated with designers and PMs to scope features, estimate effort, and deliver iterative releases under tight outsourcing timelines',
+                        'Participated in code reviews, led technical interviews, hiring, and mentorship for junior developers.',
                     ],
                 },
             ],
-            description: ['Insoft Global provides software development services for various industries.'],
-            stack: 'Sencha ExtJS, SCSS, Node.js, Java',
-        },
-        {
-            company: 'Various companies (web studios and outsourcing) 🇺🇦',
-            website: '',
-            dateStart: 'August 2011',
-            dateEnd: 'March 2013',
-            positions: [
-                {
-                    title: 'QA > Junior PHP > JavaScript Developer',
-                    dateStart: 'August 2011',
-                    dateEnd: 'March 2013',
-                    website: '',
-                    positionDescription: '',
-                    description: [
-                        'Participated in front end development of an e-commerce project',
-                        'Developed numerous websites using Wordpress and OpenCart. Implemented plugins, widgets and themes for Wordpress. Preliminary project analysis. Tasks estimation. User guides writing',
-                        'Manual testing. Specification writing. UI prototyping',
-                    ],
-                },
-            ],
-            description: ['Provided development and QA services for various web studios and outsourcing companies.'],
-            stack: 'JavaScript, jQuery, CSS, Backbone.js, PHP, MySQL, LAMP, WordPress',
+            description: [],
+            stack: 'JavaScript, SCSS, Node.js, Java, jQuery, CSS, PHP, MySQL, LAMP, WordPress',
         },
     ],
     education: [
