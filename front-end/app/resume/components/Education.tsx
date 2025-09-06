@@ -1,23 +1,43 @@
-import React, {Fragment} from "react";
+import React from 'react';
+import CVSection from './CVSection';
+import data from '../data/data';
+import { Description } from './Description';
 
-import CVSection from "./CVSection";
-import data from "../data/data";
+type EducationItem = (typeof data.education)[0];
 
-type Props = {
-    education: typeof data.education;
+type GroupedEducation = {
+    university: string;
+    positions: EducationItem[];
 };
 
-const Education = (props: Props) => (
-    <CVSection title="Education" cls="history">
-        {props.education.map((item) => (
-            <Fragment key={item.title}>
-                <h3 className="title">{item.title}</h3>
-                <div className="item-key pr-4 mb-2">{item.date}</div>
-                <div className="company-name mb-2 italic">{item.company}</div>
-                <div className="description">{item.description}</div>
-            </Fragment>
-        ))}
-    </CVSection>
-)
+export function Education(props: { education: typeof data.education }) {
+    const groupedEducation = props.education.reduce<GroupedEducation[]>((acc, item) => {
+        const existing = acc.find((g) => g.university === item.company);
+        if (existing) {
+            existing.positions.push(item);
+        } else {
+            acc.push({
+                university: item.company,
+                positions: [item],
+            });
+        }
+        return acc;
+    }, []);
 
-export default Education;
+    return (
+        <CVSection cls="education" title="Education">
+            {groupedEducation.map((group) => (
+                <section key={group.university} className="education-section flex flex-col">
+                    <h3 className="company-name font-bold">{group.university}</h3>
+                    {group.positions.map((item) => (
+                        <div key={item.title} className="project">
+                            <h4 className="title">&gt; {item.title}</h4>
+                            <div className="font-bold">{item.date}</div>
+                            <Description description={item.description} className="italic" />
+                        </div>
+                    ))}
+                </section>
+            ))}
+        </CVSection>
+    );
+}

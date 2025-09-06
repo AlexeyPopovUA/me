@@ -1,15 +1,10 @@
 import React from 'react';
 import moment from 'moment';
-import clsx from 'clsx';
 
 import CVSection from './CVSection';
 import data from '../data/data';
 import Tag from '@/components/primitive/Tag';
-
-type Props = {
-    experience: typeof data.experience;
-    education: typeof data.education;
-};
+import { Description } from './Description';
 
 function getHumanizedDuration(duration: moment.Duration) {
     const years = duration.years();
@@ -25,27 +20,6 @@ function getHumanizedDuration(duration: moment.Duration) {
     return result.join(' ');
 }
 
-function Description(props: { description: string | string[]; className?: string }) {
-    if (Array.isArray(props.description)) {
-        return (
-            <div className={clsx('flex flex-col gap-2', props.className)}>
-                {props.description.map((descr, i) => (
-                    <div
-                        key={descr.slice(0, 20)}
-                        className={clsx('flex flex-col gap-2', {
-                            'border-b print:border-b-0': i !== props.description.length - 1,
-                        })}
-                    >
-                        {descr}
-                    </div>
-                ))}
-            </div>
-        );
-    }
-
-    return props.description ? <div className={clsx("description col-span-3 col-start-2 pb-2", props.className)}>{props.description}</div> : null;
-}
-
 function Stack(props: { stack: string }) {
     return (
         <div className="description flex flex-row flex-wrap gap-2">
@@ -56,22 +30,7 @@ function Stack(props: { stack: string }) {
     );
 }
 
-function Education(props: { education: typeof data.education }) {
-    return (
-        <CVSection cls="education" title="Education">
-            {props.education.map((item) => (
-                <section key={item.title} className="education-section flex flex-col gap-2">
-                    <h3 className="company-name font-bold">{item.company}</h3>
-                    <div className="font-bold">{item.date}</div>
-                    <div>{item.title}</div>
-                    <Description description={item.description} className="italic" />
-                </section>
-            ))}
-        </CVSection>
-    );
-}
-
-function WorkHistory(props: { experience: typeof data.experience }) {
+export function WorkHistory(props: { experience: typeof data.experience }) {
     const historyDurations = props.experience.map((item) =>
         moment.duration((item.dateEnd ? moment(item.dateEnd, 'MMM YYYY', 'en') : moment()).diff(moment(item.dateStart, 'MMM YYYY', 'en'))),
     );
@@ -119,14 +78,5 @@ function WorkHistory(props: { experience: typeof data.experience }) {
                 </section>
             ))}
         </CVSection>
-    );
-}
-
-export default function History(props: Props) {
-    return (
-        <>
-            <WorkHistory experience={props.experience} />
-            <Education education={props.education} />
-        </>
     );
 }

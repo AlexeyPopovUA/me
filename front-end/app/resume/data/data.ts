@@ -29,11 +29,11 @@ const data = Object.seal({
     skills: [
         {
             name: 'Programming languages',
-            description: 'Advanced knowledge of JavaScript, TypeScript, Node.js, HTML, CSS, SCSS',
+            description: 'Advanced knowledge of JavaScript, TypeScript, Node.js, HTML, CSS',
         },
         {
             name: 'Frontend',
-            description: 'React, Redux, TailwindCSS, Next.js, Storybook, Webpack, Lerna, NPM',
+            description: 'React, Redux, TailwindCSS, Next.js, Storybook, Webpack, Lerna, NPM, pnpm, yarn',
         },
         {
             name: 'Cloud & Backend',
@@ -42,7 +42,7 @@ const data = Object.seal({
         {
             name: 'Other technologies & AI',
             description:
-                'Mastra AI, Claude-code, Gemini-cli, GitHub Co-pilot, Jest, Selenium, Webpack, Lerna, NPM, Elastic Search & Kibana, Sumologic, NewRelic, SonarQube, Lighthouse',
+                'Mastra AI, Claude-code, Gemini-cli, GitHub Co-pilot, GitHub Actions, GitLab Pipelines, Jest, Selenium, Webpack, Lerna, NPM, Elastic Search & Kibana, Sumologic, NewRelic, SonarQube, Lighthouse',
         },
     ],
     certificates: [
@@ -85,7 +85,8 @@ const data = Object.seal({
                     positionDescription: 'Innervate (formerly RevJet) provides a platform for digital advertising and marketing solutions.',
                     description: [
                         'Maintained and enhanced multiple full-stack web applications.',
-                        'Engineered and implemented shared GitLab CI/CD pipeline templates, migrating multiple projects to the new system and reducing deployment time and complexity.',
+                        'Engineered and implemented shared GitLab CI/CD pipeline templates reducing deployment time and complexity',
+                        'Migrated more than 10 projects to the new CI/CD system',
                         'Developed AI-based migration tools and conducted experiments with Retrieval-Augmented Generation (RAG) systems.',
                     ],
                 },
@@ -172,7 +173,9 @@ const data = Object.seal({
                     positionDescription: '',
                     description: [
                         'Participated in development and maintenance of online photo editors and hybrid mobile application.',
-                        'Developed different tools for debugging, logging and fixing customer issues.',
+                        'Introduced latest JavaScript support into the mature product (100k executable lines).',
+                        'Introduced the latest unit testing system',
+                        'Developed different tools for debugging, logging and fixing customer issues, simplifying customer support.',
                         'Set up code quality monitoring system.',
                     ],
                 },
@@ -196,7 +199,6 @@ const data = Object.seal({
                         'Developed frontend and server-side components for cloud management and energy management platforms.',
                         'Built and maintained small to mid-scale web applications, marketing and e-commerce sites using PHP, JavaScript',
                         'Refactored legacy PHP / jQuery codebases to modular, maintainable architectures, reducing defect rates and easing feature delivery',
-                        'Applied data structures and algorithms to optimize application performance.',
                         'Collaborated with designers and PMs to scope features, estimate effort, and deliver iterative releases under tight outsourcing timelines',
                         'Participated in code reviews, led technical interviews, hiring, and mentorship for junior developers.',
                     ],
@@ -209,15 +211,15 @@ const data = Object.seal({
     education: [
         {
             company: 'National Technical University Kharkiv Polytechnical Institute of Ukraine',
-            title: 'Master of Science (MSc)',
+            title: 'MSc in Mechanical Engineering (Cryogenic technology)',
             date: '2009 - 2011',
-            description: 'Mechanical Engineering (Cryogenic technology)',
+            description: '',
         },
         {
             company: 'National Technical University Kharkiv Polytechnical Institute of Ukraine',
-            title: 'Bachelor of Science (BSc)',
+            title: 'BSc in Mechanical Engineering (Cryogenic technology)',
             date: '2005 - 2009',
-            description: 'Mechanical Engineering (Cryogenic technology)',
+            description: '',
         },
     ],
     ownProjects: [

@@ -6,7 +6,6 @@ import {PageSchema} from "@/content/pages/resume/schema";
 import Header from "@/app/resume/components/Header";
 import Intro from "@/app/resume/components/Intro";
 import Skills from "@/app/resume/components/Skills";
-import History from "@/app/resume/components/History";
 import renderData from "@/app/resume/data/data";
 import {content} from "@/app/configuration/content";
 import {environment} from "@/app/configuration/environment";
@@ -14,6 +13,8 @@ import {ensurePathSlash} from "@/lib/utils";
 import {getOGImageURL} from "@/lib/image";
 import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
 import {ResumeStructuredData} from "@/components/ResumeStructuredData";
+import { WorkHistory } from '@/app/resume/components/WorkHistory';
+import { Education } from '@/app/resume/components/Education';
 
 const pageSlug = "resume";
 
@@ -59,7 +60,8 @@ export default async function Post() {
                 <Header user={renderData.user} contacts={renderData.contacts}/>
                 <Intro intro={renderData.intro}/>
                 <Skills skills={renderData.skills}/>
-                <History experience={renderData.experience} education={renderData.education} />
+                <WorkHistory experience={renderData.experience} />
+                <Education education={renderData.education} />
             </article>
         </>
     );
