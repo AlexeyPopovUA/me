@@ -32,6 +32,7 @@ export function HomePageStructuredData({ description, name, jobTitle, url, image
             content.socialLinks.wko,
             content.socialLinks.devto,
             content.socialLinks.braintrust,
+            content.socialLinks.freelancetribes,
         ],
         ...(image ? { image: image } : {}),
         mainEntityOfPage: {

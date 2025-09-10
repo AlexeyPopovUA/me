@@ -12,6 +12,7 @@ export const content = {
         wko: 'https://firmen.wko.at/oleksii-yuriiovych-popov/k%c3%a4rnten/?firmaid=77a31ef0-e8f0-4993-90fd-b71445513875&standortid=6&standortname=k%c3%a4rnten%20%28bundesland%29&suchbegriff=oleksii%20yuriiovych%20popov',
         devto: 'https://dev.to/oleksii_popov',
         braintrust: 'https://app.usebraintrust.com/talent/1734710/',
+        freelancetribes: 'https://freelancetribes.com/en/freelancers/senior-full-stack-developer-senior-front-end-developer-e1bfeb',
     },
     services: {
         scheduleCall: {
