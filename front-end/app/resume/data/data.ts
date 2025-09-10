@@ -14,7 +14,7 @@ const data = Object.seal({
     intro: {
         title: 'About Me',
         description: [
-            "I'm a front-end leaning full-stack software developer with over 13 years of experience, including 7 in senior roles.",
+            "I'm a front-end leaning full-stack software developer with 14 years of experience, including 7 in senior roles.",
             'I build user-centric products, leveraging my expertise across frontend, cloud-native, and backend technologies.',
             'I specialize in architecting and developing high-scale single-page applications, UI libraries, and SDKs, while also implementing CI/CD pipelines, hosting, and distribution solutions.',
             'I excel at optimizing application performance for improved runtime efficiency and faster load speeds.',
@@ -80,7 +80,7 @@ const data = Object.seal({
                 {
                     title: 'Senior Software Developer at Innervate (Remote, contract) 🌍',
                     dateStart: 'April 2025',
-                    dateEnd: '',
+                    dateEnd: 'September 2025',
                     website: 'https://www.innervate.com/',
                     positionDescription: 'Innervate (formerly RevJet) provides a platform for digital advertising and marketing solutions.',
                     description: [
@@ -107,9 +107,10 @@ const data = Object.seal({
                     website: '',
                     positionDescription: '',
                     description: [
-                        'Maintenance and feature development for a new Kubernetes monitoring web application, including related services and libraries, serving enterprise customers.',
-                        'Improved application performance by profiling React components and implementing targeted optimizations.',
-                        'Conducted code reviews, refactored legacy code to modern standards, and participated in technical interviews for multiple teams.',
+                        'Maintained and developed the new Kubernetes monitoring web application, including related services and libraries, serving more than 4000 enterprise customers.',
+                        'Improved application performance by profiling React components and implementing targeted optimizations, reducing several heavy operations execution time by up to 6 times.',
+                        'Conducted code reviews, refactored legacy code to modern standards',
+                        'Participated in technical interviews for multiple teams.',
                     ],
                 },
             ],
@@ -131,12 +132,12 @@ const data = Object.seal({
                     website: '',
                     positionDescription: '',
                     description: [
-                        'Developed the core architecture of a new route planning web application (plan.tomtom.com).',
+                        'Developed the core architecture of a new route planning web application plan.tomtom.com, designed for high performance and scalability, serving millions of users worldwide.',
                         'Started development of a new web SDK for TomTom public services, including its distribution infrastructure, improving developer experience and reducing integration time.',
                         'Designed and implemented a microservice for authentication.',
                         'Authored technical documentation for knowledge sharing and onboarding for new team members.',
                         'Supported and improved AWS CI/CD system, high concurrency automation testing infrastructure and performance testing dashboard.',
-                        'Code review, code refactoring, technical interviews, hiring, mentorship',
+                        'Conducted code reviews, technical interviews, hiring, mentorship. Participated in customer support duties.',
                     ],
                 },
                 {
@@ -146,7 +147,7 @@ const data = Object.seal({
                     website: '',
                     positionDescription: '',
                     description: [
-                        'Established a new development team, participating in hiring, leading onboarding and mentorship.',
+                        'Established a new development team, helped to hire 2 developers and 1 QA, onboarded to multiple projects.',
                         'Architected and developed the core of a next-generation Road Trips web application, featuring pre-rendering, server-side rendering, and localization, supporting a global user base.',
                         'Implemented a robust AWS CI/CD system with feature branch support, enabling parallel development and faster release cycles.',
                         'Created a high-concurrency automation testing infrastructure that reduced Selenium test execution time from 2 hours to 3-5 minutes, a 96% decrease.',
@@ -175,7 +176,7 @@ const data = Object.seal({
                         'Participated in development and maintenance of online photo editors and hybrid mobile application.',
                         'Introduced latest JavaScript support into the mature product (100k executable lines).',
                         'Introduced the latest unit testing system',
-                        'Developed different tools for debugging, logging and fixing customer issues, simplifying customer support.',
+                        'Developed different tools for debugging, logging and fixing customer issues, participated in customer support.',
                         'Set up code quality monitoring system.',
                     ],
                 },
@@ -200,7 +201,7 @@ const data = Object.seal({
                         'Built and maintained small to mid-scale web applications, marketing and e-commerce sites using PHP, JavaScript',
                         'Refactored legacy PHP / jQuery codebases to modular, maintainable architectures, reducing defect rates and easing feature delivery',
                         'Collaborated with designers and PMs to scope features, estimate effort, and deliver iterative releases under tight outsourcing timelines',
-                        'Participated in code reviews, led technical interviews, hiring, and mentorship for junior developers.',
+                        'Participated in code reviews, led technical interviews, requirement analysis, hired multiple developers and QA, mentored junior developers and QA.',
                     ],
                 },
             ],
