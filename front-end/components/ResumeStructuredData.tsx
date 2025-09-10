@@ -43,6 +43,7 @@ export function ResumeStructuredData({
             content.socialLinks.devto,
             content.socialLinks.braintrust,
             content.socialLinks.freelancetribes,
+            content.socialLinks.buffer_start_page,
         ],
         ...(image ? { image: image } : {}),
         //...(skills.length > 0 ? { knowsAbout: skills.join(', ') } : {}),

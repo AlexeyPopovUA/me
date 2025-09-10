@@ -13,6 +13,7 @@ export const content = {
         devto: 'https://dev.to/oleksii_popov',
         braintrust: 'https://app.usebraintrust.com/talent/1734710/',
         freelancetribes: 'https://freelancetribes.com/en/freelancers/senior-full-stack-developer-senior-front-end-developer-e1bfeb',
+        buffer_start_page: 'https://oleksiipopov.start.page/',
     },
     services: {
         scheduleCall: {

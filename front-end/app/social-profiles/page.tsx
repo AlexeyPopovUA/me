@@ -96,6 +96,16 @@ export default function SocialProfilesPage() {
               </li>
               <li>
                 <a
+                  href={content.socialLinks.buffer_start_page}
+                  rel="nofollow noopener noreferrer"
+                  target="_blank"
+                  className="text-blue-600 hover:text-blue-800 underline"
+                >
+                  Buffer - Start Page Profile
+                </a>
+              </li>
+              <li>
+                <a
                   href={content.socialLinks.rok}
                   rel="nofollow noopener noreferrer"
                   target="_blank"
