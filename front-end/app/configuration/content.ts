@@ -18,7 +18,7 @@ export const content = {
     services: {
         scheduleCall: {
             title: 'schedule a quick call',
-            url: 'https://oleksiipopov.gumroad.com/l/intro-call-15-30-min',
+            url: 'https://cal.com/oleksii-popov-software-developer/30min',
         },
         technicalInterview: {
             title: 'book a technical interview',
