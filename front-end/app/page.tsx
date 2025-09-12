@@ -80,52 +80,32 @@ export default async function Home() {
                             </div>
                         </div>
                         <div className="mb-4">
-                            I can help you with:
-                            <ul className="mt-2 list-none space-y-1 pl-6">
+                            <Link className="font-bold text-amber-500" href={content.services.scheduleCall.url} target="_blank">
+                              Book a call with me
+                            </Link>, if you need help with:
+                            <ul className="mt-2 list-none pl-6">
                                 <li>
-                                    🔧{' '}
-                                    <Link title={content.services.workFor1Hour.title} href={content.services.workFor1Hour.url}>
-                                        Developing a full-stack web app with React, Node.js, and TypeScript and infrastructure on AWS
-                                    </Link>
+                                    🔧 Developing a full-stack web app with React, Node.js, and TypeScript and infrastructure on AWS
                                 </li>
                                 <li>
-                                    ⚡️{' '}
-                                    <Link title={content.services.workFor1Hour.title} href={content.services.workFor1Hour.url}>
-                                        Boosting your web app&apos;s performance
-                                    </Link>
+                                    ⚡️ Boosting your web app&apos;s performance
                                 </li>
                                 <li>
-                                    🚀{' '}
-                                    <Link title={content.services.workFor1Hour.title} href={content.services.workFor1Hour.url}>
-                                        Accelerating development & delivery
-                                    </Link>
+                                    🚀 Accelerating development & delivery
                                 </li>
                                 <li>
-                                    🧹{' '}
-                                    <Link title={content.services.workFor1Hour.title} href={content.services.workFor1Hour.url}>
-                                        Enhancing code quality & maintainability
-                                    </Link>
+                                    🧹 Enhancing code quality & maintainability
                                 </li>
                                 <li>
-                                    ☁️{' '}
-                                    <Link title={content.services.workFor1Hour.title} href={content.services.workFor1Hour.url}>
-                                        Improving CI/CD & AWS infrastructure
-                                    </Link>
+                                    ☁️ Improving CI/CD & AWS infrastructure
                                 </li>
                                 <li>
-                                    🔍{' '}
-                                    <Link title={content.services.workFor1Hour.title} href={content.services.workFor1Hour.url}>
-                                        Reviewing your projects & codebases
-                                    </Link>
+                                    🔍 Reviewing your projects & codebases
                                 </li>
                                 <li>
-                                    👥{' '}
-                                    <Link title={content.services.technicalInterview.title} href={content.services.technicalInterview.url}>
-                                        Hiring & building front-end teams
-                                    </Link>
+                                    👥 Hiring & building front-end teams
                                 </li>
                             </ul>
-                            <br />
                             <Link className="font-bold" href='/contact'>
                                 Contact me&nbsp;
                             </Link>

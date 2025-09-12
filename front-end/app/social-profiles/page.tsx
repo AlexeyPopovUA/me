@@ -212,6 +212,16 @@ export default function SocialProfilesPage() {
                   Gumroad - Digital Products & Services
                 </a>
               </li>
+            <li>
+              <a
+                href={content.socialLinks.cal_com}
+                rel="nofollow noopener noreferrer"
+                target="_blank"
+                className="text-blue-600 hover:text-blue-800 underline"
+              >
+                Cal.com - Schedule a Quick Call
+              </a>
+              </li>
             </ul>
           </section>
         </div>

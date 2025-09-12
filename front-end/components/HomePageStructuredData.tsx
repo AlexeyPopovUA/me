@@ -34,6 +34,7 @@ export function HomePageStructuredData({ description, name, jobTitle, url, image
             content.socialLinks.braintrust,
             content.socialLinks.freelancetribes,
             content.socialLinks.buffer_start_page,
+            content.socialLinks.cal_com,
         ],
         ...(image ? { image: image } : {}),
         mainEntityOfPage: {
