@@ -14,7 +14,7 @@ const data = Object.seal({
     intro: {
         title: 'About Me',
         description: [
-            "I'm a front-end leaning full-stack software developer with 14 years of experience, including 7 in senior roles.",
+            "I'm a front-end leaning full-stack software developer with 14 years of experience, including 7+ in senior roles.",
             'I build user-centric products, leveraging my expertise across frontend, cloud-native, and backend technologies.',
             'I specialize in architecting and developing high-scale single-page applications, UI libraries, and SDKs, while also implementing CI/CD pipelines, hosting, and distribution solutions.',
             'I excel at optimizing application performance for improved runtime efficiency and faster load speeds.',
@@ -33,7 +33,7 @@ const data = Object.seal({
         },
         {
             name: 'Frontend',
-            description: 'React, Redux, TailwindCSS, Next.js, Storybook, Webpack, Lerna, NPM, pnpm, yarn',
+            description: 'React, Redux, TailwindCSS, Next.js, Storybook, Webpack, Lerna, npm, pnpm, yarn',
         },
         {
             name: 'Cloud & Backend',
@@ -42,7 +42,7 @@ const data = Object.seal({
         {
             name: 'Other technologies & AI',
             description:
-                'Mastra AI, Claude-code, Gemini-cli, GitHub Co-pilot, GitHub Actions, GitLab Pipelines, Jest, Selenium, Webpack, Lerna, NPM, Elastic Search & Kibana, Sumologic, NewRelic, SonarQube, Lighthouse',
+                'Mastra AI, AI SDK by Vercel, Claude-code, GitHub Actions, GitLab Pipelines, Jest, Selenium, Webpack, Lerna, Elastic Search & Kibana, Sumologic, NewRelic, SonarQube',
         },
     ],
     certificates: [
@@ -92,7 +92,7 @@ const data = Object.seal({
                 },
             ],
             description: [],
-            stack: 'React, Typescript, Next.js, Docker, Kubernetes, Node.js, GitLab, AI',
+            stack: 'React, Typescript, Next.js, Docker, Mastra AI, AI SDK by Vercel, Kubernetes, Node.js, GitLab',
         },
         {
             company: 'Dynatrace (Klagenfurt am Wörthersee, Austria) 🇦🇹',
@@ -158,7 +158,7 @@ const data = Object.seal({
             description: [
                 'TomTom is a global leader in location technology, providing navigation, maps, and traffic data for drivers, businesses, and smart cities',
             ],
-            stack: 'React, Redux, Typescript, Next.js, TailwindCSS, GraphQL, Docker, Node.js, AWS, AWS-CDK, AWS-SDK, sitespeed.io, Grafana, Storybook, Java, Selenium, GitHub Actions, Microservices Architecture, API Development',
+            stack: 'React, Redux, Typescript, Next.js, TailwindCSS, GraphQL, Docker, Node.js, AWS, AWS-CDK, AWS-SDK, Grafana, Storybook, Java, Selenium, GitHub Actions, Microservices Architecture, API Development',
         },
         {
             company: 'Albelli (Amsterdam, Netherlands) 🇳🇱',
@@ -182,7 +182,7 @@ const data = Object.seal({
                 },
             ],
             description: ['Albelli specializes in personalized photo products like photo books, wall art, and calendars.'],
-            stack: 'JavaScript, TypeScript, SCSS, Node.js, google-closure-library, Mocha, Java, Grunt, Selenium',
+            stack: 'JavaScript, TypeScript, SCSS, Node.js, google-closure-library, Mocha, Java, Selenium',
         },
         {
             company: 'Various companies (web studios and outsourcing) 🇺🇦',
@@ -206,7 +206,7 @@ const data = Object.seal({
                 },
             ],
             description: [],
-            stack: 'JavaScript, SCSS, Node.js, Java, jQuery, CSS, PHP, MySQL, LAMP, WordPress',
+            stack: 'JavaScript, SCSS, Node.js, Java, jQuery, CSS, PHP, MySQL, WordPress',
         },
     ],
     education: [
