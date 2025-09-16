@@ -7,7 +7,7 @@ import { getInsideImageURL } from '@/lib/image';
 type Props = {
     user: typeof data.user;
     contacts: typeof data.contacts;
-};
+}
 
 export default async function Header(props: Props) {
     const insideUrlProps: getInsideImageURL.Props = {
@@ -19,9 +19,7 @@ export default async function Header(props: Props) {
 
     return (
         <div className="flex flex-col items-center">
-            <h1>
-                {props.user.name} {props.user.surname}
-            </h1>
+            <h1>{props.user.name} {props.user.surname}</h1>
 
             <div className="flex w-full flex-row gap-8">
                 <Image
@@ -34,15 +32,15 @@ export default async function Header(props: Props) {
                 />
                 <div className="flex-4 mb-4 text-left sm:mb-0">
                     {props.user.position ? <div className="mb-4 text-3xl">{props.user.position}</div> : null}
-                    <div className="max-w-sm whitespace-nowrap">🇦🇹&nbsp;{props.user.Address}</div>
-                    <div className="max-w-sm whitespace-nowrap">
+                    <div className="max-w-sm whitespace-nowrap print:mb-2">🇦🇹&nbsp;{props.user.Address}</div>
+                    <div className="max-w-sm whitespace-nowrap print:mb-2">
                         📨&nbsp;<a href={`mailto:${props.user.Email}`}>{props.user.Email}</a>
                     </div>
-                    <div className="max-w-sm whitespace-nowrap">
+                    <div className="max-w-sm whitespace-nowrap print:mb-2">
                         &#128222;&nbsp;<a href={`callto:${props.user.Phone}`}>{props.user.Phone}</a>
                     </div>
-                    <div className="max-w-sm whitespace-nowrap">🌍&nbsp;Sprache: {props.contacts['I speak']}</div>
-                    <div className="max-w-sm whitespace-nowrap">🇳🇱&nbsp;🇺🇦&nbsp;Nationalität: {props.contacts.Nationality}</div>
+                    <div className="max-w-sm whitespace-nowrap print:mb-2">🌍&nbsp;Sprache: {props.contacts['I speak']}</div>
+                    <div className="max-w-sm whitespace-nowrap print:mb-2">🇳🇱&nbsp;🇺🇦&nbsp;Nationalität: {props.contacts.Nationality}</div>
                 </div>
             </div>
         </div>

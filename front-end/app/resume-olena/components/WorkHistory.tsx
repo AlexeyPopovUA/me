@@ -1,52 +1,23 @@
 import React from 'react';
 import moment from 'moment';
-import clsx from 'clsx';
 
 import CVSection from './CVSection';
 import data from '../data/data';
 import Tag from '@/components/primitive/Tag';
+import { Description } from './Description';
 
-type Props = {
-    experience: typeof data.experience;
-};
-
-/**
- * Converts "moment" module duration object into the humanized string
- */
 function getHumanizedDuration(duration: moment.Duration) {
     const years = duration.years();
     const months = duration.months();
 
-    //formatted output
     const result = [];
     if (years > 0) {
-        result.push(years === 1 ? `${years} Jahr` : `${years} Jahre`);
+        result.push(years === 1 ? `${years} year` : `${years} years`);
     }
     if (months > 0) {
-        result.push(months === 1 ? `${months} Monat` : `${months} Monate`);
+        result.push(months === 1 ? `${months} month` : `${months} months`);
     }
     return result.join(' ');
-}
-
-function Description(props: { description: string | string[]; className?: string }) {
-    if (Array.isArray(props.description)) {
-        return (
-            <div className={clsx('flex flex-col gap-2', props.className)}>
-                {props.description.map((descr, i) => (
-                    <div
-                        key={descr.slice(0, 20)}
-                        className={clsx('flex flex-col gap-2', {
-                            'border-b': i !== props.description.length - 1,
-                        })}
-                    >
-                        {descr}
-                    </div>
-                ))}
-            </div>
-        );
-    }
-
-    return <div className="description col-span-3 col-start-2 pb-2">{props.description}</div>;
 }
 
 function Stack(props: { stack: string }) {
@@ -59,7 +30,7 @@ function Stack(props: { stack: string }) {
     );
 }
 
-export default function History(props: Props) {
+export function WorkHistory(props: { experience: typeof data.experience }) {
     const historyDurations = props.experience.map((item) =>
         moment.duration((item.dateEnd ? moment(item.dateEnd, 'MMM YYYY', 'en') : moment()).diff(moment(item.dateStart, 'MMM YYYY', 'en'))),
     );
@@ -71,9 +42,9 @@ export default function History(props: Props) {
     }
 
     return (
-        <CVSection cls="history" title={`Berufserfahrung (${getHumanizedDuration(totalDuration)})`}>
+        <CVSection cls="history" title={`Work history (${getHumanizedDuration(totalDuration)})`}>
             {props.experience.map((item, index) => (
-                <section key={item.company} className="history-section flex flex-col gap-2">
+                <section key={`${item.company}-${item.company}`} className="history-section flex flex-col gap-2">
                     <h3 className="company-name font-bold">
                         {item.website ? (
                             <a className="no-underline" href={item.website}>
@@ -83,7 +54,12 @@ export default function History(props: Props) {
                             item.company
                         )}
                     </h3>
-                    <div className="font-bold">{`${item.dateStart} - ${item.dateEnd ? item.dateEnd : 'Jetzt'} ${historyDurationValues[index] ? `${historyDurationValues[index]}` : ''}`}</div>
+                    {item.dateStart ? (
+                        <div className="font-bold">{`${item.dateStart} - ${item.dateEnd ? item.dateEnd : 'Now'} ${historyDurationValues[index] ? (`(${historyDurationValues[index]})`) : ''}`}</div>
+                    ) : (
+                        <div className="font-bold">Now</div>
+                    )}
+
                     <Description description={item.description} className="italic" />
                     {item.website ? (
                         <a href={item.website} className="mb-2 text-sm italic">
