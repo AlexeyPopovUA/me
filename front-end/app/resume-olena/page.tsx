@@ -5,9 +5,9 @@ import {getPagePathByDirName} from "@/lib/files";
 import {PageSchema} from "@/content/pages/resume/schema";
 import Header from "@/app/resume-olena/components/Header";
 import Skills from "@/app/resume-olena/components/Skills";
-import History from "@/app/resume-olena/components/History";
-import Education from "@/app/resume-olena/components/Education";
 import renderData from "@/app/resume-olena/data/data";
+import { WorkHistory } from '@/app/resume-olena/components/WorkHistory';
+import { Education } from '@/app/resume-olena/components/Education';
 import {content} from "@/app/configuration/content";
 import {environment} from "@/app/configuration/environment";
 import {ensurePathSlash} from "@/lib/utils";
@@ -41,11 +41,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Post() {
     return (
         <article
-            className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white prose-pre:p-0 mx-auto p-4 print:p-0 print:pt-2'>
-            <Header user={renderData.user} contacts={renderData.contacts}/>
-            <Skills skills={renderData.skills}/>
-            <History experience={renderData.experience}/>
-            <Education education={renderData.education}/>
+            className='prose prose-sm md:prose-base lg:prose-lg print:prose-xs prose-pre:bg-white prose-pre:p-0 mx-auto p-4 print:p-0 print:pt-2 print:space-y-2 print:leading-tight print:prose-a:no-underline'>
+            <Header user={renderData.user} contacts={renderData.contacts} />
+            <Skills skills={renderData.skills} />
+            <WorkHistory experience={renderData.experience} />
+            <Education education={renderData.education} />
         </article>
     );
 }
