@@ -8,8 +8,8 @@ export type CVSectionProps =  PropsWithChildren<{
 
 const CVSection = (props: CVSectionProps) => (
     <div className={clsx("cv-section", props.cls)}>
-        <h2 className="cv-section-title text-center">{props.title}</h2>
-        <div className="cv-section-content flex flex-col gap-1">{props.children}</div>
+        <h2 className="cv-section-title text-center print:mt-4 print:mb-2">{props.title}</h2>
+        <div className="cv-section-content flex flex-col gap-2">{props.children}</div>
     </div>
 );
 

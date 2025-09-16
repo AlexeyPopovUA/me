@@ -32,6 +32,14 @@ const data = Object.seal({
     certificates: [],
     experience: [
         {
+            company: "Babypause",
+            dateStart: "",
+            dateEnd: "",
+            positions: [],
+            description: "",
+            stack: ""
+        },
+        {
             company: "Reinaldahuis Woonzorg (Haarlem, Niederlande) 🇳🇱",
             dateStart: "2017",
             dateEnd: "2017",
