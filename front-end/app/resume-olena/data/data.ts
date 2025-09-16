@@ -3,7 +3,7 @@ const data = Object.seal({
         name: "Olena",
         surname: "Tymchenko",
         initials: "O.O.",
-        position: "Pflegerische Hilfskraft",
+        position: "",
         Email: "alenatymchenko@gmail.com",
         Address: "Klagenfurt am Wörthersee, Österreich",
         Phone: "+43 676 540 84 32",
