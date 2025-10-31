@@ -13,7 +13,7 @@ export function remarkCode() {
 
     // @ts-expect-error - todo > add proper types later
     async function transformer(tree) {
-        const languages = ['ts', 'tsx', 'javascript', 'json', 'html', 'bash', 'shell', 'text', 'yaml', 'prolog', 'dockerfile'];
+        const languages = ['ts', 'tsx', 'javascript', 'json', 'jsonc', 'html', 'bash', 'shell', 'text', 'yaml', 'prolog', 'dockerfile'];
         highlighterInstancePromise = highlighterInstancePromise ? highlighterInstancePromise: getSingletonHighlighter({
             themes: ['github-light'],
             langs: languages,
