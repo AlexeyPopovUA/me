@@ -39,9 +39,9 @@ const FeaturedProjects = async () => {
                     </Link>
                 ))}
             </div>
-            <Link href="/portfolio" className="font-bold hover:text-amber-500">
+            {/*<Link href="/portfolio" className="font-bold hover:text-amber-500">
                 See more projects →
-            </Link>
+            </Link>*/}
         </>
     );
 };

@@ -73,9 +73,33 @@ const data = Object.seal({
     ],
     experience: [
         {
+            company: 'Synthesia (Remote) 🌍',
+            website: 'https://synthesia.io/',
+            dateStart: 'November 2025',
+            dateEnd: '',
+            positions: [
+                {
+                    title: 'Senior Software Developer',
+                    dateStart: 'November 2025',
+                    dateEnd: '',
+                    website: '',
+                    positionDescription: '',
+                    description: [
+                        'Empowering engineers to deliver high-performance features across the entire frontend stack',
+                        'Collaboration on CI/CD pipelines to enhance deployment efficiency and reliability',
+                        'Establishing best practices for frontend tooling, fostering a culture of quality and innovation',
+                    ],
+                },
+            ],
+            description: [
+                'Synthesia is the #1 rated AI video communications platform. Thousands of companies use it to create videos in 140 languages, saving up to 80% of their time and budget. 👉 Trusted by Zoom, Xerox, Teleperformance, Amazon and more.',
+            ],
+            stack: 'React, Typescript, Docker, Datadog, Node.js, AWS, Terraform',
+        },
+        {
             company: 'Self-employed (Remote) 🌍',
             dateStart: 'April 2025',
-            dateEnd: '',
+            dateEnd: 'November 2025',
             positions: [
                 {
                     title: 'Senior Software Developer at Innervate (Remote, contract) 🌍',

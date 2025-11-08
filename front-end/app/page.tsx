@@ -72,14 +72,14 @@ export default async function Home() {
                             </div>
                             <div className="flex flex-col justify-center">
                                 <h1 className="mb-2 text-xl md:text-2xl lg:text-3xl">Hi, I&apos;m Oleksii Popov,</h1>
-                                <div className="mb-4 text-xl lg:text-2xl">Freelance Front End Leaning Full-Stack Software Developer</div>
+                                <div className="mb-4 text-xl lg:text-2xl">Front End Leaning Full-Stack Software Developer</div>
                                 <div className="mb-4">
                                     with 14 years of experience crafting robust software solutions using React, Node.js, JavaScript, TypeScript, and
                                     AWS.
                                 </div>
                             </div>
                         </div>
-                        <div className="mb-4">
+                        {/*<div className="mb-4">
                             <Link className="font-bold text-amber-500" href={content.services.scheduleCall.url} target="_blank">
                               Book a call with me
                             </Link>, if you need help with:
@@ -114,7 +114,7 @@ export default async function Home() {
                                 {content.services.scheduleCall.title}
                             </Link>{' '}
                             right away.
-                        </div>
+                        </div>*/}
                         <p className="mb-4">
                             Curious about my professional journey?{' '}
                             <Link className="font-bold" href={'/resume'}>
