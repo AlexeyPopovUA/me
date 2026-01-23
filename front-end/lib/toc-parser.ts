@@ -1,4 +1,4 @@
-import {Nodes} from 'hast';
+import type {Nodes} from 'hast';
 import {read} from "to-vfile";
 import {fromMarkdown} from "mdast-util-from-markdown";
 import {toHast} from "mdast-util-to-hast";
