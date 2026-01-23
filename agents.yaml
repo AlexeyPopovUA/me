@@ -6,16 +6,16 @@ project:
   type: monorepo
   description: Personal blog and portfolio website with Next.js frontend, backend services, and AWS infrastructure
   structure:
-    - front-end: Next.js 15 application with TypeScript, Tailwind CSS, MDX content
-    - back-end: Backend services and APIs
+    - front-end: Next.js 16 application with TypeScript, Tailwind CSS, MDX content
+    - back-end: Backend services and APIs (Express on AWS Lambda)
     - cloud: AWS CDK infrastructure as code
 
 # Agent Guidelines
 guidelines:
   code_style:
     - Use TypeScript for type safety
-    - Follow Next.js 15 best practices (App Router)
-    - Use Tailwind CSS for styling
+    - Follow Next.js 16 best practices (App Router, Turbopack)
+    - Use Tailwind CSS 4 for styling
     - Prettier for code formatting (configured)
     - ESLint for linting
     
@@ -34,30 +34,40 @@ guidelines:
 # Technology Stack
 tech_stack:
   frontend:
-    framework: Next.js 15.3.5
-    language: TypeScript 5.8.3
-    styling: Tailwind CSS 4.1.11
+    framework: Next.js 16.1.4
+    language: TypeScript 5.9.3
+    styling: Tailwind CSS 4.1.18
+    runtime: React 19.2.3
     ui_library: Custom components with tailwindcss-animate
     content: next-mdx-remote, remark, rehype plugins
     features:
       - MDX content rendering
-      - Syntax highlighting (shiki)
-      - Image optimization
+      - Syntax highlighting (shiki v3.21.0)
+      - Image optimization (sharp v0.34.5)
       - RSS feed generation
       - Mermaid diagrams support
       - Typography plugin for blog content
+      - Turbopack build optimization
       
   backend:
     location: back-end/demo
+    framework: Express 4.22.1
+    runtime: Node.js 24 on AWS Lambda
+    adapter: "@vendia/serverless-express"
+    language: TypeScript 5.9.3
     
   infrastructure:
     provider: AWS
-    iac: AWS CDK
+    iac: AWS CDK 2.235.1
     location: cloud directory
+    sdk: AWS SDK v3.974.0
+    runtime: Node.js 24
+    language: TypeScript 5.9.3
     
   tooling:
-    package_manager: pnpm
-    node_version: "22"
+    package_manager: pnpm 10.28.1
+    node_version: "24.13.0"
+    build_tool: Turbopack (Next.js 16)
 
 # Common Tasks
 tasks:
@@ -96,10 +106,11 @@ agents:
       - Handle MDX content rendering
       - Maintain responsive design
     tools:
-      - Next.js App Router
-      - TypeScript
-      - Tailwind CSS
-      - Shiki for syntax highlighting
+      - Next.js App Router (Next.js 16 with Turbopack)
+      - TypeScript 5.9.3
+      - Tailwind CSS 4.1.18
+      - Shiki v3.21.0 for syntax highlighting
+      - Sharp v0.34.5 for image processing
       
   content_editor:
     responsibilities:
@@ -108,17 +119,24 @@ agents:
       - Optimize images and media
       - Generate RSS feeds
     tools:
-      - MDX
-      - Remark/Rehype plugins
+      - MDX with next-mdx-remote
+      - Remark/Rehype plugins (unified ecosystem)
+      - rehype-unwrap-images (for image processing)
+      - Sharp for image optimization
       - Feed generation
       
   infrastructure_engineer:
     responsibilities:
-      - Manage AWS infrastructure with CDK
+      - Manage AWS infrastructure with CDK 2.235.1
       - Configure deployment pipelines
-      - Optimize cloud resources
+      - Optimize cloud resources (Lambda, DynamoDB, API Gateway)
       - Handle monitoring and logging
+      - Deploy Node.js 24 Lambda functions
     location: cloud directory
+    tools:
+      - AWS CDK 2.235.1
+      - AWS SDK v3.974.0
+      - TypeScript 5.9.3
     
   devops:
     responsibilities:
@@ -162,8 +180,82 @@ best_practices:
 considerations:
   - Project uses pnpm workspaces for monorepo management
   - pnpm configured with shamefully-hoist=true for compatibility
-  - Next.js 15 with React 19 - check compatibility for new dependencies
+  - Next.js 16 with React 19 - check compatibility for new dependencies
   - Static site generation is preferred over SSR where possible
   - Content is stored in MDX format with frontmatter metadata
   - Use pnpm --filter <workspace> for workspace-specific commands
   - Use pnpm -r for recursive operations across all workspaces
+  - Image processing uses sharp (build-time only, server-side)
+  - MDX plugins: rehype-unwrap-images for image unwrapping
+  - Type definitions: Use @types namespace (e.g., @types/hast)
+  - All deprecated packages resolved as of January 23, 2026
+
+# Recent Upgrades (2026)
+recent_upgrades:
+  session_7_jan_23_2026:
+    focus: Deprecated package cleanup
+    changes:
+      - Migrated from remark-unwrap-images to rehype-unwrap-images
+      - Replaced deprecated hast package with @types/hast
+      - All deprecated packages resolved
+    commits:
+      - "2635ab2: remark-unwrap-images migration"
+      - "adbe7f1: hast → @types/hast migration"
+      - "09d6f41: session documentation"
+      
+  session_6_jan_2026:
+    focus: jimp → sharp migration
+    changes:
+      - Replaced jimp with sharp for image processing
+      - Created server-only image processing module
+      - 10x performance improvement
+      - Cleaner dependency tree (-809 lines)
+    commit: "10cef4b: jimp → sharp migration"
+    
+  session_5_jan_2026:
+    focus: Shiki v3 upgrade
+    changes:
+      - Upgraded shiki from v1.29.2 to v3.21.0
+      - Zero code changes required
+      - Maintained compatibility with existing syntax highlighting
+    commit: "f04d71a: shiki v3.21.0 upgrade"
+    
+  session_4_jan_2026:
+    focus: Safe package upgrades
+    changes:
+      - React 19.1.0 → 19.2.3
+      - TypeScript 5.8.3 → 5.9.3 (all workspaces)
+      - Updated all related type definitions
+    commit: "001b1b1: React + TypeScript upgrades"
+    
+  session_3_jan_2026:
+    focus: Tailwind CSS upgrade
+    changes:
+      - Tailwind CSS 4.1.11 → 4.1.18
+    commit: "6a50fc1: Tailwind CSS 4.1.18"
+    
+  session_2_jan_2026:
+    focus: Next.js 16 upgrade
+    changes:
+      - Next.js 15.3.5 → 16.1.4
+      - Turbopack as default build tool
+    commit: "88cd7f7: Next.js 16.1.4 upgrade"
+    
+  session_1_dec_2025:
+    focus: Node.js 24 and AWS updates
+    changes:
+      - Node.js upgrade to 24.13.0
+      - AWS CDK and SDK updates
+      - Lambda runtime updated to Node 24
+    commit: "2bccfae: Node.js 24 upgrade"
+
+# Upgrade Status
+upgrade_status:
+  status: "✅ All up-to-date"
+  last_updated: "January 23, 2026"
+  outdated_packages: 1
+  notes:
+    - "@types/node at 24.10.9 is correct (matches Node.js 24 runtime)"
+    - "No deprecated packages remaining"
+    - "All regular packages on latest stable versions"
+
