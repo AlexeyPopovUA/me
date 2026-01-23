@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install-all": "npm i -ws --include-workspace-root",
-    "dev-front": "npm run dev -w front-end",
-    "update-dependencies-all": "npm run -ws --include-workspace-root update-dependencies",
+    "install-all": "pnpm install",
+    "dev-front": "pnpm --filter front-end dev",
+    "update-dependencies-all": "pnpm -r update-dependencies",
     "update-dependencies": "npx npm-check-updates -u --packageFile package.json"
   },
   "keywords": [],

@@ -20,7 +20,7 @@ guidelines:
     - ESLint for linting
     
   architecture:
-    - Monorepo structure with npm workspaces
+    - Monorepo structure with pnpm workspaces
     - Frontend: Static site generation with Next.js
     - Content: MDX-based blog posts and pages
     - Infrastructure: AWS CDK for cloud resources
@@ -29,7 +29,7 @@ guidelines:
     - Components: React functional components with TypeScript
     - Styling: Tailwind CSS utility classes
     - Content: MDX files in front-end/content directory
-    - Scripts: npm workspace commands for cross-package operations
+    - Scripts: pnpm workspace commands for cross-package operations
 
 # Technology Stack
 tech_stack:
@@ -56,21 +56,26 @@ tech_stack:
     location: cloud directory
     
   tooling:
-    package_manager: npm
+    package_manager: pnpm
     dependency_updates: Renovate bot
     node_version: "22"
 
 # Common Tasks
 tasks:
   development:
-    start_dev_server: npm run dev-front
-    install_dependencies: npm run install-all
-    update_dependencies: npm run update-dependencies-all
+    start_dev_server: pnpm run dev-front
+    install_dependencies: pnpm install
+    update_dependencies: pnpm -r update-dependencies
     
   frontend:
-    dev: npm run dev -w front-end
-    build: npm run build -w front-end
-    lint: npm run lint -w front-end
+    dev: pnpm --filter front-end dev
+    build: pnpm --filter front-end build
+    lint: pnpm --filter front-end lint
+    
+  cloud:
+    type_check: pnpm --filter cloud type-check
+    deploy: pnpm --filter cloud deploy
+    diff: pnpm --filter cloud cdk-diff-stacks
     
   content:
     location: front-end/content
@@ -127,6 +132,8 @@ agents:
 important_files:
   configuration:
     - package.json: Root workspace configuration
+    - pnpm-workspace.yaml: pnpm workspace configuration
+    - .npmrc: pnpm configuration (shamefully-hoist enabled)
     - front-end/package.json: Frontend dependencies
     - tsconfig.json: TypeScript configuration
     - front-end/next.config.ts: Next.js configuration
@@ -157,8 +164,11 @@ best_practices:
 
 # Known Issues & Considerations
 considerations:
-  - Project uses npm workspaces for monorepo management
+  - Project uses pnpm workspaces for monorepo management
+  - pnpm configured with shamefully-hoist=true for compatibility
   - Next.js 15 with React 19 - check compatibility for new dependencies
   - Static site generation is preferred over SSR where possible
   - Content is stored in MDX format with frontmatter metadata
   - Renovate bot actively manages dependency updates
+  - Use pnpm --filter <workspace> for workspace-specific commands
+  - Use pnpm -r for recursive operations across all workspaces

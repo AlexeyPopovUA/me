@@ -1,0 +1,4 @@
+packages:
+  - 'front-end'
+  - 'cloud'
+  - 'back-end/*'

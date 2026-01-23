@@ -7,7 +7,7 @@ on:
     paths:
       - 'cloud/**'
       - 'back-end/**'
-      - 'package-lock.json'
+      - 'pnpm-lock.yaml'
 
 env:
   DEFAULT_BRANCH: main
@@ -34,12 +34,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install, type-check, lint
         run: |
-          npm ci --include-workspace-root
-          npm run -w cloud type-check
+          pnpm install --frozen-lockfile
+          pnpm --filter cloud type-check
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -49,8 +66,8 @@ jobs:
 
       - name: Deploy infrastructure
         if: env.SAFE_SOURCE_NAME == env.DEFAULT_BRANCH
-        run: npm run deploy -w cloud
+        run: pnpm --filter cloud deploy
 
       - name: Diff infrastructure
         if: env.SAFE_SOURCE_NAME != env.DEFAULT_BRANCH
-        run: npm run cdk-diff-stacks -w cloud
+        run: pnpm --filter cloud cdk-diff-stacks
