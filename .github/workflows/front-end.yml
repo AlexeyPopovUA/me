@@ -51,10 +51,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install, type-check
-        run: |
-          pnpm install --frozen-lockfile
-          # pnpm --filter front-end type-check
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Puppeteer browsers
+        run: pnpm --filter front-end exec puppeteer browsers install chrome
 
       - name: Build
         run: pnpm --filter front-end build
