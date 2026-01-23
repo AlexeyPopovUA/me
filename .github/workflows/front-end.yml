@@ -7,6 +7,7 @@ on:
     paths:
       - 'front-end/**'
       - 'pnpm-lock.yaml'
+      - '.github/workflows/front-end.yml'
 
 env:
   S3_HOSTING_BUCKET: me-hosting

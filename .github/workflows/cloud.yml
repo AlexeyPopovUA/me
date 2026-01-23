@@ -8,6 +8,7 @@ on:
       - 'cloud/**'
       - 'back-end/**'
       - 'pnpm-lock.yaml'
+      - '.github/workflows/cloud.yml'
 
 env:
   DEFAULT_BRANCH: main
