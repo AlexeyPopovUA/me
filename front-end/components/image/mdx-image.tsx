@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 
 import {ContentImage} from "@/components/image/ContentImage";
-import {readBlurredImageSrcPair} from "@/lib/image";
+import {readBlurredImageSrcPair} from "@/lib/image-server";
 import {ThumbnailImage} from "@/components/image/animated-image-loading/thumbnail-image";
 import {imageLoader} from "@/components/image/image-loader";
 

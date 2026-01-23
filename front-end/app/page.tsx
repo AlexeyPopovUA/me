@@ -4,7 +4,8 @@ import { Metadata } from 'next';
 
 import LatestArticles from '@/app/latest-articles';
 import FeaturedProjects from '@/app/featured-projects';
-import { getOGImageURL, readBlurredImageSrcPair } from '@/lib/image';
+import { getOGImageURL } from '@/lib/image';
+import { readBlurredImageSrcPair } from '@/lib/image-server';
 import { getFrontMatterDataByPath } from '@/lib/mdx-utils';
 import { getPagePathByDirName } from '@/lib/files';
 import { getRssMetadataObject } from '@/lib/rss';

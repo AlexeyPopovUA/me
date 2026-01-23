@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { getLastArticles } from '@/lib/articles';
 import { ThumbnailImage } from '@/components/image/animated-image-loading/thumbnail-image';
-import { getInsideImageURL, readBlurredImageSrcPair } from '@/lib/image';
+import { getInsideImageURL } from '@/lib/image';
+import { readBlurredImageSrcPair } from '@/lib/image-server';
 
 const LatestArticles = async () => {
     const lastNArticles = await getLastArticles({ limit: 5 });

@@ -3,7 +3,8 @@ import {Metadata} from "next";
 
 import {getProjectSlugs} from "@/lib/articles";
 import {Carousel} from "@/components/image/carousel";
-import {getInsideImageURL, getOGImageURL, readBlurredImageSrcPair} from "@/lib/image";
+import {getInsideImageURL, getOGImageURL} from "@/lib/image";
+import {readBlurredImageSrcPair} from "@/lib/image-server";
 import {content} from "@/app/configuration/content";
 import {ArticleContainer} from "@/components/ArticleContainer";
 import {environment} from "@/app/configuration/environment";

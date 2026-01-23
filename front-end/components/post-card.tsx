@@ -3,7 +3,8 @@ import Link from "next/link";
 import {PostType} from "@/lib/posts";
 import {ThumbnailImage} from "@/components/image/animated-image-loading/thumbnail-image";
 import Tag from "@/components/primitive/Tag";
-import {getInsideImageURL, readBlurredImageSrcPair} from "@/lib/image";
+import {getInsideImageURL} from "@/lib/image";
+import {readBlurredImageSrcPair} from "@/lib/image-server";
 
 type Props = {
   type: PostType,
