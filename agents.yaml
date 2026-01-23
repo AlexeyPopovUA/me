@@ -1,0 +1,164 @@
+# AI Agents Configuration for "me" Project
+# Personal blog and portfolio website
+
+project:
+  name: me
+  type: monorepo
+  description: Personal blog and portfolio website with Next.js frontend, backend services, and AWS infrastructure
+  structure:
+    - front-end: Next.js 15 application with TypeScript, Tailwind CSS, MDX content
+    - back-end: Backend services and APIs
+    - cloud: AWS CDK infrastructure as code
+
+# Agent Guidelines
+guidelines:
+  code_style:
+    - Use TypeScript for type safety
+    - Follow Next.js 15 best practices (App Router)
+    - Use Tailwind CSS for styling
+    - Prettier for code formatting (configured)
+    - ESLint for linting
+    
+  architecture:
+    - Monorepo structure with npm workspaces
+    - Frontend: Static site generation with Next.js
+    - Content: MDX-based blog posts and pages
+    - Infrastructure: AWS CDK for cloud resources
+    
+  conventions:
+    - Components: React functional components with TypeScript
+    - Styling: Tailwind CSS utility classes
+    - Content: MDX files in front-end/content directory
+    - Scripts: npm workspace commands for cross-package operations
+
+# Technology Stack
+tech_stack:
+  frontend:
+    framework: Next.js 15.3.5
+    language: TypeScript 5.8.3
+    styling: Tailwind CSS 4.1.11
+    ui_library: Custom components with tailwindcss-animate
+    content: next-mdx-remote, remark, rehype plugins
+    features:
+      - MDX content rendering
+      - Syntax highlighting (shiki)
+      - Image optimization
+      - RSS feed generation
+      - Mermaid diagrams support
+      - Typography plugin for blog content
+      
+  backend:
+    location: back-end/demo
+    
+  infrastructure:
+    provider: AWS
+    iac: AWS CDK
+    location: cloud directory
+    
+  tooling:
+    package_manager: npm
+    dependency_updates: Renovate bot
+    node_version: "22"
+
+# Common Tasks
+tasks:
+  development:
+    start_dev_server: npm run dev-front
+    install_dependencies: npm run install-all
+    update_dependencies: npm run update-dependencies-all
+    
+  frontend:
+    dev: npm run dev -w front-end
+    build: npm run build -w front-end
+    lint: npm run lint -w front-end
+    
+  content:
+    location: front-end/content
+    format: MDX
+    features:
+      - GitHub Flavored Markdown
+      - Emoji support
+      - Auto-linked headings
+      - Syntax highlighting
+      - Mermaid diagrams
+
+# Agent Roles
+agents:
+  frontend_developer:
+    responsibilities:
+      - Implement UI components with React and TypeScript
+      - Style with Tailwind CSS
+      - Optimize performance and accessibility
+      - Handle MDX content rendering
+      - Maintain responsive design
+    tools:
+      - Next.js App Router
+      - TypeScript
+      - Tailwind CSS
+      - Shiki for syntax highlighting
+      
+  content_editor:
+    responsibilities:
+      - Create and edit MDX blog posts
+      - Manage content metadata
+      - Optimize images and media
+      - Generate RSS feeds
+    tools:
+      - MDX
+      - Remark/Rehype plugins
+      - Feed generation
+      
+  infrastructure_engineer:
+    responsibilities:
+      - Manage AWS infrastructure with CDK
+      - Configure deployment pipelines
+      - Optimize cloud resources
+      - Handle monitoring and logging
+    location: cloud directory
+    
+  devops:
+    responsibilities:
+      - Maintain build and deployment processes
+      - Update dependencies via Renovate
+      - Ensure CI/CD functionality
+      - Monitor application health
+
+# Important Files
+important_files:
+  configuration:
+    - package.json: Root workspace configuration
+    - front-end/package.json: Frontend dependencies
+    - tsconfig.json: TypeScript configuration
+    - front-end/next.config.ts: Next.js configuration
+    - renovate.json: Dependency update automation
+    
+  styling:
+    - front-end/tailwind.config.ts: Tailwind configuration
+    - front-end/postcss.config.mjs: PostCSS setup
+    - front-end/.prettierrc.js: Code formatting rules
+    
+  content:
+    - front-end/content/: MDX blog posts and pages
+    - front-end/app/: Next.js app router pages
+    - front-end/components/: React components
+    - front-end/lib/: Utility functions
+
+# Best Practices
+best_practices:
+  - Always run TypeScript type checking before committing
+  - Test responsive design on multiple screen sizes
+  - Optimize images before adding to content
+  - Use semantic HTML and ARIA labels for accessibility
+  - Keep components small and focused
+  - Write meaningful commit messages
+  - Update dependencies regularly via Renovate
+  - Maintain consistent code formatting with Prettier
+  - Follow Next.js performance best practices (Image optimization, lazy loading, etc.)
+
+# Known Issues & Considerations
+considerations:
+  - Project uses npm workspaces for monorepo management
+  - Next.js 15 with React 19 - check compatibility for new dependencies
+  - Static site generation is preferred over SSR where possible
+  - Content is stored in MDX format with frontmatter metadata
+  - Renovate bot actively manages dependency updates
