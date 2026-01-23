@@ -20,12 +20,16 @@ export class DemoConstruct extends Construct {
 
         this.lambda = new NodejsFunction(this, `${props.project}-${props.name}-lambda`, {
             handler: "handler",
-            runtime: Runtime.NODEJS_20_X,
+            runtime: Runtime.NODEJS_24_X,
             entry: resolve(process.cwd(), "../back-end/demo/src/lambda.ts"),
             timeout: Duration.seconds(10),
             logRetention: RetentionDays.ONE_DAY,
             memorySize: 128,
             description: `${props.project}-${props.name}-lambda`,
+            bundling: {
+                externalModules: ['@aws-sdk/*'],
+                nodeModules: ['@vendia/serverless-express']
+            },
             environment: {
                 REGION: props.region,
                 DEBUG: props.debug ? "express:*" : ""

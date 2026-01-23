@@ -4,11 +4,14 @@
   "description": "lambda that demos monorepo setup",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.844.0",
-    "@aws-sdk/lib-dynamodb": "^3.844.0",
+    "@aws-sdk/client-dynamodb": "^3.974.0",
+    "@aws-sdk/lib-dynamodb": "^3.974.0",
     "@vendia/serverless-express": "^4.12.6",
-    "aws-cdk-lib": "^2.204.0",
+    "aws-cdk-lib": "^2.235.1",
     "constructs": "^10.4.2",
     "cors": "^2.8.5",
     "express": "^4.21.2",

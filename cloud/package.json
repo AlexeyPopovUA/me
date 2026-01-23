@@ -1,6 +1,9 @@
 {
   "name": "cloud",
   "version": "0.1.0",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "scripts": {
     "clean": "rm -rf ./cdk.out",
     "cdk-synth-stacks": "cdk synth",
@@ -12,16 +15,16 @@
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.10",
     "@types/jest": "^30.0.0",
-    "@types/node": "^22.15.29",
-    "aws-cdk": "^2.1020.2",
+    "@types/node": "^24.10.9",
+    "aws-cdk": "^2.1102.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },
   "dependencies": {
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.114.1-alpha.0",
-    "@aws-sdk/client-dynamodb": "^3.844.0",
-    "@aws-sdk/lib-dynamodb": "^3.844.0",
-    "aws-cdk-lib": "2.204.0",
+    "@aws-sdk/client-dynamodb": "^3.974.0",
+    "@aws-sdk/lib-dynamodb": "^3.974.0",
+    "aws-cdk-lib": "^2.235.1",
     "constructs": "^10.4.2",
     "source-map-support": "^0.5.21",
     "demo": "workspace:*"
