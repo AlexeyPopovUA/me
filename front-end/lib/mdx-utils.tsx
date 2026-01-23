@@ -1,7 +1,7 @@
 import React from 'react';
 import emoji from "remark-emoji";
 import rehypeRaw from "rehype-raw";
-import remarkUnwrapImages from "remark-unwrap-images";
+import rehypeUnwrapImages from "rehype-unwrap-images";
 import {compileMDX, MDXRemoteProps} from "next-mdx-remote/rsc";
 import {read} from "to-vfile";
 import remarkGfm from 'remark-gfm'
@@ -58,11 +58,11 @@ export async function getArticleMdxDataByPath({path}: { path: string }) {
             behavior: 'wrap',
             test: (node: Parameters<TestFunction>[0]) => node.tagName !== 'h1' // Skip h1 headings
           }],
+          [rehypeUnwrapImages],
         ],
         remarkPlugins: [
           [remarkMermaid],
           [emoji, {accessible: true, emoticon: false}],
-          [remarkUnwrapImages],
           [remarkCode],
           [remarkGfm],
         ],
@@ -93,10 +93,10 @@ export async function getProjectMdxDataByPath({path}: { path: string }) {
             behavior: 'wrap',
             test: (node: Parameters<TestFunction>[0]) => node.tagName !== 'h1' // Skip h1 headings
           }],
+          [rehypeUnwrapImages],
         ],
         remarkPlugins: [
           [emoji, {accessible: true, emoticon: false}],
-          [remarkUnwrapImages],
           [remarkGfm],
         ],
       }
