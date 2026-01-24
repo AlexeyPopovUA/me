@@ -39,7 +39,7 @@ export function ThumbnailImageClient(props: Props) {
   );
 
   return (
-    <div onClick={props.onClick}>
+    <div onClick={props.onClick} className="h-full">
       <Image
         width={props.width}
         height={props.height}
