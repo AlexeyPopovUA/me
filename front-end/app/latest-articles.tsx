@@ -3,6 +3,7 @@ import { getLastArticles } from '@/lib/articles';
 import { ThumbnailImage } from '@/components/image/animated-image-loading/thumbnail-image';
 import { getInsideImageURL } from '@/lib/image';
 import { readBlurredImageSrcPair } from '@/lib/image-server';
+import { BlogSection, BlogPostCard } from '@/components/blog-section';
 
 const LatestArticles = async () => {
     const lastNArticles = await getLastArticles({ limit: 5 });
@@ -10,7 +11,7 @@ const LatestArticles = async () => {
     const articlesWithImages = await Promise.all(
         lastNArticles.map(async (article) => {
             const { blurDataURL, ratio } = await readBlurredImageSrcPair({ src: article.thumbnail });
-            const imageURL = getInsideImageURL({ src: article.thumbnail, width: 160, height: 160, quality: 90 });
+            const imageURL = getInsideImageURL({ src: article.thumbnail, width: 240, height: 240, quality: 90 });
 
             return {
                 ...article,
@@ -22,31 +23,28 @@ const LatestArticles = async () => {
     );
 
     return (
-        <>
-            <div className="list-none">
-                {articlesWithImages.map((article) => (
-                    <div className="font-bold underline" key={article.slug}>
-                        <Link href={`/blog/${article.slug}`} passHref className="flex items-center gap-3 py-4">
-                            <ThumbnailImage
-                                className="flex-shrink-0"
-                                imageClassName="rounded-md object-cover"
-                                unoptimized={true}
-                                src={article.imageURL}
-                                blurDataURL={article.blurDataURL}
-                                alt={article.title}
-                                loading="lazy"
-                                width={160}
-                                height={160 / article.ratio}
-                            />
-                            <span>{article.title}</span>
-                        </Link>
-                    </div>
-                ))}
-            </div>
-            <Link href="/blog" className="font-bold hover:text-amber-500">
-                See more articles →
-            </Link>
-        </>
+        <BlogSection>
+            {articlesWithImages.map((article, index) => (
+                <BlogPostCard
+                    key={article.slug}
+                    title={article.title}
+                    href={`/blog/${article.slug}`}
+                    index={index}
+                    image={
+                        <ThumbnailImage
+                            imageClassName="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            unoptimized={true}
+                            src={article.imageURL}
+                            blurDataURL={article.blurDataURL}
+                            alt={article.title}
+                            loading="lazy"
+                            width={96}
+                            height={64}
+                        />
+                    }
+                />
+            ))}
+        </BlogSection>
     );
 };
 

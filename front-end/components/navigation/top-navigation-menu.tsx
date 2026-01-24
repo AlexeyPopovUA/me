@@ -1,26 +1,5 @@
-import NavMenu from "@/components/navigation/nav-menu";
-import NavMenuMobile from "@/components/navigation/nav-menu-mobile";
+import {Navbar} from "@/components/navigation/navbar";
 
-const menuItems = [
-    {
-        title: "Blog",
-        link: "/blog"
-    }, {
-        title: "Portfolio",
-        link: "/portfolio"
-    }, {
-        title: "Resume",
-        link: "/resume"
-    }, {
-        title: "Contact",
-        link: "/contact"
-    },
-];
-
-const TopNavigationMenu = () =>
-    <>
-        <NavMenu items={menuItems}/>
-        <NavMenuMobile items={menuItems}/>
-    </>;
+const TopNavigationMenu = () => <Navbar />;
 
 export default TopNavigationMenu;

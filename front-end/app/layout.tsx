@@ -1,15 +1,16 @@
 import React, {PropsWithChildren} from "react";
-import {Domine} from 'next/font/google'
+import {Inter} from 'next/font/google'
 import clsx from "clsx";
 
 import TopNavigationMenu from "@/components/navigation/top-navigation-menu";
 import Footer from "@/app/footer";
 import {environment} from "@/app/configuration/environment";
 import {Analytics} from "@/components/analytics";
+import {ThemeProvider} from "@/components/theme-provider";
 
 import './globals.css';
 
-const font = Domine({subsets: ['latin']});
+const font = Inter({subsets: ['latin']});
 
 export async function generateMetadata() {
     return {
@@ -24,14 +25,14 @@ const NODE_ENV = process.env.NODE_ENV;
 
 export default function RootLayout({children}: PropsWithChildren) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
         <body className={clsx(font.className, "relative")}>
-        <header className="print:hidden w-full border-b bg-white">
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
             <TopNavigationMenu/>
-        </header>
-        {children}
-        <Footer/>
-        {NODE_ENV === "production" ? <Analytics/> : null}
+            {children}
+            <Footer/>
+            {NODE_ENV === "production" ? <Analytics/> : null}
+        </ThemeProvider>
         </body>
         </html>
     )
