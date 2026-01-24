@@ -28,16 +28,18 @@ export function PostCardClient({ type, title, date, description, link, tags, pro
                 <article className="h-full bg-card border border-border rounded-xl overflow-hidden hover:border-primary/50 transition-all duration-300 hover-lift">
                     {/* Image */}
                     <div className="aspect-video overflow-hidden bg-muted relative">
-                        <ThumbnailImage
-                            imageClassName="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            unoptimized={true}
-                            src={imageURL}
-                            blurDataURL={blurDataURL}
-                            alt={title}
-                            loading="lazy"
-                            width={560}
-                            height={315}
-                        />
+                        <div className="w-full h-full transition-transform duration-500 ease-out group-hover:scale-110">
+                            <ThumbnailImage
+                                imageClassName="w-full h-full object-cover"
+                                unoptimized={true}
+                                src={imageURL}
+                                blurDataURL={blurDataURL}
+                                alt={title}
+                                loading="lazy"
+                                width={560}
+                                height={315}
+                            />
+                        </div>
                         {/* Category Badge for Projects */}
                         {projectType && (
                             <div className="absolute top-4 right-4">
