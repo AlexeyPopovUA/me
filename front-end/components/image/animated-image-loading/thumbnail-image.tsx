@@ -15,7 +15,7 @@ type Props = ImageProps & {
 
 export function ThumbnailImage(props: Props) {
   return (
-    <div className={clsx(props.className, `relative overflow-hidden`)}>
+    <div className={clsx(props.className, `relative overflow-hidden h-full`)}>
       <ThumbnailImageClient
         blurDataURL={props.blurDataURL}
         width={props.width}
