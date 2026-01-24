@@ -19,8 +19,8 @@ export function ThumbnailImageClient(props: Props) {
     setLoaded(true);
   }, []);
 
-  const classNameBlurred = clsx(props.className, `thumbnail-client-image absolute w-full h-full left-0 right-0 top-0 bottom-0 z-0`);
-  const classNameFinal = clsx(props.className, `thumbnail-client-image absolute w-full h-full left-0 right-0 top-0 bottom-0 z-10`);
+  const classNameBlurred = clsx(props.className, `thumbnail-client-image`);
+  const classNameFinal = clsx(props.className, `thumbnail-client-image absolute w-full h-full left-0 right-0 top-0 bottom-0 z-0`);
 
   const commonCfg: Partial<ImageProps> = useMemo(
     () => ({
@@ -33,36 +33,23 @@ export function ThumbnailImageClient(props: Props) {
     [props.priority, props.width, props.height, props.loading],
   );
 
-  const blurImageStyle: CSSProperties = useMemo(
-    () => ({
-      ...commonCfg.style,
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-    }),
-    [commonCfg.style],
-  );
-
   const normalImageStyle: CSSProperties = useMemo(
     () => ({
       ...commonCfg.style,
       opacity: loaded ? 1 : 0,
       transition: 'opacity 0.3s ease-in-out',
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
     }),
     [commonCfg.style, loaded],
   );
 
   return (
-    <div onClick={props.onClick} className="relative w-full h-full">
+    <div onClick={props.onClick}>
       <Image
         {...commonCfg}
         aria-hidden={true}
         className={classNameBlurred}
         src={props.blurDataURL}
-        style={blurImageStyle}
+        style={commonCfg.style}
         alt={props.alt}
         unoptimized={true}
       />
