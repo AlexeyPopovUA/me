@@ -36,11 +36,22 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function Post() {
     return (
-        <article className="container mx-auto px-4 py-8 sm:px-8 md:px-12">
-            <div className="prose prose-sm md:prose-base lg:prose-lg mb-4">
-                <h1>Blog</h1>
-            </div>
-            <AllPosts />
-        </article>
+        <main className="min-h-screen bg-background">
+            {/* Hero Section */}
+            <section className="pt-32 pb-16 px-6">
+                <div className="container mx-auto max-w-6xl">
+                    <div className="text-center mb-16">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">Blog</h1>
+                        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+                            Insights on front-end, cloud, and back-end development. Sharing my experiences with React, Node.js, AWS, and modern software
+                            engineering.
+                        </p>
+                    </div>
+
+                    {/* Blog Grid */}
+                    <AllPosts />
+                </div>
+            </section>
+        </main>
     );
 }

@@ -52,189 +52,174 @@ export const metadata: Metadata = {
 
 export default function SocialProfilesPage() {
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-6">Social Profiles</h1>
+    <main className="min-h-screen bg-background">
+      <section className="pt-32 pb-16 px-6">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Social Profiles</h1>
+            <p className="text-lg text-muted-foreground">
+              Connect with {content.authorName} on various social media platforms and professional networks.
+            </p>
+          </div>
 
-      <div className="prose prose-lg max-w-none">
-        <p className="text-lg text-gray-600 mb-8">
-          Connect with {content.authorName} on various social media platforms and professional networks.
-        </p>
-
-        <div className="grid gap-6 md:grid-cols-2">
-          <section>
-            <h2 className="text-xl font-semibold mb-4">Professional Networks</h2>
-            <ul className="space-y-3">
-              <li>
+          <div className="grid gap-6 md:grid-cols-2">
+            <section className="space-y-4">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">Professional Networks</h2>
+              <div className="space-y-3">
                 <a
                   href={content.socialLinks.linkedin}
                   rel="nofollow noopener noreferrer"
                   target="_blank"
-                  className="text-blue-600 hover:text-blue-800 underline"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
                 >
-                  LinkedIn - Professional Profile
+                  <span className="text-foreground hover:text-primary font-medium">LinkedIn</span>
+                  <p className="text-sm text-muted-foreground mt-1">Professional Profile</p>
                 </a>
-              </li>
-              <li>
                 <a
                   href={content.socialLinks.braintrust}
                   rel="nofollow noopener noreferrer"
                   target="_blank"
-                  className="text-blue-600 hover:text-blue-800 underline"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
                 >
-                  Braintrust - Freelance Profile
+                  <span className="text-foreground hover:text-primary font-medium">Braintrust</span>
+                  <p className="text-sm text-muted-foreground mt-1">Freelance Profile</p>
                 </a>
-              </li>
-              <li>
                 <a
                   href={content.socialLinks.freelancetribes}
                   rel="nofollow noopener noreferrer"
                   target="_blank"
-                  className="text-blue-600 hover:text-blue-800 underline"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
                 >
-                  Freelancetribes - Freelance Profile
+                  <span className="text-foreground hover:text-primary font-medium">Freelancetribes</span>
+                  <p className="text-sm text-muted-foreground mt-1">Freelance Profile</p>
                 </a>
-              </li>
-              <li>
                 <a
                   href={content.socialLinks.buffer_start_page}
                   rel="nofollow noopener noreferrer"
                   target="_blank"
-                  className="text-blue-600 hover:text-blue-800 underline"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
                 >
-                  Buffer - Start Page Profile
+                  <span className="text-foreground hover:text-primary font-medium">Buffer</span>
+                  <p className="text-sm text-muted-foreground mt-1">Start Page Profile</p>
                 </a>
-              </li>
-              <li>
                 <a
                   href={content.socialLinks.rok}
                   rel="nofollow noopener noreferrer"
                   target="_blank"
-                  className="text-blue-600 hover:text-blue-800 underline"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
                 >
-                  RemoteOK - Remote Work Profile
+                  <span className="text-foreground hover:text-primary font-medium">RemoteOK</span>
+                  <p className="text-sm text-muted-foreground mt-1">Remote Work Profile</p>
                 </a>
-              </li>
-              <li>
                 <a
                   href={content.socialLinks.wko}
                   rel="nofollow noopener noreferrer"
                   target="_blank"
-                  className="text-blue-600 hover:text-blue-800 underline"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
                 >
-                  WKO Austria - Business Profile
+                  <span className="text-foreground hover:text-primary font-medium">WKO Austria</span>
+                  <p className="text-sm text-muted-foreground mt-1">Business Profile</p>
                 </a>
-              </li>
-            </ul>
-          </section>
+              </div>
+            </section>
 
-          <section>
-            <h2 className="text-xl font-semibold mb-4">Development Platforms</h2>
-            <ul className="space-y-3">
-              <li>
+            <section className="space-y-4">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">Development Platforms</h2>
+              <div className="space-y-3">
                 <a
                   href={content.socialLinks.github}
                   rel="nofollow noopener noreferrer"
                   target="_blank"
-                  className="text-blue-600 hover:text-blue-800 underline"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
                 >
-                  GitHub - Open Source Projects
+                  <span className="text-foreground hover:text-primary font-medium">GitHub</span>
+                  <p className="text-sm text-muted-foreground mt-1">Open Source Projects</p>
                 </a>
-              </li>
-              <li>
                 <a
                   href={content.socialLinks.gitlab}
                   rel="nofollow noopener noreferrer"
                   target="_blank"
-                  className="text-blue-600 hover:text-blue-800 underline"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
                 >
-                  GitLab - Code Repository
+                  <span className="text-foreground hover:text-primary font-medium">GitLab</span>
+                  <p className="text-sm text-muted-foreground mt-1">Code Repository</p>
                 </a>
-              </li>
-              <li>
                 <a
                   href={content.socialLinks.npm}
                   rel="nofollow noopener noreferrer"
                   target="_blank"
-                  className="text-blue-600 hover:text-blue-800 underline"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
                 >
-                  NPM - Published Packages
+                  <span className="text-foreground hover:text-primary font-medium">NPM</span>
+                  <p className="text-sm text-muted-foreground mt-1">Published Packages</p>
                 </a>
-              </li>
-            </ul>
-          </section>
+              </div>
 
-          <section>
-            <h2 className="text-xl font-semibold mb-4">Content & Social</h2>
-            <ul className="space-y-3">
-              <li>
+              <h2 className="text-2xl font-semibold text-foreground mb-4 mt-8">Content & Social</h2>
+              <div className="space-y-3">
                 <a
                   href={content.socialLinks.medium}
                   rel="nofollow noopener noreferrer"
                   target="_blank"
-                  className="text-blue-600 hover:text-blue-800 underline"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
                 >
-                  Medium - Technical Articles
+                  <span className="text-foreground hover:text-primary font-medium">Medium</span>
+                  <p className="text-sm text-muted-foreground mt-1">Technical Articles</p>
                 </a>
-              </li>
-              <li>
                 <a
                   href={content.socialLinks.devto}
                   rel="nofollow noopener noreferrer"
                   target="_blank"
-                  className="text-blue-600 hover:text-blue-800 underline"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
                 >
-                  Dev.to - Developer Community
+                  <span className="text-foreground hover:text-primary font-medium">Dev.to</span>
+                  <p className="text-sm text-muted-foreground mt-1">Developer Community</p>
                 </a>
-              </li>
-              <li>
                 <a
                   href={content.socialLinks.twitter}
                   rel="nofollow noopener noreferrer"
                   target="_blank"
-                  className="text-blue-600 hover:text-blue-800 underline"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
                 >
-                  Twitter (X) - Updates & Insights
+                  <span className="text-foreground hover:text-primary font-medium">Twitter (X)</span>
+                  <p className="text-sm text-muted-foreground mt-1">Updates & Insights</p>
                 </a>
-              </li>
-            </ul>
-          </section>
+              </div>
 
-          <section>
-            <h2 className="text-xl font-semibold mb-4">Services & Products</h2>
-            <ul className="space-y-3">
-              <li>
+              <h2 className="text-2xl font-semibold text-foreground mb-4 mt-8">Services & Products</h2>
+              <div className="space-y-3">
                 <a
                   href={content.socialLinks.gumroad}
                   rel="nofollow noopener noreferrer"
                   target="_blank"
-                  className="text-blue-600 hover:text-blue-800 underline"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
                 >
-                  Gumroad - Digital Products & Services
+                  <span className="text-foreground hover:text-primary font-medium">Gumroad</span>
+                  <p className="text-sm text-muted-foreground mt-1">Digital Products & Services</p>
                 </a>
-              </li>
-            <li>
-              <a
-                href={content.socialLinks.cal_com}
-                rel="nofollow noopener noreferrer"
-                target="_blank"
-                className="text-blue-600 hover:text-blue-800 underline"
-              >
-                Cal.com - Schedule a Quick Call
-              </a>
-              </li>
-            </ul>
-          </section>
-        </div>
+                <a
+                  href={content.socialLinks.cal_com}
+                  rel="nofollow noopener noreferrer"
+                  target="_blank"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
+                >
+                  <span className="text-foreground hover:text-primary font-medium">Cal.com</span>
+                  <p className="text-sm text-muted-foreground mt-1">Schedule a Quick Call</p>
+                </a>
+              </div>
+            </section>
+          </div>
 
-        <div className="mt-12 p-6 bg-gray-50 rounded-lg">
-          <h3 className="text-lg font-semibold mb-3">About {content.authorName}</h3>
-          <p className="text-gray-700">
-            Full-Stack Software Developer specializing in React, TypeScript, AWS, and Node.js.
-            Based in Klagenfurt am Wörthersee, Austria. Available for consulting, technical interviews,
-            and web development projects.
-          </p>
+          <div className="mt-12 p-6 bg-card border border-border rounded-xl">
+            <h3 className="text-xl font-semibold text-foreground mb-3">About {content.authorName}</h3>
+            <p className="text-muted-foreground">
+              Full-Stack Software Developer specializing in React, TypeScript, AWS, and Node.js.
+              Based in Klagenfurt am Wörthersee, Austria. Available for consulting, technical interviews,
+              and web development projects.
+            </p>
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

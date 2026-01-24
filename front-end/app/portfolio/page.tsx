@@ -35,11 +35,24 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function Post() {
     return (
-        <article className='container mx-auto px-4 sm:px-8 md:px-12 py-8'>
-            <div className="prose prose-sm md:prose-base lg:prose-lg mb-4">
-                <h1>Portfolio</h1>
-            </div>
-            <AllProjects/>
-        </article>
+        <main className="min-h-screen bg-background">
+            {/* Hero Section */}
+            <section className="pt-32 pb-16 px-6">
+                <div className="container mx-auto max-w-6xl">
+                    <div className="text-center mb-16">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+                            <span className="gradient-text">Portfolio</span>
+                        </h1>
+                        <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto">
+                            A collection of projects showcasing my expertise in full-stack development,
+                            from enterprise applications to personal experiments.
+                        </p>
+                    </div>
+
+                    {/* Projects Grid */}
+                    <AllProjects/>
+                </div>
+            </section>
+        </main>
     );
 }
