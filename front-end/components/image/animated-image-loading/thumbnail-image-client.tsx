@@ -20,41 +20,42 @@ export function ThumbnailImageClient(props: Props) {
   }, []);
 
   const classNameBlurred = clsx(props.className, `thumbnail-client-image`);
-  const classNameFinal = clsx(props.className, `thumbnail-client-image absolute w-full h-full left-0 right-0 top-0 bottom-0 z-0`);
+  const classNameFinal = clsx(props.className, `thumbnail-client-image absolute w-full h-full left-0 right-0 top-0 bottom-0`);
 
-  const commonCfg: Partial<ImageProps> = useMemo(
+  const blurImageStyle: CSSProperties = useMemo(
     () => ({
-      width: props.width,
-      height: props.height,
-      loading: props.loading,
-      priority: props.priority,
-      style: {},
+      opacity: loaded ? 0 : 1,
+      transition: 'opacity 0.3s ease-in-out',
     }),
-    [props.priority, props.width, props.height, props.loading],
+    [loaded],
   );
 
   const normalImageStyle: CSSProperties = useMemo(
     () => ({
-      ...commonCfg.style,
       opacity: loaded ? 1 : 0,
       transition: 'opacity 0.3s ease-in-out',
     }),
-    [commonCfg.style, loaded],
+    [loaded],
   );
 
   return (
     <div onClick={props.onClick}>
       <Image
-        {...commonCfg}
+        width={props.width}
+        height={props.height}
         aria-hidden={true}
         className={classNameBlurred}
         src={props.blurDataURL}
-        style={commonCfg.style}
+        style={blurImageStyle}
         alt={props.alt}
         unoptimized={true}
+        priority
       />
       <Image
-        {...commonCfg}
+        width={props.width}
+        height={props.height}
+        loading={props.loading}
+        priority={props.priority}
         loader={props.loader}
         className={classNameFinal}
         onLoad={onImageLoad}
