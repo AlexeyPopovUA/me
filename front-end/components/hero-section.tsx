@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
+import { imageLoader } from '@/components/image/image-loader';
 
 const techStack = ['React', 'Node.js', 'TypeScript', 'JavaScript', 'AWS', 'CI/CD'];
 
@@ -36,7 +37,7 @@ export const HeroSection = ({ src, blurDataURL, name, title, description }: Hero
                                 className="relative z-10 w-full h-full rounded-full object-cover border-4 border-primary/50 glow-amber"
                                 placeholder="blur"
                                 blurDataURL={blurDataURL}
-                                unoptimized
+                                loader={imageLoader}
                                 priority
                             />
                             {/* Decorative ring */}
