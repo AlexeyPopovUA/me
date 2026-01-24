@@ -80,7 +80,7 @@ export default async function Post(props: StaticProps) {
 
                 {/* Fixed sidebar TOC */}
                 <div className="fixed top-24 left-4 hidden w-60 xl:block">
-                    <TableOfContents heading={toc!} className="rounded-lg bg-slate-50 p-4" />
+                    <TableOfContents heading={toc!} className="rounded-lg bg-card border border-border p-4" />
                 </div>
 
                 {/* Mobile/responsive TOC */}

@@ -71,8 +71,12 @@ export default async function Post(props: StaticProps) {
 
       {/* Technologies tag list */}
       {frontmatter.technologies && frontmatter.technologies.length > 0 && (
-        <div className="text-md text-gray-600 mt-8 flex flex-row flex-wrap gap-2 justify-center max-w-4xl mx-auto">
-          {frontmatter.technologies.map(tech => <Tag key={tech} item={tech}/>)}
+        <div className="flex flex-row flex-wrap gap-2 justify-center max-w-4xl mx-auto mt-8">
+          {frontmatter.technologies.map(tech => (
+            <span key={tech} className="px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
+              {tech}
+            </span>
+          ))}
         </div>
       )}
 

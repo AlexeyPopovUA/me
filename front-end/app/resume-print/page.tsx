@@ -56,7 +56,7 @@ export default async function Post() {
                 image={ogImage}
             />
             <article
-                className='prose prose-sm md:prose-base lg:prose-lg print:prose-xs dark:prose-invert prose-pre:bg-slate-50 dark:prose-pre:bg-slate-900 prose-pre:p-0 container mx-auto px-4 py-8 pt-32 print:pt-2 print:space-y-2 print:leading-tight print:prose-a:no-underline'>
+                className='prose prose-sm md:prose-base lg:prose-lg print:prose-xs prose-pre:bg-white prose-pre:p-0 mx-auto p-4 print:p-0 print:pt-2 print:space-y-2 print:leading-tight print:prose-a:no-underline'>
                 <Header user={renderData.user} contacts={renderData.contacts}/>
                 <Intro intro={renderData.intro}/>
                 <Skills skills={renderData.skills}/>
