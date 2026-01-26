@@ -7,7 +7,8 @@ import {content} from "@/app/configuration/content";
 import {getOGImageURL} from "@/lib/image";
 import {environment} from "@/app/configuration/environment";
 import {ensurePathSlash} from "@/lib/utils";
-import {getFrontMatterDataByPath, getPageMdxDataByPath} from "@/lib/mdx-utils";
+import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
+import ContactPageClient from "./contact-page-client";
 
 const pageSlug = "contact";
 
@@ -33,17 +34,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Post() {
-    const {content: mdxContent} = await getPageMdxDataByPath({path: getPagePathByDirName(pageSlug)});
-
-    return (
-        <main className="min-h-screen bg-background">
-            <section className="pt-32 pb-16 px-6">
-                <div className="container mx-auto max-w-4xl">
-                    <article className='prose prose-sm md:prose-base lg:prose-lg prose-pre:bg-white dark:prose-pre:bg-slate-900 prose-pre:p-0 mx-auto'>
-                        {mdxContent}
-                    </article>
-                </div>
-            </section>
-        </main>
-    );
+    return <ContactPageClient />;
 }

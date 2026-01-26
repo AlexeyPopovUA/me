@@ -192,6 +192,47 @@ considerations:
 
 # Recent Upgrades (2026)
 recent_upgrades:
+  session_8_jan_24_2026:
+    focus: Resume & Contact page glass morphism migration + Critical bug fixes
+    changes:
+      - "PHASE 1: Critical Bug Fixes"
+      - Fixed profile photo not loading on home page (added imageLoader prop)
+      - Fixed portfolio card hover animation (zoom effect placement)
+      - Fixed blog/portfolio card image gaps (added h-full to wrapper divs)
+      - Fixed blur placeholder animation (crossfade timing and height mismatches)
+      - "PHASE 2: Resume & Contact Page Migration"
+      - Migrated resume page to unified client component with glass morphism design
+      - Created resume-page-client.tsx (220 lines) with Framer Motion animations
+      - Migrated contact page to structured glass panels layout
+      - Created contact-page-client.tsx (179 lines) with lucide-react icons
+      - Applied staggered fade-in animations and hover-lift effects
+      - Maintained server-side metadata generation and SEO structure
+      - Used amber/gold color scheme consistent with rest of site
+    files_modified:
+      - components/hero-section.tsx (image loader fix)
+      - components/post-card-client.tsx (hover animation fix)
+      - components/image/animated-image-loading/thumbnail-image.tsx (height fix)
+      - components/image/animated-image-loading/thumbnail-image-client.tsx (blur animation fix)
+      - app/resume/page.tsx (simplified to server wrapper)
+      - app/resume/resume-page-client.tsx (NEW - 220 lines)
+      - app/contact/page.tsx (simplified to server wrapper)
+      - app/contact/contact-page-client.tsx (NEW - 179 lines)
+    commits:
+      - "1c63ca7: Fix profile photo loading on home page"
+      - "af75901: Fix portfolio card hover animation"
+      - "0c4730f: Add h-full to ThumbnailImage wrapper"
+      - "0948754: Fix blur placeholder animation"
+      - "47df0fa: Fix blur image height mismatch"
+      - "Migrate contact page to glass morphism design"
+      - "Migrate resume page to glass morphism design"
+    status: "✅ Complete - Ready for testing"
+    next_steps:
+      - Manual QA testing on /resume and /contact
+      - Cross-browser testing (Chrome, Firefox, Safari)
+      - Performance audit with Lighthouse
+      - Content verification (resume data, contact links)
+      - Test print styles on /resume-print
+      
   session_7_jan_23_2026:
     focus: Deprecated package cleanup
     changes:
@@ -252,10 +293,93 @@ recent_upgrades:
 # Upgrade Status
 upgrade_status:
   status: "✅ All up-to-date"
-  last_updated: "January 23, 2026"
+  last_updated: "January 24, 2026"
   outdated_packages: 1
   notes:
     - "@types/node at 24.10.9 is correct (matches Node.js 24 runtime)"
     - "No deprecated packages remaining"
     - "All regular packages on latest stable versions"
+    
+# Design System (Added Jan 24, 2026)
+design_system:
+  theme:
+    colors:
+      primary: Amber/gold accents
+      classes: "text-primary, bg-primary/10, border-primary/30"
+    modes:
+      - light (default)
+      - dark (next-themes)
+      
+  effects:
+    glass_morphism:
+      class: glass-panel
+      properties: "backdrop-filter: blur(12px)"
+      borders: "border-border/50"
+      location: front-end/app/globals.css
+      
+    hover_lift:
+      class: hover-lift
+      effect: "transform: translateY(-4px)"
+      location: front-end/app/globals.css
+      
+  animations:
+    library: framer-motion
+    patterns:
+      - Staggered fade-in on scroll
+      - Hover-lift effects on cards
+      - Viewport-triggered animations (whileInView)
+      - Image zoom on portfolio cards
+      
+  icons:
+    library: lucide-react
+    usage:
+      - Navigation icons
+      - Contact method icons
+      - Social media icons
+      - Section headers
+      
+  images:
+    system: Dual-image blur loading
+    source: AWS S3 via images.oleksiipopov.com
+    loader: components/image/image-loader.ts
+    components:
+      - ThumbnailImage (wrapper)
+      - ThumbnailImageClient (blur/final crossfade)
+    critical_rules:
+      - Both wrapper divs MUST have h-full
+      - Blur image uses relative positioning
+      - Final image uses absolute positioning
+      - Don't remove priority from blur image
+      
+# Testing Checklist
+testing_checklist:
+  manual_qa:
+    - Visit /resume in dev server
+    - Visit /contact in dev server
+    - Test dark/light mode toggle
+    - Test hover effects on cards
+    - Test mobile responsiveness
+    - Verify scroll animations trigger
+    
+  cross_browser:
+    - Chrome (glass morphism support)
+    - Firefox (backdrop-filter)
+    - Safari (webkit compatibility)
+    
+  performance:
+    - Run Lighthouse audit
+    - Check bundle size
+    - Verify animation performance
+    
+  content_verification:
+    - All resume data displays correctly
+    - Contact links work (email, cal.com, LinkedIn)
+    - Social links functional
+    - Print styles work (/resume-print)
+    
+  before_production:
+    - Build generates all 27 pages
+    - SEO metadata present
+    - OpenGraph images working
+    - External links have security attributes
 

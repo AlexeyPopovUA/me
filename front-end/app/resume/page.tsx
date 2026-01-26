@@ -3,9 +3,6 @@ import {Metadata} from "next";
 
 import {getPagePathByDirName} from "@/lib/files";
 import {PageSchema} from "@/content/pages/resume/schema";
-import Header from "@/app/resume/components/Header";
-import Intro from "@/app/resume/components/Intro";
-import Skills from "@/app/resume/components/Skills";
 import renderData from "@/app/resume/data/data";
 import {content} from "@/app/configuration/content";
 import {environment} from "@/app/configuration/environment";
@@ -13,8 +10,7 @@ import {ensurePathSlash} from "@/lib/utils";
 import {getOGImageURL} from "@/lib/image";
 import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
 import {ResumeStructuredData} from "@/components/ResumeStructuredData";
-import { WorkHistory } from '@/app/resume/components/WorkHistory';
-import { Education } from '@/app/resume/components/Education';
+import ResumePageClient from "./resume-page-client";
 
 const pageSlug = "resume";
 
@@ -55,14 +51,7 @@ export default async function Post() {
                 jobTitle={renderData.user.position}
                 image={ogImage}
             />
-            <article
-                className='prose prose-sm md:prose-base lg:prose-lg print:prose-xs dark:prose-invert prose-pre:bg-slate-50 dark:prose-pre:bg-slate-900 prose-pre:p-0 container mx-auto px-4 py-8 pt-32 print:pt-2 print:space-y-2 print:leading-tight print:prose-a:no-underline'>
-                <Header user={renderData.user} contacts={renderData.contacts}/>
-                <Intro intro={renderData.intro}/>
-                <Skills skills={renderData.skills}/>
-                <WorkHistory experience={renderData.experience} />
-                <Education education={renderData.education} />
-            </article>
+            <ResumePageClient />
         </>
     );
 }
