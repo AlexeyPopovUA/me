@@ -11,27 +11,23 @@ export default function Header(props: Props) {
     return (
         <div className="flex flex-col items-center">
             <h1>{props.user.name} {props.user.surname}</h1>
-            <div className="text-2xl text-center mb-4">{props.user.position}</div>
+            <div className="text-2xl text-center mb-4 print:text-lg print:mb-2">{props.user.position}</div>
 
-            <div className="flex flex-col sm:flex-row text-left">
-                <div className="mb-4 sm:mb-0 mr-8">
+            <div className="flex flex-col sm:flex-row text-left print:text-sm">
+                <div className="mb-4 sm:mb-0 mr-8 print:mb-2 print:mr-4">
                     <div className="max-w-sm whitespace-nowrap">🇦🇹&nbsp;{props.user.Address}</div>
-                    <div className="max-w-sm whitespace-nowrap">📨&nbsp;<a
-                        href={`mailto:${props.user.Email}`}>{props.user.Email}</a></div>
+                    <div className="max-w-sm whitespace-nowrap">📨&nbsp;{props.user.Email}</div>
                     <div className="max-w-sm whitespace-nowrap">🌍&nbsp;I speak {props.contacts["I speak"]}</div>
                 </div>
                 <div>
-                    <div>
-                        💼&nbsp;<a className="underline whitespace-nowrap"
-                           href={props.user.Website.url}>{props.user.Website.title}</a>
+                    <div className="whitespace-nowrap">
+                        💼&nbsp;{props.user.Website.title}
                     </div>
-                    <div>
-                        👨🏻‍💻&nbsp;<a className="underline whitespace-nowrap"
-                           href={props.user.GitHub.url}>{props.user.GitHub.title}</a>
+                    <div className="whitespace-nowrap">
+                        👨🏻‍💻&nbsp;{props.user.GitHub.title}
                     </div>
-                    <div>
-                        🪪&nbsp;<a className="underline whitespace-nowrap"
-                           href={props.user.LinkedIn.url}>{props.user.LinkedIn.title}</a>
+                    <div className="whitespace-nowrap">
+                        🪪&nbsp;{props.user.LinkedIn.title}
                     </div>
                 </div>
             </div>

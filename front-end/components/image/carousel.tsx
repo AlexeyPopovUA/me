@@ -90,7 +90,7 @@ export function Carousel(props: Carousel.Props) {
             {props.imageCfgs.map((imageCfg, index) => (
               <div
                 key={imageCfg.src}
-                className="w-full h-full flex-shrink-0 cursor-pointer"
+                className="w-full h-full flex-shrink-0 cursor-pointer flex items-center justify-center"
                 onClick={() => openImageLightbox(index)}
               >
                 <ThumbnailImage
@@ -99,7 +99,7 @@ export function Carousel(props: Carousel.Props) {
                   blurDataURL={imageCfg.blurDataURL}
                   alt={`Carousel image ${index + 1}`}
                   className="w-full h-full"
-                  imageClassName="w-full h-full object-contain"
+                  imageClassName="carousel-image w-full h-full object-contain"
                   loading="lazy"
                   width={900}
                   height={900 / imageCfg.ratio}

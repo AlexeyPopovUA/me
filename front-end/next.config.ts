@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     output: 'export',
     images: {
         formats: ['image/avif', 'image/webp'],
+        qualities: [70, 75],
     }
 }
 

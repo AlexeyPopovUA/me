@@ -9,6 +9,7 @@ import {environment} from "@/app/configuration/environment";
 import {ensurePathSlash} from "@/lib/utils";
 import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
 import ContactPageClient from "./contact-page-client";
+import {ContactPageStructuredData} from "@/components/ContactPageStructuredData";
 
 const pageSlug = "contact";
 
@@ -26,6 +27,8 @@ export async function generateMetadata(): Promise<Metadata> {
         openGraph: {
             title: `${frontMatter.title} - ${content.authorName}`,
             description: frontMatter.description,
+            url: ensurePathSlash(`/${pageSlug}`),
+            type: "website",
             images: [
                 ogImage
             ]
@@ -34,5 +37,23 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Post() {
-    return <ContactPageClient />;
+    const frontMatter = await getFrontMatterDataByPath<PageSchema>(getPagePathByDirName(pageSlug));
+    const ogImage = getOGImageURL({src: frontMatter.thumbnail});
+    const pageUrl = `${environment.url}${ensurePathSlash(`/${pageSlug}`)}`;
+    const sameAs = Object.values(content.socialLinks);
+
+    return (
+        <>
+            <ContactPageStructuredData
+                pageName={`${frontMatter.title} - ${content.authorName}`}
+                personName={content.authorName}
+                description={frontMatter.description}
+                url={pageUrl}
+                sameAs={sameAs}
+                image={ogImage}
+                personUrl={environment.url}
+            />
+            <ContactPageClient />
+        </>
+    );
 }

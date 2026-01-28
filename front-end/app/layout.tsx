@@ -5,6 +5,7 @@ import clsx from "clsx";
 import TopNavigationMenu from "@/components/navigation/top-navigation-menu";
 import Footer from "@/app/footer";
 import {environment} from "@/app/configuration/environment";
+import {content} from "@/app/configuration/content";
 import {Analytics} from "@/components/analytics";
 import {ThemeProvider} from "@/components/theme-provider";
 
@@ -12,11 +13,33 @@ import './globals.css';
 
 const font = Inter({subsets: ['latin']});
 
+function getTwitterHandle(twitterUrl: string) {
+    try {
+        const parsed = new URL(twitterUrl);
+        const handle = parsed.pathname.split("/").filter(Boolean).pop();
+        if (!handle) {
+            return undefined;
+        }
+        return handle.startsWith("@") ? handle : `@${handle}`;
+    } catch {
+        return undefined;
+    }
+}
+
 export async function generateMetadata() {
+    const twitterHandle = getTwitterHandle(content.socialLinks.twitter);
+
     return {
         metadataBase: new URL(environment.url),
         alternates: {
             canonical: '/'
+        },
+        openGraph: {
+            siteName: content.authorName
+        },
+        twitter: {
+            card: "summary_large_image",
+            ...(twitterHandle ? {site: twitterHandle} : {})
         }
     }
 }

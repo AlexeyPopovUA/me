@@ -1,8 +1,12 @@
 import { getAllArticles } from '@/lib/articles';
 import { PostCard } from '@/components/post-card-new';
 
-const AllPosts = async () => {
-    const lastPosts = await getAllArticles();
+type AllPostsProps = {
+    posts?: Awaited<ReturnType<typeof getAllArticles>>;
+};
+
+const AllPosts = async ({posts}: AllPostsProps = {}) => {
+    const lastPosts = posts ?? await getAllArticles();
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

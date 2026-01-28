@@ -68,7 +68,7 @@ export function PostCardClient({ type, title, date, description, link, tags, pro
 
                         {/* Tags */}
                         {tags && tags.length > 0 && (
-                            <div className="flex flex-wrap gap-2 mb-4">
+                            <div className="flex flex-wrap gap-2 mb-4 items-center">
                                 {tags.slice(0, 3).map((tag) => (
                                     <span key={tag} className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-primary/10 text-primary text-xs font-medium">
                                         <TagIcon size={10} />

@@ -22,18 +22,29 @@ export function ThumbnailImageClient(props: Props) {
   const classNameBlurred = clsx(props.className, `thumbnail-client-image`);
   const classNameFinal = clsx(props.className, `thumbnail-client-image absolute w-full h-full left-0 right-0 top-0 bottom-0`);
 
+  const aspectRatio = useMemo(() => {
+    if (!props.height) {
+      return undefined;
+    }
+
+    return props.width / props.height;
+  }, [props.height, props.width]);
+
   const blurImageStyle: CSSProperties = useMemo(
     () => ({
       opacity: loaded ? 0 : 1,
       transition: 'opacity 0.3s ease-in-out',
+      aspectRatio,
     }),
-    [loaded],
+    [aspectRatio, loaded],
   );
 
   const normalImageStyle: CSSProperties = useMemo(
     () => ({
       opacity: loaded ? 1 : 0,
       transition: 'opacity 0.3s ease-in-out',
+      height: '100%',
+      width: '100%',
     }),
     [loaded],
   );

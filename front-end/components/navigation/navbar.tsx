@@ -17,7 +17,7 @@ export const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-50 glass-panel">
+        <header className="fixed top-0 left-0 right-0 z-50 glass-panel print:hidden">
             <nav className="container mx-auto px-6 py-4">
                 <div className="flex items-center justify-between">
                     <motion.div whileHover={{ scale: 1.02 }}>

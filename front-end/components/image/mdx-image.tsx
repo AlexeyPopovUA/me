@@ -11,7 +11,7 @@ const MDXImage = async (props) => {
   const {src, blurDataURL, ratio} = await readBlurredImageSrcPair({src: props.src});
 
   const className = clsx(
-    `w-full cursor-zoom-in`,
+    'w-full cursor-zoom-in article-image',
     {
       'thumbnail-image': props.id === 'thumbnail-image'
     }

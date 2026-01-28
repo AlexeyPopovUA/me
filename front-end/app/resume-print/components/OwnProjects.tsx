@@ -14,8 +14,7 @@ const OwnProjects = (props: Props) => (
                 <h3>{project.name}</h3>
                 {project.links.map((link) => (
                     <div key={link.name} className="link">
-                        <span className="font-bold">{link.name}</span>: <a href={link.link}
-                                                                           className="underline">{link.link}</a>
+                        <span className="font-bold">{link.name}</span>: <span>{link.link}</span>
                     </div>
                 ))}
                 <div className="description">{project.description}</div>

@@ -1,7 +1,6 @@
 @import 'tailwindcss';
 
 @plugin 'tailwindcss-animate';
-@plugin '@tailwindcss/typography';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -228,13 +227,240 @@
     transform: translateY(-4px);
     box-shadow: var(--glow-amber);
   }
+
+  .resume-tag {
+    background: hsl(var(--primary) / 0.05) !important;
+    border: 1px solid hsl(var(--primary)) !important;
+    color: hsl(var(--primary)) !important;
+  }
 }
 
-.prose {
+/* Article content styles - replaces prose */
+.article-content {
+  @apply max-w-4xl mx-auto;
+  
+  /* Typography */
+  font-size: 0.875rem;
+  line-height: 1.75;
+  color: hsl(var(--foreground));
+  
+  @media (min-width: 768px) {
+    font-size: 1rem;
+  }
+  
+  @media (min-width: 1024px) {
+    font-size: 1.125rem;
+  }
+  
+  /* Headings */
   h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+    margin-top: 2em;
+    margin-bottom: 1em;
+    scroll-margin-top: 6rem;
+    
     > a {
       @apply no-underline;
     }
+  }
+  
+  h1 {
+    font-size: 2.25em;
+    line-height: 1.2;
+    margin-top: 0;
+  }
+  
+  h2 {
+    font-size: 1.875em;
+    line-height: 1.3;
+  }
+  
+  h3 {
+    font-size: 1.5em;
+    line-height: 1.4;
+  }
+  
+  h4 {
+    font-size: 1.25em;
+    line-height: 1.5;
+  }
+  
+  /* Paragraphs */
+  p {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+  }
+  
+  /* Links */
+  a {
+    @apply text-primary underline;
+    text-underline-offset: 2px;
+    
+    &:hover {
+      @apply text-primary/80;
+    }
+  }
+  
+  /* Lists */
+  ul, ol {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+    padding-left: 1.625em;
+  }
+  
+  li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+  
+  /* Code blocks */
+  pre {
+    @apply overflow-x-auto rounded-lg border border-border bg-muted p-4;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    font-size: 0.875em;
+    line-height: 1.7142857;
+    
+    /* Shiki-generated code blocks (padding from global pre.shiki) */
+    &.shiki {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    
+    code {
+      @apply bg-transparent p-0 border-0;
+      font-size: inherit;
+    }
+  }
+  
+  /* Inline code */
+  code {
+    @apply bg-muted text-foreground rounded px-1.5 py-0.5;
+    font-size: 0.875em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  /* Blockquotes */
+  blockquote {
+    @apply border-l-4 border-primary/50 pl-4 italic text-muted-foreground;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+  }
+  
+  /* Images */
+  img:not(.carousel-image):not(.thumbnail-client-image) {
+    @apply rounded-lg max-w-full h-auto;
+    margin-top: 2em;
+    margin-bottom: 2em;
+  }
+
+  figure {
+    margin-top: 2em;
+    margin-bottom: 2em;
+  }
+
+  .article-image {
+    @apply rounded-lg;
+  }
+  
+  /* Tables */
+  table {
+    @apply w-full border-collapse border border-border;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    
+    th, td {
+      @apply border border-border p-3 text-left;
+    }
+    
+    thead {
+      @apply bg-muted/50;
+    }
+  }
+  
+  /* Horizontal rules */
+  hr {
+    @apply border-border;
+    margin-top: 3em;
+    margin-bottom: 3em;
+  }
+  
+  /* Strong and emphasis */
+  strong {
+    @apply font-semibold text-foreground;
+  }
+  
+  em {
+    @apply italic;
+  }
+}
+
+/* Print-specific article styles */
+@media print {
+  .article-print {
+    font-size: 0.9rem;
+    line-height: 1.4;
+
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 0.35em;
+      margin-bottom: 0.25em;
+    }
+
+    h1 {
+      font-size: 1.6em;
+      margin-top: 0;
+    }
+
+    h2 {
+      font-size: 1.3em;
+    }
+
+    h3 {
+      font-size: 1.15em;
+    }
+
+    h4 {
+      font-size: 1.05em;
+    }
+
+    p {
+      margin-top: 0.4em;
+      margin-bottom: 0.4em;
+    }
+
+    ul, ol {
+      margin-top: 0.4em;
+      margin-bottom: 0.4em;
+      padding-left: 1.1em;
+    }
+
+    li {
+      margin-top: 0.2em;
+      margin-bottom: 0.2em;
+    }
+
+    blockquote {
+      margin-top: 0.8em;
+      margin-bottom: 0.8em;
+    }
+
+    hr {
+      margin-top: 1.5em;
+      margin-bottom: 1.5em;
+    }
+
+    a {
+      @apply no-underline;
+    }
+  }
+
+  .resume-tag {
+    color: hsl(var(--primary)) !important;
+    -webkit-text-fill-color: hsl(var(--primary)) !important;
+    background: hsl(var(--primary) / 0.05) !important;
+    border: 1px solid hsl(var(--primary)) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 }
 
@@ -243,17 +469,51 @@
   @apply overflow-auto;
 }
 
+/* Shiki code blocks: one light, one dark; toggle by .dark */
+.shiki-code-block {
+  position: relative;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.shiki-code-block .shiki-dark {
+  display: none;
+}
+
+.dark .shiki-code-block .shiki-light {
+  display: none;
+}
+
+.dark .shiki-code-block .shiki-dark {
+  display: block;
+}
+
+/* Shiki code blocks with dark mode support */
 pre.shiki {
   counter-reset: codeblock-line;
+  @apply border border-border rounded-lg overflow-x-auto p-4;
+  margin: 0;
+  font-size: 0.875em;
+  line-height: 1.7142857;
+}
 
-  .line {
-    counter-increment: codeblock-line;
+pre.shiki.shiki-light {
+  @apply bg-[#f6f8fa];
+  --shiki-line-number: #8b949e;
+}
 
-    &::before {
-      content: counter(codeblock-line);
-      margin-right: 1rem;
-      color: #a3a2a2;
-    }
+pre.shiki.shiki-dark {
+  @apply bg-[#0d1117];
+  --shiki-line-number: #6e7681;
+}
+
+pre.shiki .line {
+  counter-increment: codeblock-line;
+
+  &::before {
+    content: counter(codeblock-line);
+    margin-right: 1rem;
+    color: var(--shiki-line-number);
   }
 }
 
@@ -265,5 +525,51 @@ pre.shiki {
   .toc-first-container > ul {
     @apply max-h-[calc(70vh)];
     @apply ps-0;
+  }
+
+  /* Reset prose styles that might affect TOC */
+  h3 {
+    @apply !text-sm !font-semibold !mt-0 !mb-2;
+    font-size: 0.875rem !important;
+    line-height: 1.25rem !important;
+  }
+
+  p {
+    @apply !text-xs !mt-0 !mb-4;
+    font-size: 0.75rem !important;
+    line-height: 1rem !important;
+  }
+
+  /* Only reset buttons/links in the button container, not TOC items */
+  > div.flex a,
+  > div.flex button {
+    @apply !text-sm !font-normal;
+    font-size: 0.875rem !important;
+    font-weight: 400 !important;
+  }
+
+  /* TOC navigation items styling */
+  nav a,
+  nav button {
+    /* Let the component classes handle styling */
+  }
+
+  /* Ensure nested items use text-xs */
+  nav a.text-xs,
+  nav button.text-xs {
+    font-size: 0.75rem !important;
+    font-weight: 400 !important;
+  }
+
+  /* Ensure level 1 items use font-medium (500) */
+  nav a.font-medium,
+  nav button.font-medium {
+    font-weight: 500 !important;
+  }
+
+  /* Ensure nested items (with pl-3) don't have font-medium */
+  nav a.pl-3,
+  nav button.pl-3 {
+    font-weight: 400 !important;
   }
 }

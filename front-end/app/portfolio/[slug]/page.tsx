@@ -12,7 +12,7 @@ import {ensurePathSlash} from "@/lib/utils";
 import {getProjectPathByDirName} from "@/lib/files";
 import {getFrontMatterDataByPath, getProjectMdxDataByPath} from "@/lib/mdx-utils";
 import {ProjectsSchema} from "@/content/projects/projects-schema";
-import Tag from "@/components/primitive/Tag";
+import {WebApplicationStructuredData} from "@/components/WebApplicationStructuredData";
 
 export async function generateStaticParams() {
   const allSlugs = await getProjectSlugs();
@@ -38,6 +38,8 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
     openGraph: {
       title: `${frontMatter.title} - ${content.authorName}`,
       description: frontMatter.description,
+      url: ensurePathSlash(`/portfolio/${(await props.params).slug}`),
+      type: "website",
       images: [
         ogImage
       ]
@@ -51,6 +53,9 @@ export default async function Post(props: StaticProps) {
 
   // Get both frontmatter and MDX content
   const { content: mdxContent, frontmatter } = await getProjectMdxDataByPath({path: projectPath});
+  const pageUrl = `${environment.url}${ensurePathSlash(`/portfolio/${slug}`)}`;
+  const ogImage = getOGImageURL({src: frontmatter.thumbnail});
+  const sameAs = frontmatter.URL ? [frontmatter.URL] : undefined;
 
   const imageCfgs: Carousel.Props["imageCfgs"] = await Promise.all(frontmatter.gallery.map(async image => {
     const blurredImageSrcPair = await readBlurredImageSrcPair({src: image});
@@ -65,23 +70,36 @@ export default async function Post(props: StaticProps) {
   }));
 
   return (
-    <ArticleContainer>
-      <h1>{frontmatter.title}</h1>
-      <Carousel imageCfgs={imageCfgs} projectType={frontmatter.type} />
+    <>
+      <WebApplicationStructuredData
+        name={frontmatter.title}
+        description={frontmatter.description}
+        url={pageUrl}
+        authorName={content.authorName}
+        authorUrl={environment.url}
+        image={ogImage}
+        datePublished={frontmatter.date}
+        sameAs={sameAs}
+        technologies={frontmatter.technologies}
+      />
+      <ArticleContainer>
+        <h1>{frontmatter.title}</h1>
+        <Carousel imageCfgs={imageCfgs} projectType={frontmatter.type} />
 
-      {/* Technologies tag list */}
-      {frontmatter.technologies && frontmatter.technologies.length > 0 && (
-        <div className="flex flex-row flex-wrap gap-2 justify-center max-w-4xl mx-auto mt-8">
-          {frontmatter.technologies.map(tech => (
-            <span key={tech} className="px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
-              {tech}
-            </span>
-          ))}
-        </div>
-      )}
+        {/* Technologies tag list */}
+        {frontmatter.technologies && frontmatter.technologies.length > 0 && (
+          <div className="flex flex-row flex-wrap gap-2 justify-center max-w-4xl mx-auto mt-8">
+            {frontmatter.technologies.map(tech => (
+              <span key={tech} className="px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
+                {tech}
+              </span>
+            ))}
+          </div>
+        )}
 
-      {/* Render MDX content instead of structured sections */}
-      {mdxContent}
-    </ArticleContainer>
+        {/* Render MDX content instead of structured sections */}
+        {mdxContent}
+      </ArticleContainer>
+    </>
   );
 }

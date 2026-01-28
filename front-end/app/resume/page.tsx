@@ -29,6 +29,8 @@ export async function generateMetadata(): Promise<Metadata> {
         openGraph: {
             title: `${frontMatter.title} - ${content.authorName}`,
             description: frontMatter.description,
+            url: ensurePathSlash(`/${pageSlug}`),
+            type: "website",
             images: [
                 ogImage
             ]

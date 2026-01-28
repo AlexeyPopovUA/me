@@ -45,6 +45,8 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
         openGraph: {
             title: getSEOTitleName(post.title),
             description: post.description,
+            url: ensurePathSlash(`/blog/${(await props.params).slug}`),
+            type: "article",
             images: [ogImage],
         },
     };
@@ -80,7 +82,7 @@ export default async function Post(props: StaticProps) {
 
                 {/* Fixed sidebar TOC */}
                 <div className="fixed top-24 left-4 hidden w-60 xl:block">
-                    <TableOfContents heading={toc!} className="rounded-lg bg-card border border-border p-4" />
+                    <TableOfContents heading={toc!} className="rounded-xl bg-card border border-border p-5" />
                 </div>
 
                 {/* Mobile/responsive TOC */}

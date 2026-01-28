@@ -30,6 +30,8 @@ export async function generateMetadata(): Promise<Metadata> {
         openGraph: {
             title: frontMatter.title,
             description: frontMatter.description,
+            url: "/",
+            type: "website",
             images: [ogImage],
         },
     };

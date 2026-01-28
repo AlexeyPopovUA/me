@@ -3,9 +3,9 @@ import {Metadata} from "next";
 
 import {getPagePathByDirName} from "@/lib/files";
 import {PageSchema} from "@/content/pages/resume/schema";
-import Header from "@/app/resume/components/Header";
-import Intro from "@/app/resume/components/Intro";
-import Skills from "@/app/resume/components/Skills";
+import Header from "@/app/resume-print/components/Header";
+import Intro from "@/app/resume-print/components/Intro";
+import Skills from "@/app/resume-print/components/Skills";
 import renderData from "@/app/resume/data/data";
 import {content} from "@/app/configuration/content";
 import {environment} from "@/app/configuration/environment";
@@ -13,8 +13,8 @@ import {ensurePathSlash} from "@/lib/utils";
 import {getOGImageURL} from "@/lib/image";
 import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
 import {ResumeStructuredData} from "@/components/ResumeStructuredData";
-import { WorkHistory } from '@/app/resume/components/WorkHistory';
-import { Education } from '@/app/resume/components/Education';
+import { WorkHistory } from '@/app/resume-print/components/WorkHistory';
+import { Education } from '@/app/resume-print/components/Education';
 
 const pageSlug = "resume";
 
@@ -30,9 +30,15 @@ export async function generateMetadata(): Promise<Metadata> {
             canonical: ensurePathSlash(`/${pageSlug}`)
         },
         keywords: frontMatter.keywords,
+        robots: {
+            index: false,
+            follow: true,
+        },
         openGraph: {
             title: `${frontMatter.title} - ${content.authorName}`,
             description: frontMatter.description,
+            url: ensurePathSlash("/resume-print"),
+            type: "website",
             images: [
                 ogImage
             ]
@@ -55,8 +61,7 @@ export default async function Post() {
                 jobTitle={renderData.user.position}
                 image={ogImage}
             />
-            <article
-                className='prose prose-sm md:prose-base lg:prose-lg print:prose-xs prose-pre:bg-white prose-pre:p-0 mx-auto p-4 print:p-0 print:pt-2 print:space-y-2 print:leading-tight print:prose-a:no-underline'>
+            <article className='article-content article-print mx-auto p-4 pt-24 print:p-0 print:pt-1 print:space-y-1 print:leading-tight'>
                 <Header user={renderData.user} contacts={renderData.contacts}/>
                 <Intro intro={renderData.intro}/>
                 <Skills skills={renderData.skills}/>
