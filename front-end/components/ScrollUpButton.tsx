@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 
 const GoTop = (props: { cls?: string }) => {
-    const cls = clsx('right-2 bottom-2 rounded-md border-2 bg-white', props.cls);
+    const cls = clsx('right-2 bottom-2 rounded-md border border-border bg-card text-foreground shadow-sm', props.cls);
     const router = useRouter();
 
     const handleBackToBlogClick = useCallback(() => {
