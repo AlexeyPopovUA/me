@@ -1,54 +1,21 @@
 "use client";
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowUp } from 'lucide-react';
-import { TOCHeading } from '@/lib/toc-parser';
+import { ArrowLeft, ArrowUp, List } from 'lucide-react';
+import { TOCHeading, flattenTOC } from '@/lib/toc-types';
 import { clsx } from 'clsx';
 
-interface TableOfContentsProps {
+interface TOCListProps {
     heading: TOCHeading;
+    onItemClick?: () => void;
     className?: string;
-    onHeadingClick?: (id: string) => void;
 }
 
-// Flatten hierarchical TOC structure to a flat list, only including h2 and h3 (levels 2 and 3)
-function flattenTOC(heading: TOCHeading): TOCHeading[] {
-    const result: TOCHeading[] = [];
-    const seenIds = new Set<string>();
-    
-    function traverse(h: TOCHeading) {
-        // Only include levels 2 (H2) and 3 (H3), skip deeper levels
-        if (h.level > 1 && h.level <= 3) {
-            // Only add if we haven't seen this ID before
-            if (!seenIds.has(h.id)) {
-                seenIds.add(h.id);
-                result.push(h);
-            }
-        }
-        
-        // Only traverse children if we're at level 3 or below (to catch h3 children)
-        if (h.children && h.level < 3) {
-            h.children.forEach(child => traverse(child));
-        }
-    }
-    
-    traverse(heading);
-    return result;
-}
-
-const TableOfContents: React.FC<TableOfContentsProps> = ({
-    heading,
-    className = '',
-}) => {
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    // Flatten the hierarchical TOC to a flat list
+export const TOCList: React.FC<TOCListProps> = ({ heading, onItemClick, className }) => {
     const flatTOC = useMemo(() => flattenTOC(heading), [heading]);
 
-    const handleClick = (id: string) => {
+    const handleClick = useCallback((id: string) => {
         const element = document.getElementById(id);
         if (element) {
             element.scrollIntoView({
@@ -57,6 +24,44 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
                 inline: 'nearest'
             });
         }
+        onItemClick?.();
+    }, [onItemClick]);
+
+    return (
+        <nav className={clsx("space-y-1", className)}>
+            {flatTOC.map((item) => {
+                const isLevel1 = item.level === 2;
+                const buttonClassName = `block w-full text-left text-sm py-1.5 transition-colors hover:text-primary ${
+                    isLevel1 
+                        ? "text-foreground font-medium" 
+                        : "text-muted-foreground pl-3 text-xs"
+                }`;
+
+                return (
+                    <button
+                        key={item.id ?? item.title}
+                        onClick={() => handleClick(item.id)}
+                        className={buttonClassName}
+                    >
+                        {item.title}
+                    </button>
+                );
+            })}
+        </nav>
+    );
+};
+
+interface TableOfContentsProps {
+    heading: TOCHeading;
+    className?: string;
+}
+
+const TableOfContents: React.FC<TableOfContentsProps> = ({
+    heading,
+    className = '',
+}) => {
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     return (
@@ -79,30 +84,60 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
                     UP
                 </button>
             </div>
-            <nav className="space-y-1 max-h-[60vh] overflow-y-auto">
-                {flatTOC.map((item) => {
-                    // Level 2 (H2) headings are top-level TOC items
-                    // Level 3+ (H3+) headings are nested
-                    const isLevel1 = item.level === 2;
-                    const buttonClassName = `block w-full text-left text-sm py-1.5 transition-colors hover:text-primary ${
-                        isLevel1 
-                            ? "text-foreground font-medium" 
-                            : "text-muted-foreground pl-3 text-xs"
-                    }`;
-
-                    return (
-                        <button
-                            key={item.id ?? item.title}
-                            onClick={() => handleClick(item.id)}
-                            className={buttonClassName}
-                        >
-                            {item.title}
-                        </button>
-                    );
-                })}
-            </nav>
+            <TOCList heading={heading} className="max-h-[60vh] overflow-y-auto" />
         </nav>
     );
 };
 
 export default TableOfContents;
+
+/* Mobile TOC Panel */
+
+interface MobileTOCPanelProps {
+    heading: TOCHeading;
+    isOpen: boolean;
+    onClose: () => void;
+    className?: string;
+}
+
+export const MobileTOCPanel: React.FC<MobileTOCPanelProps> = ({ heading, isOpen, onClose, className }) => {
+    const panelCls = clsx(
+        "fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border shadow-lg transition-all duration-500 ease-in-out overflow-hidden overscroll-contain",
+        {
+            "max-h-[70vh] opacity-100": isOpen,
+            "max-h-0 opacity-0": !isOpen
+        }
+    );
+
+    const overlayCls = clsx(
+        "fixed inset-0 bg-black/50 z-40 transition-opacity duration-500 touch-none overscroll-contain",
+        {
+            "opacity-100 pointer-events-auto": isOpen,
+            "opacity-0 pointer-events-none": !isOpen
+        }
+    );
+
+    return (
+        <div className={className}>
+            {/* Overlay */}
+            <div className={overlayCls} onClick={onClose} />
+
+            {/* Panel */}
+            <div className={panelCls}>
+                <div className="p-5 pb-8 max-h-[70vh] overflow-y-auto">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-sm font-semibold text-foreground">Table of Contents</h3>
+                        <button 
+                            onClick={onClose}
+                            className="text-2xl text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                        >
+                            &times;
+                        </button>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-4">Navigate through the article</p>
+                    <TOCList heading={heading} onItemClick={onClose} />
+                </div>
+            </div>
+        </div>
+    );
+};

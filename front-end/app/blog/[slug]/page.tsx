@@ -2,7 +2,7 @@ import React from 'react';
 import { Metadata } from 'next';
 
 import { getArticleSEOContent, getArticlesSlugs } from '@/lib/articles';
-import GoTop from '@/components/ScrollUpButton';
+import { ArticleMobileControls } from '@/components/ArticleMobileControls';
 import { content } from '@/app/configuration/content';
 import { getOGImageURL } from '@/lib/image';
 import { ArticleContainer } from '@/components/ArticleContainer';
@@ -78,10 +78,10 @@ export default async function Post(props: StaticProps) {
             <ArticleContainer>
                 {content}
 
-                <GoTop cls={"fixed xl:hidden"} />
+                <ArticleMobileControls className="fixed xl:hidden" toc={toc} />
 
                 {/* Fixed sidebar TOC */}
-                <div className="fixed top-24 left-4 hidden w-60 xl:block">
+                <div className="fixed top-24 left-4 hidden w-56 xl:block">
                     <TableOfContents heading={toc!} className="rounded-xl bg-card border border-border p-5" />
                 </div>
 

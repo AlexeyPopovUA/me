@@ -3,13 +3,9 @@ import {read} from "to-vfile";
 import {fromMarkdown} from "mdast-util-from-markdown";
 import {toHast} from "mdast-util-to-hast";
 import {slug} from 'github-slugger'
+import { TOCHeading } from './toc-types';
 
-export interface TOCHeading {
-  id: string;
-  title: string;
-  level: number;
-  children?: TOCHeading[];
-}
+export type { TOCHeading };
 
 function extractTOC(ast: Nodes): TOCHeading[] {
   const headings: TOCHeading[] = [];
