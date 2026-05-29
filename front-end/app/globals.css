@@ -300,6 +300,16 @@
       @apply text-primary/80;
     }
   }
+
+  a.resume-contact-link {
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    text-underline-offset: 0;
+
+    &:hover {
+      color: hsl(var(--foreground));
+    }
+  }
   
   /* Lists */
   ul, ol {
@@ -348,10 +358,15 @@
   }
   
   /* Images */
-  img:not(.carousel-image):not(.thumbnail-client-image) {
+  img:not(.carousel-image):not(.thumbnail-client-image):not(.resume-profile-photo) {
     @apply rounded-lg max-w-full h-auto;
     margin-top: 2em;
     margin-bottom: 2em;
+  }
+
+  .resume-profile-photo {
+    margin-top: 0;
+    margin-bottom: 0;
   }
 
   figure {
@@ -400,6 +415,10 @@
   .article-print {
     font-size: 0.9rem;
     line-height: 1.4;
+    color: hsl(222 47% 11%) !important;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
 
     h1, h2, h3, h4, h5, h6 {
       margin-top: 0.35em;
@@ -451,6 +470,16 @@
 
     a {
       @apply no-underline;
+    }
+
+    a.resume-contact-link {
+      color: hsl(222 47% 11%);
+      -webkit-text-fill-color: hsl(222 47% 11%);
+
+      &:hover {
+        color: hsl(222 47% 11%);
+        -webkit-text-fill-color: hsl(222 47% 11%);
+      }
     }
   }
 
