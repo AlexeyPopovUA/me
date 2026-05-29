@@ -25,12 +25,12 @@ export function Education(props: { education: typeof data.education }) {
     }, []);
 
     return (
-        <CVSection cls="education" title="Education">
+        <CVSection cls="education" title="Bildung">
             {groupedEducation.map((group) => (
-                <section key={group.university} className="education-section flex flex-col">
+                <section key={group.university} className="education-section flex flex-col print:gap-1">
                     <h3 className="company-name font-bold">{group.university}</h3>
                     {group.positions.map((item) => (
-                        <div key={item.title} className="project">
+                        <div key={item.title} className="project print:mt-1">
                             <h4 className="title">&gt; {item.title}</h4>
                             <div className="font-bold">{item.date}</div>
                             <Description description={item.description} className="italic" />
