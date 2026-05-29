@@ -20,23 +20,32 @@ const data = Object.seal({
         "I speak": "Englisch, Deutsch (B1), Niederländisch, Ukrainisch, Russisch"
     },
     skills: [
-        {
-            name: "Bankerfahrung",
-            description: "Administrative Arbeit. Durchführung von Datenanalysen im Geldtransferbericht. Arbeit mit Transfersystemen (CONTACT, Western Union, UNIStream, Lider, Anelik, MIGOM, SWIFT). Unterstützung von Privatpersonen und Unternehmen (Banküberweisung, Kontoeröffnung, Geldverwaltung, Hypotheken, Einlagen und Kredite)."
-        },
-        {
-            name: "SEO",
-            description: "Analyse der Website-Struktur, Optimierung von Webseiten, Texterstellung, Kommunikation mit Website-Besuchern, Internet-Marketing, Benutzeranalyse, Berichterstellung"
-        },
+        // {
+        //     name: "Bankenerfahrung",
+        //     description: "Administrative Arbeit. Durchführung von Datenanalysen im Geldtransferbericht. Arbeit mit Transfersystemen (CONTACT, Western Union, UNIStream, Lider, Anelik, MIGOM, SWIFT). Unterstützung von Privatpersonen und Unternehmen (Banküberweisung, Kontoeröffnung, Geldverwaltung, Hypotheken, Einlagen und Kredite)."
+        // },
+        // {
+        //     name: "SEO",
+        //     description: "Analyse der Webseitenstruktur, Optimierung von Webseiten, Texterstellung, Kommunikation mit Webseitenbesuchern, Online-Marketing, Nutzeranalyse, Berichterstellung"
+        // },
     ],
     certificates: [],
     experience: [
         {
-            company: "Babypause",
-            dateStart: "",
+            company: "VS 14 & 27 Welzenegg (Klagenfurt, Österreich) 🇦🇹",
+            dateStart: "November 2025",
             dateEnd: "",
-            positions: [],
-            description: "",
+            positions: [
+                {
+                    title: "Kuchenhilfe",
+                    dateStart: "November 2025",
+                    dateEnd: "",
+                    description: [
+                        "Mitarbeit in der Schulküche"
+                    ]
+                }
+            ],
+            description: "Volksschule",
             stack: ""
         },
         {
@@ -102,7 +111,7 @@ const data = Object.seal({
                     dateStart: "August 2008",
                     dateEnd: "August 2009",
                     description: [
-                        "Berichterstellung, Arbeit mit Kunden, Kontoverwaltung, Einlagenportfolio, Kreditportfolio, Arbeit mit Plastikkarten"
+                        "Berichterstellung, Arbeit mit Kunden, Kontoverwaltung, Einlagen- und Kreditgeschäft, Arbeit mit Bankkarten"
                     ]
                 }
             ],
@@ -116,11 +125,11 @@ const data = Object.seal({
             dateEnd: "2008",
             positions: [
                 {
-                    title: "Operator-Interviewer",
+                    title: "Umfrageoperator",
                     dateStart: "2004",
                     dateEnd: "2008",
                     description: [
-                        "Sammlung und primäre Verarbeitung von Daten für weitere soziologische Forschung"
+                        "Sammlung und erste Aufbereitung von Daten für soziologische Forschung"
                     ]
                 }
             ],
