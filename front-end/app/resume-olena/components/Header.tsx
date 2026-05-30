@@ -20,6 +20,9 @@ export default async function Header(props: Props) {
     return (
         <div className="flex flex-col items-center">
             <h1>{props.user.name} {props.user.surname}</h1>
+            {props.user.position ? (
+                <div className="mb-4 text-center text-2xl print:mb-2 print:text-lg">{props.user.position}</div>
+            ) : null}
 
             <div className="flex w-full flex-row gap-8 print:gap-4 print:text-sm">
                 <Image
@@ -31,9 +34,6 @@ export default async function Header(props: Props) {
                     height={insideUrlProps.height}
                 />
                 <div className="mb-4 flex-1 text-left sm:mb-0 print:mb-2">
-                    {props.user.position ? (
-                        <div className="mb-4 text-3xl print:mb-2 print:text-lg">{props.user.position}</div>
-                    ) : null}
                     <div className="max-w-sm whitespace-nowrap print:mb-2">🇦🇹&nbsp;{props.user.Address}</div>
                     <div className="max-w-sm whitespace-nowrap print:mb-2">
                         📨&nbsp;<a className="resume-contact-link" href={`mailto:${props.user.Email}`}>{props.user.Email}</a>
