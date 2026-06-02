@@ -1,15 +1,15 @@
 ---
-title: Advanced-logger NPM library and website
+title: Advanced Logger — TypeScript logging library and documentation site
 type: Own project
 company: "-"
 slug: advanced-logger
 state: Production
-URL: https://advanced-logger.com/
+URL: https://www.advancedlogger.com/
 date: 2022-01-01
 draft: false
 featured: false
-description: Advanced-logger NPM library and website. It is a TypeScript library for logging in Node.js and browser applications. It provides a flexible and powerful logging system with support for multiple transports, log levels, and custom formats.
-thumbnail: /projects/advanced-logger/advanced-logger-about.png
+description: An extendable isomorphic TypeScript logging library for Node.js and browsers, with a static Gatsby documentation site covering installation, services, strategies, and grouping.
+thumbnail: /projects/advanced-logger/advanced-logger-home.png
 technologies:
     - TypeScript
     - GatsbyJS
@@ -19,26 +19,29 @@ technologies:
     - React
     - Markdown
 gallery:
-    - /projects/advanced-logger/advanced-logger-about.png
-    - /projects/advanced-logger/advanced-logger-start.png
+    - /projects/advanced-logger/advanced-logger-home.png
+    - /projects/advanced-logger/advanced-logger-getting-started.png
     - /projects/advanced-logger/advanced-logger-strategy.png
 ---
 
 ## Description
 
-Advanced-logger NPM library and website. It is a TypeScript library for logging in Node.js and browser applications. It provides a flexible and powerful logging system with support for multiple transports, log levels, and custom formats.
+Advanced Logger is an extendable isomorphic TypeScript logging library for Node.js and browser applications. It separates **when** to send logs (strategies) from **where** to send them (services), supports custom serializers, and ships dual ESM/CJS builds with no runtime npm dependencies. The public documentation site at advancedlogger.com is a statically exported Gatsby app with syntax-highlighted guides.
 
 ## Links
 
-[Documentation website](https://advancedlogger.com/)
+[Documentation website](https://www.advancedlogger.com/)
+
 [NPM Library](https://www.npmjs.com/package/advanced-logger)
 
 ## Main features
 
-- NPM module that works in browser and Node.js
-- Completely static pre-rendered website
-- Code highlighting
-- SEO
+- NPM package that works in Node.js 18+ and modern browsers (native `fetch`)
+- Pluggable log-sending strategies (interval, on request, bundle size, instant)
+- Built-in remote services (Sumo Logic, Loggly, Elasticsearch) and console debugging
+- Rapid-fire log grouping and circular-reference-safe serialization
+- Completely static pre-rendered documentation site (Gatsby)
+- Code highlighting and SEO
 
 ## My commitment
 
