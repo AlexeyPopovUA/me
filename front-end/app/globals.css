@@ -301,16 +301,66 @@
     }
   }
   
-  /* Lists */
-  ul, ol {
+  /* Lists (Tailwind preflight sets list-style: none globally) */
+  ul,
+  ol {
     margin-top: 1.25em;
     margin-bottom: 1.25em;
     padding-left: 1.625em;
+    list-style-position: outside;
   }
-  
-  li {
+
+  ul {
+    list-style-type: disc;
+  }
+
+  ol {
+    list-style-type: decimal;
+  }
+
+  ul ul {
+    list-style-type: circle;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
+  }
+
+  ul ul ul {
+    list-style-type: square;
+  }
+
+  ol ol {
+    list-style-type: lower-alpha;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  li {
+    display: list-item;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  /* MDX often wraps list item text in <p> */
+  li > p {
+    margin-top: 0.35em;
+    margin-bottom: 0.35em;
+  }
+
+  li > p:first-child {
+    margin-top: 0;
+  }
+
+  li > p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* GFM task lists */
+  li.task-list-item {
+    list-style-type: none;
+  }
+
+  li.task-list-item > input[type='checkbox'] {
+    margin-right: 0.5em;
   }
   
   /* Code blocks */
@@ -428,13 +478,24 @@
       margin-bottom: 0.4em;
     }
 
-    ul, ol {
+    ul,
+    ol {
       margin-top: 0.4em;
       margin-bottom: 0.4em;
       padding-left: 1.1em;
+      list-style-position: outside;
+    }
+
+    ul {
+      list-style-type: disc;
+    }
+
+    ol {
+      list-style-type: decimal;
     }
 
     li {
+      display: list-item;
       margin-top: 0.2em;
       margin-bottom: 0.2em;
     }

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Metadata } from 'next';
 
-import { getArticleSEOContent, getArticlesSlugs } from '@/lib/articles';
+import { getArticleSEOContent, getArticlePathBySlug, getArticlesSlugs } from '@/lib/articles';
+import { DraftPreviewBanner } from '@/components/DraftPreviewBanner';
 import { ArticleMobileControls } from '@/components/ArticleMobileControls';
 import { content } from '@/app/configuration/content';
 import { getOGImageURL } from '@/lib/image';
@@ -9,7 +10,6 @@ import { ArticleContainer } from '@/components/ArticleContainer';
 import { environment } from '@/app/configuration/environment';
 import { ensurePathSlash } from '@/lib/utils';
 import { getArticleMdxDataByPath } from '@/lib/mdx-utils';
-import { getArticlePathByDirName } from '@/lib/files';
 import { readTOC } from '@/lib/toc-parser';
 import { getRssMetadataObject } from '@/lib/rss';
 import TableOfContents from '@/components/TableOfContents';
@@ -30,7 +30,8 @@ function getSEOTitleName(title: string) {
 }
 
 export const generateMetadata = async (props: StaticProps): Promise<Metadata> => {
-    const post = await getArticleSEOContent({ slug: (await props.params).slug });
+    const slug = (await props.params).slug;
+    const post = await getArticleSEOContent({ slug });
     const ogImage = getOGImageURL({ src: post.thumbnail });
 
     return {
@@ -38,14 +39,15 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
         description: post.description,
         metadataBase: new URL(environment.url),
         alternates: {
-            canonical: ensurePathSlash(`/blog/${(await props.params).slug}`),
+            canonical: ensurePathSlash(`/blog/${slug}`),
             types: getRssMetadataObject(),
         },
         keywords: post.keywords,
+        robots: post.draft ? { index: false, follow: false } : undefined,
         openGraph: {
             title: getSEOTitleName(post.title),
             description: post.description,
-            url: ensurePathSlash(`/blog/${(await props.params).slug}`),
+            url: ensurePathSlash(`/blog/${slug}`),
             type: "article",
             images: [ogImage],
         },
@@ -54,7 +56,7 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
 
 export default async function Post(props: StaticProps) {
     const slug = (await props.params).slug;
-    const path = getArticlePathByDirName(slug);
+    const path = await getArticlePathBySlug(slug);
 
     // TODO Avoid double file reading
     const { content, frontmatter } = await getArticleMdxDataByPath({ path });
@@ -76,6 +78,7 @@ export default async function Post(props: StaticProps) {
                 image={image}
             />
             <ArticleContainer>
+                {frontmatter.draft ? <DraftPreviewBanner /> : null}
                 {content}
 
                 <ArticleMobileControls className="fixed xl:hidden" toc={toc} />

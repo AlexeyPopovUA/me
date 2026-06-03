@@ -1,0 +1,346 @@
+---
+title: "Static hosting for vibe coders: one platform, many demo apps"
+slug: static-hosting-for-vibe-coders
+date: 2026-06-03
+lastMod: 2026-06-05
+draft: true
+description: "How a vague “vibe coding” ask became simple shared static hosting with preview URLs — cheap, agent-friendly, and built for many demo apps, not full-stack apps."
+thumbnail: /articles/static-hosting-for-vibe-coders/hosting-demo-prod.png
+tags:
+  - AWS
+  - Hosting
+  - GitHub Actions
+  - CloudFront
+  - Solution design
+keywords:
+  - static hosting
+  - branch previews
+  - vibe coding
+  - AI agent workflow
+  - demo link
+  - CloudFront
+  - S3
+  - GitHub Actions
+  - reusable workflow
+  - Lambda@Edge
+  - subdomain routing
+---
+
+![Production demo app on the shared hosting platform](/articles/static-hosting-for-vibe-coders/hosting-demo-prod.png)
+
+# Static hosting for vibe coders: one platform, many demo apps
+
+## Why I built this
+
+While working on a dev platform, we once got a request that sounded simple on the surface: a **super lightweight “vibe coding” space** — friendly for **non-technical people** who wanted to sketch an idea quickly and **see it live** without learning deployment tooling.
+
+There was no formal spec. The practical bar was roughly:
+
+- make it **easy for an AI agent** to use end-to-end;
+- when the agent finishes a change, **hand back a demo link**;
+- let people **iterate** on that link until the idea is good enough.
+
+That idea stuck with me, but **this article is not about what we shipped at work**. The team eventually took a different road — a heavier stack that kept picking up “one more technology” as requirements shifted late in the game. Fair enough for that context; it just was not the minimal static-hosting shape I had in mind.
+
+**This platform is a private experiment** on my own time and AWS account: a way to satisfy builder curiosity and see how small the solution could stay while still feeling useful. Same spark, different constraints — optimize for cheap, boring, and agent-friendly instead of covering every platform feature on day one.
+
+At its core it is still a hosting problem dressed as a product ask: you need a URL fast, you need previews while experimenting, and you do not want every experiment to become its own infrastructure project.
+
+### From one app to many
+
+A few years earlier I had built [static hosting with a protected dev environment](/blog/simple-static-web-hosting-aws-infrastructure-with-protected-dev-environment/) — **one** app, **multiple environments**, and preview-style URLs on a dev subdomain. It was simple, cheap, and dynamic enough for feature work.
+
+That design stuck in my head. The new question was:
+
+> What if we had the same **preview-by-branch** idea, but for **any number** of small static apps — not just one codebase?
+
+That became this platform: still boring on purpose (S3 + CloudFront + GitHub Actions), but scaled out to **many tenants** with almost no ceremony per app.
+
+### What this is — and is not
+
+This is a **static hosting platform**, not a full-stack product:
+
+- **In scope:** HTML/CSS/JS (or any build that outputs static files), branch previews, shared infra, thin app repos.
+- **Out of scope:** APIs, databases, auth backends, server-side runtimes. If you need a backend, you bring it elsewhere.
+
+The goal is “draft, deploy, share a link, iterate” — not “run my entire SaaS here.”
+
+### What shipped
+
+- **Many apps** on the same infrastructure (one S3 bucket, one CloudFront distribution).
+- **Clean URLs** per app: `{app}.demo.oleksiipopov.com` for production.
+- **Branch previews** on pull requests: `{app}--{branch}.dev.demo.oleksiipopov.com`.
+- **Separate Git repos** per app — the platform repo only owns AWS and reusable workflows.
+
+The code lives in two places:
+
+- Platform (infra + workflows): [static-hosting-for-vibe-coders](https://github.com/AlexeyPopovUA/static-hosting-for-vibe-coders)
+- External demo consumer: [static-hosting-demo-app](https://github.com/AlexeyPopovUA/static-hosting-demo-app)
+
+Live examples today on `demo.oleksiipopov.com`:
+
+| App | Type | Production URL |
+|-----|------|----------------|
+| `hello` | Bundled with platform CDK | [hello.demo.oleksiipopov.com](https://hello.demo.oleksiipopov.com) |
+| `palette` | Bundled with platform CDK | [palette.demo.oleksiipopov.com](https://palette.demo.oleksiipopov.com) |
+| `hosting-demo` | External repo + reusable workflow | [hosting-demo.demo.oleksiipopov.com](https://hosting-demo.demo.oleksiipopov.com) |
+| `hosting-demo` (branch preview) | Same app, PR deploy | [hosting-demo--test-feature-branch-hosting.dev.demo.oleksiipopov.com](https://hosting-demo--test-feature-branch-hosting.dev.demo.oleksiipopov.com) |
+
+## What I needed (requirements)
+
+The **user-facing** requirements were almost embarrassingly small:
+
+| Ask | How the platform answers it |
+|-----|-----------------------------|
+| “Give me a link when you’re done” | Production URL per app slug; PR workflow posts a preview URL in a comment |
+| “Let me iterate” | Each branch/PR gets its own subdomain and S3 prefix |
+| “Keep it simple for agents” | App repo adds a short reusable workflow; build is `pnpm build` → upload `dist/` |
+
+From that, a few **technical** requirements fell out:
+
+1. **Multi-tenant static hosting** — many small apps, each with its own slug, without a new CloudFront distribution per app.
+2. **Production vs preview** — default branch is production; every PR gets an isolated preview folder and URL.
+3. **Predictable URLs** — wildcards on DNS and ACM: `*.demo.oleksiipopov.com` and `*.dev.demo.oleksiipopov.com`.
+4. **Safe names** — Git branch names like `feature/login` must become DNS-safe (`feature-login`).
+5. **SPA-friendly 404s** — ship `404.html` alongside `index.html` so client-side routers still work.
+6. **Simple app integration** — `deploy.yml` + optional `cleanup.yml`; no platform code copied into every repo.
+7. **Automatic cleanup** — when a PR closes or a branch is deleted, remove the S3 prefix so previews do not pile up.
+8. **Low cost and low ops** — one bucket, one distribution, OIDC from GitHub Actions (no long-lived keys in app repos).
+
+**Explicit non-goals:** backends, databases, per-app auth, custom domains per app, and edge response header policies (apps set `Cache-Control` in their build output). This stays a **static** lane on purpose.
+
+## Architecture at a glance
+
+Visitors always hit **one CloudFront distribution**. A **CloudFront Function** (viewer-request) reads the `Host` header and rewrites the URI to an S3 prefix. **Lambda@Edge** (origin-response) only helps with HTML-style 404 handling by serving the closest `404.html` inline.
+
+```mermaid
+flowchart TB
+    subgraph Users
+        U[Browser]
+    end
+
+    subgraph GitHub
+        AR[App repo workflow]
+        PW[Platform reusable workflows]
+        AR --> PW
+    end
+
+    subgraph AWS
+        S3[(S3 bucket)]
+        CF[CloudFront]
+        FN[CloudFront Function]
+        LE["Lambda Edge 404 resolver"]
+        SSM[SSM parameters]
+    end
+
+    PW -->|s3 sync + invalidation| S3
+    U -->|HTTPS| CF
+    CF --> FN
+    FN -->|rewrite URI prefix| CF
+    CF --> S3
+    S3 --> LE
+    LE --> CF
+    CF --> U
+    PW --> SSM
+```
+
+### URL → S3 mapping
+
+Production uses a short hostname. Previews use a **single DNS label** with `--` between app and branch (so `*.dev.demo...` wildcard still works).
+
+| URL | S3 prefix (example) |
+|-----|---------------------|
+| `hello.demo.oleksiipopov.com` | `/hello/main/` |
+| `hello--feat-ui.dev.demo.oleksiipopov.com` | `/hello/feat-ui/` |
+| `hosting-demo.demo.oleksiipopov.com` | `/hosting-demo/main/` |
+| `hosting-demo--test-feature-branch-hosting.dev.demo.oleksiipopov.com` | `/hosting-demo/test-feature-branch-hosting/` |
+
+```mermaid
+flowchart LR
+    subgraph Production
+        P1["hello.demo..."]
+        P2["/hello/main/index.html"]
+        P1 --> P2
+    end
+
+    subgraph Preview
+        V1["hosting-demo--test-feature-branch-hosting.dev.demo..."]
+        V2["/hosting-demo/test-feature-branch-hosting/..."]
+        V1 --> V2
+    end
+```
+
+Branch names are sanitized in CI (slashes and odd characters become hyphens, lowercased, max 63 chars). The separator `--` is reserved: app slugs and branch names cannot contain `--` themselves.
+
+### Closest 404 (HTML only)
+
+For navigation requests (no file extension, `.html`, or `Accept: text/html`), a miss in S3 triggers a search:
+
+1. `/{app}/{branch}/404.html`
+2. `/{app}/404.html`
+3. `/404.html` (global)
+
+The first existing file is returned with HTTP 404 and the HTML body — no redirect. Static assets (`.js`, `.css`, images) keep a normal 404 from origin.
+
+**SPA tip:** ship `404.html` as a copy of `index.html` in each deploy. The external demo app build does this automatically.
+
+### What we deliberately avoid
+
+CloudFront **custom error responses** are **not** configured on the distribution. They would fight with the Lambda@Edge resolver.
+
+## Demo apps: inside the platform vs outside
+
+### Inside the platform (CDK bootstrap)
+
+When the CDK stack deploys, it uploads two tiny sample apps from `packages/infra/assets/demo-apps/`:
+
+![Hello demo app — bundled sample](/articles/static-hosting-for-vibe-coders/hello-demo.png)
+
+![Palette demo app — bundled sample with JS](/articles/static-hosting-for-vibe-coders/palette-demo.png)
+
+These prove routing and caching without any GitHub app repo. They are good smoke tests after infra changes.
+
+### Outside the platform (real consumer)
+
+[static-hosting-demo-app](https://github.com/AlexeyPopovUA/static-hosting-demo-app) is a minimal SPA in its **own** repository. Its workflow calls the platform’s reusable `deploy-app.yml`:
+
+```yaml
+jobs:
+  deploy:
+    uses: AlexeyPopovUA/static-hosting-for-vibe-coders/.github/workflows/deploy-app.yml@main
+    with:
+      app-slug: hosting-demo
+      build-command: pnpm build
+      output-dir: dist
+      base-domain: demo.oleksiipopov.com
+    secrets: inherit
+```
+
+On every pull request, the workflow builds, syncs to `s3://…/hosting-demo/{sanitized-branch}/`, invalidates CloudFront paths, and comments the preview URL on the PR.
+
+Cleanup is a sibling workflow on `pull_request: closed` and `delete` (branch removed), calling `cleanup-branch.yml` with the same `app-slug` and resolved branch name.
+
+### Branch preview in practice (verified)
+
+To prove the external app path end-to-end, I opened [PR #2](https://github.com/AlexeyPopovUA/static-hosting-demo-app/pull/2) on branch `test/feature-branch-hosting`:
+
+1. Added a visible yellow badge and `data-e2e="feature-branch-preview"` in the app HTML (so production and preview are easy to tell apart).
+2. Pushed the branch — GitHub Actions ran the reusable `deploy-app.yml` workflow successfully (~22s).
+3. The PR received an automatic comment with the preview URL.
+
+The branch name `test/feature-branch-hosting` was sanitized to `test-feature-branch-hosting` for both the S3 prefix and the subdomain:
+
+| Git branch | Sanitized | Preview URL |
+|------------|-----------|-------------|
+| `test/feature-branch-hosting` | `test-feature-branch-hosting` | `https://hosting-demo--test-feature-branch-hosting.dev.demo.oleksiipopov.com` |
+
+![Branch preview of hosting-demo with E2E badge](/articles/static-hosting-for-vibe-coders/hosting-demo-preview.png)
+
+Checks that passed:
+
+- **S3** — objects under `hosting-demo/test-feature-branch-hosting/` (`index.html`, `404.html`, assets).
+- **Preview** — HTTP 200, HTML contains the badge and `data-e2e` marker.
+- **Production** — [hosting-demo.demo.oleksiipopov.com](https://hosting-demo.demo.oleksiipopov.com) still serves the previous build without the badge.
+
+When the PR is closed without merging, `cleanup.yml` should remove the prefix and the preview hostname should return 404. The repo README has a [manual checklist](https://github.com/AlexeyPopovUA/static-hosting-demo-app#manual-e2e-checklist-feature-branch--cleanup) to repeat the full open → verify → close → verify cleanup flow.
+
+## CI/CD flow
+
+```mermaid
+sequenceDiagram
+    participant Dev as Developer
+    participant App as App repo
+    participant GHA as GitHub Actions
+    participant Plat as Platform scripts
+    participant S3 as S3
+    participant CF as CloudFront
+
+    Dev->>App: Push branch / open PR
+    App->>GHA: deploy.yml (workflow_call)
+    GHA->>App: pnpm install + build
+    GHA->>Plat: checkout platform (validation scripts)
+    Plat-->>GHA: sanitize branch name
+    GHA->>S3: s3 sync to app branch prefix
+    GHA->>CF: CloudFront invalidation
+    alt Pull request
+        GHA->>App: Comment preview URL
+    end
+```
+
+Platform repo workflows (same repository):
+
+| Workflow | Role |
+|----------|------|
+| `deploy-infra.yml` | CDK deploy when infra changes |
+| `deploy-app.yml` | Reusable build + sync + invalidate + PR comment |
+| `cleanup-branch.yml` | Reusable delete prefix for one app/branch |
+| `invalidate-app.yml` | Manual cache bust |
+| `validate-infra.yml` | Typecheck, tests, synth on PRs |
+
+Apps need **pnpm**, `AWS_AUTH_ROLE` (OIDC), and `permissions: id-token: write`.
+
+## S3 layout (mental model)
+
+```mermaid
+flowchart TB
+    root["/ (bucket root)"]
+    root --> global["404.html (global fallback)"]
+    root --> app1["/hello/"]
+    app1 --> hello404["404.html"]
+    app1 --> hellomain["main/ production"]
+    app1 --> hellobr["feat-x/ optional preview"]
+    root --> app2["/hosting-demo/"]
+    app2 --> demo404["404.html"]
+    app2 --> demomain["main/"]
+    app2 --> demobr["test-feature-branch-hosting/ active preview"]
+```
+
+Each app should deploy its own `404.html` at the app root (`/{app}/404.html`) when possible, plus per-branch copies for SPA routing.
+
+## Caching (short version)
+
+- HTML and “extensionless” paths use a **short** CloudFront cache policy (~5 minutes at the edge).
+- Common static extensions (`.js`, `.css`, `.png`, …) use **CachingOptimized** behaviors.
+- Deploy workflows invalidate `/{app}/{branch}/*` and `/{app}/404.html` after upload.
+
+Apps should set sensible `Cache-Control` in the build: short TTL for HTML, long immutable TTL for hashed assets.
+
+## How this compares to my older hosting article
+
+| Topic | [Older simple hosting](/blog/simple-static-web-hosting-aws-infrastructure-with-protected-dev-environment/) | This platform |
+|-------|-------------------------------------------------------------------------------------------------------------|---------------|
+| Apps | One site, path-based branches on dev host | Many apps, subdomain per app |
+| Dev access | WAF IP allowlist on dev distribution | Public preview URLs on `*.dev...` |
+| Distributions | Two (prod + dev) | One |
+| App repos | Same repo / manual deploy | Separate repos + reusable workflows |
+
+The older design is still valid when you need a **private** dev environment. This platform optimizes for **many public previews** and **minimal ceremony** per new demo.
+
+## Tech stack
+
+- **AWS CDK** (TypeScript) — bucket, OAC, CloudFront, ACM, Route53, Lambda@Edge, SSM params
+- **CloudFront Function** — subdomain → URI rewrite
+- **GitHub Actions** — OIDC, `mise`, reusable workflows
+- **Node 24 + pnpm** — aligned across platform and app repos
+
+Full specification (kept in sync with code): [docs/SPEC.md](https://github.com/AlexeyPopovUA/static-hosting-for-vibe-coders/blob/main/docs/SPEC.md).
+
+## Adding your own app
+
+1. Create a static app repo with `pnpm build` output (e.g. `dist/`).
+2. Pick an `app-slug` (lowercase, hyphens, no `--`).
+3. Copy `deploy.yml` and optional `cleanup.yml` from the demo app.
+4. Set `AWS_AUTH_ROLE` and ensure OIDC trust on the shared IAM role.
+5. Push to `main` for production; open a PR for a preview URL.
+
+The platform repo includes a **create-demo-app** skill/script to scaffold a new consumer repo.
+
+## Conclusion
+
+The original ask was not “build a PaaS.” It was: let people (and agents) **draft ideas, get a link, and iterate** — without a deployment lecture.
+
+This platform is the smallest thing that fit: one bucket, one distribution, predictable URLs, thin app repos, and branch previews that work the same way for every static app. Demo apps **inside** the CDK package prove routing; the **external** `hosting-demo` repo proves real consumers can plug in with a few lines of YAML.
+
+If you are in the same situation — many small front ends, AI-assisted workflows, and a need to share progress as a URL — a shared subdomain router on CloudFront is a solid fit. Just keep the scope static, invest in sanitization and cleanup early, and accept that anything needing a backend belongs somewhere else.
+
+**Repositories:** [platform](https://github.com/AlexeyPopovUA/static-hosting-for-vibe-coders) · [external demo app](https://github.com/AlexeyPopovUA/static-hosting-demo-app)

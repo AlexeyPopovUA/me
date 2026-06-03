@@ -17,8 +17,36 @@ import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
 
 const reverseTimeSorter = <T extends CommonPostSchema>(a: T, b: T) => new Date(b.date).getTime() - new Date(a.date).getTime();
 
+/** Draft posts are included in lists and routing only when running `next dev`. */
+export function isDraftPreviewEnabled(): boolean {
+  return process.env.NODE_ENV === 'development';
+}
+
+function excludeDrafts<T extends { draft?: boolean }>(items: T[]): T[] {
+  if (isDraftPreviewEnabled()) {
+    return items;
+  }
+  return items.filter((item) => !item.draft);
+}
+
+/** Resolve public slug to MDX file path (slug may differ from content folder name). */
+export async function getArticlePathBySlug(slug: string): Promise<string> {
+  const dirs = await listDirNames(getArticlesBasePath());
+
+  for (const dir of dirs) {
+    const path = getArticlePathByDirName(dir);
+    const frontMatter = await getFrontMatterDataByPath<ArticlesSchema>(path);
+    if (frontMatter.slug === slug) {
+      return path;
+    }
+  }
+
+  return getArticlePathByDirName(slug);
+}
+
 export async function getArticleSEOContent({slug}: { slug: string }) {
-  const frontMatter = await getFrontMatterDataByPath<ArticlesSchema>(getArticlePathByDirName(slug));
+  const path = await getArticlePathBySlug(slug);
+  const frontMatter = await getFrontMatterDataByPath<ArticlesSchema>(path);
 
   return {
     ...frontMatter,
@@ -33,9 +61,7 @@ export async function getArticlesSlugs() {
   const frontMatterList = await Promise.all(dirs
     .map(dir => getFrontMatterDataByPath<ArticlesSchema>(getArticlePathByDirName(dir))));
 
-  return frontMatterList
-    .filter((frontMatter) => !frontMatter.draft)
-    .map((frontMatter) => frontMatter.slug);
+  return excludeDrafts(frontMatterList).map((frontMatter) => frontMatter.slug);
 }
 
 export async function getProjectSlugs() {
@@ -57,13 +83,10 @@ export async function getLastArticles(cfg?: { limit?: number }) {
   const frontMatterList = await Promise.all(articleDirs
     .map(dir => getFrontMatterDataByPath<ArticlesSchema>(getArticlePathByDirName(dir))));
 
-  // filter out drafts
-  let result = frontMatterList.filter((frontMatter) => !frontMatter.draft);
+  let result = excludeDrafts(frontMatterList);
 
-  // sort by date
   result.sort(reverseTimeSorter);
 
-  // take first N
   if (cfg && cfg.limit && cfg.limit > 0) {
     result = result.slice(0, cfg.limit);
   }
@@ -100,11 +123,8 @@ export async function getAllArticles() {
   const frontMatterList = await Promise.all(postDirs
     .map(dir => getFrontMatterDataByPath<ArticlesSchema>(getArticlePathByDirName(dir))));
 
-  // filter out drafts
-  const result = frontMatterList
-    .filter((frontMatter) => !frontMatter.draft);
+  const result = excludeDrafts(frontMatterList);
 
-  // sort by date
   result.sort(reverseTimeSorter);
 
   return result;
@@ -117,11 +137,8 @@ export async function getAllArticleSitemapData(): Promise<MetadataRoute.Sitemap>
   const frontMatterList = await Promise.all(postDirs
     .map(dir => getFrontMatterDataByPath<ArticlesSchema>(getArticlePathByDirName(dir))));
 
-  // filter out drafts
-  const result = frontMatterList
-    .filter((frontMatter) => !frontMatter.draft);
+  const result = excludeDrafts(frontMatterList);
 
-  // sort by date
   result.sort(reverseTimeSorter);
 
   return result.map(item => {
