@@ -55,10 +55,16 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Puppeteer browsers
-        run: pnpm --filter front-end exec puppeteer browsers install chrome --no-progress
+      - name: Setup Chrome for Mermaid diagrams
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+          install-dependencies: true
 
       - name: Build
+        env:
+          PUPPETEER_EXECUTABLE_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: pnpm --filter front-end build
 
       - name: Configure AWS Credentials

@@ -11,10 +11,19 @@ interface CodeNode extends Node {
 
 let browserInstance: Promise<Browser> | null = null;
 
+function getPuppeteerLaunchOptions(): Parameters<typeof puppeteer.launch>[0] {
+  const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+  return {
+    headless: true,
+    ...(executablePath ? {executablePath} : {}),
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  };
+}
+
 async function getBrowserInstance() {
   if (!browserInstance) {
     console.log("Browser launch!");
-    browserInstance = puppeteer.launch({headless: true, args: ['--no-sandbox']});
+    browserInstance = puppeteer.launch(getPuppeteerLaunchOptions());
   }
   return browserInstance;
 }
@@ -66,11 +75,3 @@ export function remarkMermaid(): Transformer {
     }
   }
 }
-
-// Ensure the browser instance is closed when the process exits
-process.on('exit', async () => {
-  if (browserInstance) {
-    console.log("Browser close!");
-    await (await browserInstance).close();
-  }
-});
