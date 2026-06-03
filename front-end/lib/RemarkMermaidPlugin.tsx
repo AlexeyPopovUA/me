@@ -16,6 +16,7 @@ async function getBrowserInstance() {
     console.log("Browser launch!");
     browserInstance = puppeteer.launch({headless: true, args: ['--no-sandbox']});
   }
+  return browserInstance;
 }
 
 const cache: { [key: string]: unknown } = {};
@@ -60,7 +61,7 @@ export function remarkMermaid(): Transformer {
     });
 
     if (nodesToRender.length) {
-      void getBrowserInstance();
+      await getBrowserInstance();
       await generateDiagrams(nodesToRender);
     }
   }

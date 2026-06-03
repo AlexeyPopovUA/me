@@ -56,7 +56,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install Puppeteer browsers
-        run: pnpm --filter front-end exec puppeteer browsers install chrome
+        run: pnpm --filter front-end exec puppeteer browsers install chrome --no-progress
 
       - name: Build
         run: pnpm --filter front-end build
