@@ -2,10 +2,10 @@
 title: "Static hosting for vibe coders: one platform, many demo apps"
 slug: static-hosting-for-vibe-coders
 date: 2026-06-03
-lastMod: 2026-06-05
-draft: true
+lastMod: 2026-06-06
+draft: false
 description: "How a vague “vibe coding” ask became simple shared static hosting with preview URLs — cheap, agent-friendly, and built for many demo apps, not full-stack apps."
-thumbnail: /articles/static-hosting-for-vibe-coders/hosting-demo-prod.png
+thumbnail: /articles/static-hosting-for-vibe-coders/static-hosting-platform-hero.png
 tags:
   - AWS
   - Hosting
@@ -26,7 +26,7 @@ keywords:
   - subdomain routing
 ---
 
-![Production demo app on the shared hosting platform](/articles/static-hosting-for-vibe-coders/hosting-demo-prod.png)
+![Static hosting platform: one CloudFront gateway, many demo apps, shared S3 bucket](/articles/static-hosting-for-vibe-coders/static-hosting-platform-hero.png)
 
 # Static hosting for vibe coders: one platform, many demo apps
 
@@ -104,7 +104,7 @@ From that, a few **technical** requirements fell out:
 4. **Safe names** — Git branch names like `feature/login` must become DNS-safe (`feature-login`).
 5. **SPA-friendly 404s** — ship `404.html` alongside `index.html` so client-side routers still work.
 6. **Simple app integration** — `deploy.yml` + optional `cleanup.yml`; no platform code copied into every repo.
-7. **Automatic cleanup** — when a PR closes or a branch is deleted, remove the S3 prefix so previews do not pile up.
+7. **Automatic cleanup** — when a remote branch is deleted, remove the S3 prefix so previews do not pile up.
 8. **Low cost and low ops** — one bucket, one distribution, OIDC from GitHub Actions (no long-lived keys in app repos).
 
 **Explicit non-goals:** backends, databases, per-app auth, custom domains per app, and per-app `Cache-Control` tuning (shared deploy workflows invalidate CloudFront after upload instead). This stays a **static** lane on purpose.
@@ -143,6 +143,19 @@ flowchart TB
     CF --> U
     PW --> SSM
 ```
+
+### Infra IDs in SSM
+
+The `PW --> SSM` arrow is how reusable workflows learn **where** to upload and **what** to invalidate. When CDK deploys the platform stack, it writes two Parameter Store values:
+
+| Parameter | Value |
+|-----------|--------|
+| `/static-hosting/bucket-name` | Shared S3 bucket name |
+| `/static-hosting/distribution-id` | CloudFront distribution ID |
+
+App repos do **not** copy those IDs into GitHub secrets. They call `deploy-app.yml` (or `cleanup-branch.yml` / `invalidate-app.yml`) with `secrets: inherit`; the workflow assumes the shared OIDC role, runs `aws ssm get-parameter` for each path, then uses the results for `s3 sync` and `create-invalidation`.
+
+That keeps a single source of truth in AWS: if infra is recreated, updating the parameters is enough — every consumer workflow keeps working without editing each app repo. Apps only pass **their** inputs (`app-slug`, `output-dir`, `base-domain`, …).
 
 ### URL → S3 mapping
 
@@ -216,9 +229,11 @@ jobs:
     secrets: inherit
 ```
 
+`secrets: inherit` passes the shared `AWS_AUTH_ROLE` for OIDC — not bucket or distribution IDs. The reusable workflow [looks those up from SSM](#infra-ids-in-ssm) at runtime.
+
 On every pull request, the workflow builds, syncs to `s3://…/hosting-demo/{sanitized-branch}/`, invalidates CloudFront paths, and comments the preview URL on the PR.
 
-Cleanup is a sibling workflow on `pull_request: closed` and `delete` (branch removed), calling `cleanup-branch.yml` with the same `app-slug` and resolved branch name.
+Cleanup is a sibling workflow on `delete` (branch removed), calling `cleanup-branch.yml` with the same `app-slug` and `github.event.ref`.
 
 ### Branch preview in practice (verified)
 
@@ -242,7 +257,7 @@ Checks that passed:
 - **Preview** — HTTP 200, HTML contains the badge and `data-e2e` marker.
 - **Production** — [hosting-demo.demo.oleksiipopov.com](https://hosting-demo.demo.oleksiipopov.com) still serves the previous build without the badge.
 
-When the PR is closed without merging, `cleanup.yml` should remove the prefix and the preview hostname should return 404. The repo README has a [manual checklist](https://github.com/AlexeyPopovUA/static-hosting-demo-app#manual-e2e-checklist-feature-branch--cleanup) to repeat the full open → verify → close → verify cleanup flow.
+When the remote branch is deleted, `cleanup.yml` should remove the prefix and the preview hostname should return 404. The repo README has a [manual checklist](https://github.com/AlexeyPopovUA/static-hosting-demo-app#manual-e2e-checklist-feature-branch--cleanup) to repeat the full open → verify → delete branch → verify cleanup flow.
 
 ## CI/CD flow
 
