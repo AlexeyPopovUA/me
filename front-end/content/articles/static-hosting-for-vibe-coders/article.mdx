@@ -107,7 +107,7 @@ From that, a few **technical** requirements fell out:
 7. **Automatic cleanup** — when a PR closes or a branch is deleted, remove the S3 prefix so previews do not pile up.
 8. **Low cost and low ops** — one bucket, one distribution, OIDC from GitHub Actions (no long-lived keys in app repos).
 
-**Explicit non-goals:** backends, databases, per-app auth, custom domains per app, and edge response header policies (apps set `Cache-Control` in their build output). This stays a **static** lane on purpose.
+**Explicit non-goals:** backends, databases, per-app auth, custom domains per app, and per-app `Cache-Control` tuning (shared deploy workflows invalidate CloudFront after upload instead). This stays a **static** lane on purpose.
 
 ## Architecture at a glance
 
@@ -301,9 +301,9 @@ Each app should deploy its own `404.html` at the app root (`/{app}/404.html`) wh
 
 - HTML and “extensionless” paths use a **short** CloudFront cache policy (~5 minutes at the edge).
 - Common static extensions (`.js`, `.css`, `.png`, …) use **CachingOptimized** behaviors.
-- Deploy workflows invalidate `/{app}/{branch}/*` and `/{app}/404.html` after upload.
-
-Apps should set sensible `Cache-Control` in the build: short TTL for HTML, long immutable TTL for hashed assets.
+- **Freshness on deploy** comes from shared workflows: after `s3 sync`, `deploy-app.yml` invalidates `/{app}/{branch}/*` and `/{app}/404.html`. Feature-branch previews update **per push**, not by waiting for TTL expiry.
+- `aws s3 sync` does not set object `Cache-Control` metadata — and apps do not need to. Invalidation is the platform contract for cache busting.
+- Edge TTL policies only matter **between deploys** (e.g. manual S3 uploads that skip CI).
 
 ## How this compares to my older hosting article
 
