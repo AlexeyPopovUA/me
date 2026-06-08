@@ -4,6 +4,7 @@ import {Metadata} from "next";
 import {getProjectSlugs} from "@/lib/articles";
 import {Carousel} from "@/components/image/carousel";
 import {getInsideImageURL, getOGImageURL} from "@/lib/image";
+import {getTwitterMetadata} from "@/lib/metadata";
 import {readBlurredImageSrcPair} from "@/lib/image-server";
 import {content} from "@/app/configuration/content";
 import {ArticleContainer} from "@/components/ArticleContainer";
@@ -43,7 +44,12 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
       images: [
         ogImage
       ]
-    }
+    },
+    twitter: getTwitterMetadata({
+      title: `${frontMatter.title} - ${content.authorName}`,
+      description: frontMatter.description,
+      images: [ogImage],
+    }),
   };
 }
 
@@ -84,7 +90,12 @@ export default async function Post(props: StaticProps) {
       />
       <ArticleContainer>
         <h1>{frontmatter.title}</h1>
-        <Carousel imageCfgs={imageCfgs} projectType={frontmatter.type} />
+        <Carousel
+          imageCfgs={imageCfgs}
+          projectType={frontmatter.type}
+          projectTitle={frontmatter.title}
+          galleryAlt={frontmatter.galleryAlt}
+        />
 
         {/* Technologies tag list */}
         {frontmatter.technologies && frontmatter.technologies.length > 0 && (

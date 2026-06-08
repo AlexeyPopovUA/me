@@ -51,13 +51,19 @@ function extractTOC(ast: Nodes): TOCHeading[] {
   return headings;
 }
 
-export async function readTOC({path}: { path: string }) {
+export async function readArticleHeadings({path}: { path: string }) {
   const source = await read(path, {encoding: 'utf-8'});
   const mdast = fromMarkdown(source.value);
   const hast = toHast(mdast);
-
   const toc = extractTOC(hast);
 
-  // Sometimes the first heading is not the main title (maybe, the front matter influence)
-  return toc.find((heading) => heading.level === 1);
+  return {
+    hasH1: toc.some((heading) => heading.level === 1),
+    tocRoot: toc.find((heading) => heading.level === 1) ?? toc[0],
+  };
+}
+
+export async function readTOC({path}: { path: string }) {
+  const {tocRoot} = await readArticleHeadings({path});
+  return tocRoot;
 }

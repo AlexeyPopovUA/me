@@ -91,7 +91,7 @@ export const HeroSection = ({ src, blurDataURL, name, title, description }: Hero
                                 href="/resume"
                                 className="px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all glow-amber hover:glow-amber-strong"
                             >
-                                View My CV
+                                View Resume
                             </Link>
                             <Link
                                 href="/portfolio"

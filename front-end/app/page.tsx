@@ -5,6 +5,7 @@ import { Metadata } from 'next';
 import LatestArticles from '@/app/latest-articles';
 import FeaturedProjects from '@/app/featured-projects';
 import { getOGImageURL } from '@/lib/image';
+import { getTwitterMetadata } from '@/lib/metadata';
 import { readBlurredImageSrcPair } from '@/lib/image-server';
 import { getFrontMatterDataByPath } from '@/lib/mdx-utils';
 import { getPagePathByDirName } from '@/lib/files';
@@ -34,6 +35,11 @@ export async function generateMetadata(): Promise<Metadata> {
             type: "website",
             images: [ogImage],
         },
+        twitter: getTwitterMetadata({
+            title: frontMatter.title,
+            description: frontMatter.description,
+            images: [ogImage],
+        }),
     };
 }
 

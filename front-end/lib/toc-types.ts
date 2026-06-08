@@ -6,7 +6,11 @@ export interface TOCHeading {
 }
 
 // Flatten hierarchical TOC structure to a flat list, only including h2 and h3 (levels 2 and 3)
-export function flattenTOC(heading: TOCHeading): TOCHeading[] {
+export function flattenTOC(heading?: TOCHeading): TOCHeading[] {
+  if (!heading) {
+    return [];
+  }
+
   const result: TOCHeading[] = [];
   const seenIds = new Set<string>();
 

@@ -6,11 +6,12 @@ import { DraftPreviewBanner } from '@/components/DraftPreviewBanner';
 import { ArticleMobileControls } from '@/components/ArticleMobileControls';
 import { content } from '@/app/configuration/content';
 import { getOGImageURL } from '@/lib/image';
+import { getTwitterMetadata } from '@/lib/metadata';
 import { ArticleContainer } from '@/components/ArticleContainer';
 import { environment } from '@/app/configuration/environment';
 import { ensurePathSlash } from '@/lib/utils';
 import { getArticleMdxDataByPath } from '@/lib/mdx-utils';
-import { readTOC } from '@/lib/toc-parser';
+import { readArticleHeadings } from '@/lib/toc-parser';
 import { getRssMetadataObject } from '@/lib/rss';
 import TableOfContents from '@/components/TableOfContents';
 import { BlogPostStructuredData } from '@/components/BlogPostStructuredData';
@@ -51,6 +52,11 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
             type: "article",
             images: [ogImage],
         },
+        twitter: getTwitterMetadata({
+            title: getSEOTitleName(post.title),
+            description: post.description,
+            images: [ogImage],
+        }),
     };
 };
 
@@ -60,7 +66,7 @@ export default async function Post(props: StaticProps) {
 
     // TODO Avoid double file reading
     const { content, frontmatter } = await getArticleMdxDataByPath({ path });
-    const toc = await readTOC({ path });
+    const { hasH1, tocRoot: toc } = await readArticleHeadings({ path });
     // Build canonical URL
     const url = ensurePathSlash(`${environment.url}/blog/${slug}`);
     // Use post.thumbnail for image if available
@@ -79,14 +85,17 @@ export default async function Post(props: StaticProps) {
             />
             <ArticleContainer>
                 {frontmatter.draft ? <DraftPreviewBanner /> : null}
+                {!hasH1 ? <h1>{frontmatter.title}</h1> : null}
                 {content}
 
                 <ArticleMobileControls className="fixed xl:hidden" toc={toc} />
 
                 {/* Fixed sidebar TOC */}
-                <div className="fixed top-24 left-4 hidden w-56 xl:block">
-                    <TableOfContents heading={toc!} className="rounded-xl bg-card border border-border p-5" />
-                </div>
+                {toc ? (
+                    <div className="fixed top-24 left-4 hidden w-56 xl:block">
+                        <TableOfContents heading={toc} className="rounded-xl bg-card border border-border p-5" />
+                    </div>
+                ) : null}
 
                 {/* Mobile/responsive TOC */}
                 {/*<div className="lg:hidden mb-8">

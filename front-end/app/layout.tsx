@@ -31,11 +31,10 @@ export async function generateMetadata() {
 
     return {
         metadataBase: new URL(environment.url),
-        alternates: {
-            canonical: '/'
-        },
         openGraph: {
-            siteName: content.authorName
+            siteName: content.authorName,
+            locale: 'en_US',
+            type: 'website',
         },
         twitter: {
             card: "summary_large_image",

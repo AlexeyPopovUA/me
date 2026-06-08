@@ -3,6 +3,7 @@ import { BlogPosting, WithContext } from 'schema-dts';
 
 import { environment } from '@/app/configuration/environment';
 import { content } from '@/app/configuration/content';
+import { getBlogReference, getPublisher } from '@/lib/structured-data';
 
 interface BlogPostStructuredDataProps {
     title: string;
@@ -20,6 +21,7 @@ export function BlogPostStructuredData({ title, description, datePublished, date
         '@type': 'BlogPosting',
         headline: title,
         description: description,
+        url: url,
         datePublished: new Date(datePublished).toISOString(),
         ...(dateModified ? { dateModified: new Date(dateModified).toISOString() } : {}),
         author: {
@@ -27,11 +29,13 @@ export function BlogPostStructuredData({ title, description, datePublished, date
             name: author || content.authorName,
             url: environment.url,
         },
+        publisher: getPublisher(),
+        isPartOf: getBlogReference(),
         mainEntityOfPage: {
             '@type': 'WebPage',
             '@id': url,
         },
-        ...(image ? { image: image } : {}),
+        ...(image ? { image: [image] } : {}),
     };
 
     return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} suppressHydrationWarning />;

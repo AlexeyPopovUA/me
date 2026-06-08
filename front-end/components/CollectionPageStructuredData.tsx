@@ -22,6 +22,7 @@ export function CollectionPageStructuredData({title, description, url, items}: C
         url: url,
         mainEntity: {
             "@type": "ItemList",
+            numberOfItems: items.length,
             itemListElement: items.map((item, index) => ({
                 "@type": "ListItem",
                 position: index + 1,

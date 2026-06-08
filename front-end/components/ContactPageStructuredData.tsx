@@ -23,6 +23,13 @@ export function ContactPageStructuredData({pageName, personName, description, ur
             name: personName,
             url: personUrl ?? url,
             sameAs: sameAs,
+            email: "opportunities@oleksiipopov.com",
+            contactPoint: {
+                "@type": "ContactPoint",
+                contactType: "professional inquiries",
+                email: "opportunities@oleksiipopov.com",
+                availableLanguage: ["English", "Ukrainian", "Russian", "Dutch"]
+            },
             ...(image ? {image: image} : {})
         }
     };

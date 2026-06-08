@@ -6,9 +6,26 @@ import {readBlurredImageSrcPair} from "@/lib/image-server";
 import {ThumbnailImage} from "@/components/image/animated-image-loading/thumbnail-image";
 import {imageLoader} from "@/components/image/image-loader";
 
+function getImageAltFallback(props: { alt?: string; title?: string; src?: string }) {
+  if (props.alt?.trim()) {
+    return props.alt.trim();
+  }
+  if (props.title?.trim()) {
+    return props.title.trim();
+  }
+  if (props.src) {
+    const filename = props.src.split('/').pop()?.replace(/\.[^.]+$/, '') ?? '';
+    if (filename) {
+      return filename.replace(/[-_]+/g, ' ');
+    }
+  }
+  return 'Article illustration';
+}
+
 // @ts-expect-error - todo > add proper types later
 const MDXImage = async (props) => {
   const {src, blurDataURL, ratio} = await readBlurredImageSrcPair({src: props.src});
+  const alt = getImageAltFallback(props);
 
   const className = clsx(
     'w-full cursor-zoom-in article-image',
@@ -26,7 +43,7 @@ const MDXImage = async (props) => {
         <ThumbnailImage
           src={src}
           loader={imageLoader}
-          alt={props.alt}
+          alt={alt}
           width={800}
           height={800 / ratio}
           blurDataURL={blurDataURL}

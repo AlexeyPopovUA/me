@@ -47,7 +47,7 @@ export function ResumeStructuredData({
             content.socialLinks.cal_com,
         ],
         ...(image ? { image: image } : {}),
-        //...(skills.length > 0 ? { knowsAbout: skills.join(', ') } : {}),
+        email: 'opportunities@oleksiipopov.com',
         mainEntityOfPage: {
             '@type': 'WebPage',
             '@id': url,

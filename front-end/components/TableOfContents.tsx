@@ -52,7 +52,7 @@ export const TOCList: React.FC<TOCListProps> = ({ heading, onItemClick, classNam
 };
 
 interface TableOfContentsProps {
-    heading: TOCHeading;
+    heading?: TOCHeading;
     className?: string;
 }
 
@@ -60,6 +60,9 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
     heading,
     className = '',
 }) => {
+    if (!heading) {
+        return null;
+    }
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };

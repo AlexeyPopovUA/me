@@ -54,10 +54,10 @@ export const ProjectCard = ({ title, href, image, index }: ProjectCardProps) => 
             <Link href={href} className="group relative overflow-hidden rounded-xl bg-card border border-border hover-lift block">
                 <div className="aspect-square overflow-hidden">{image}</div>
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                    <div className="flex items-center justify-between">
-                        <span className="text-foreground font-medium text-sm">{title}</span>
-                        <ExternalLink size={16} className="text-primary" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background/95 via-background/80 to-transparent">
+                    <div className="flex items-center justify-between gap-2">
+                        <h3 className="text-foreground font-medium text-sm line-clamp-2 group-hover:text-primary transition-colors">{title}</h3>
+                        <ExternalLink size={16} className="text-primary shrink-0 opacity-70 group-hover:opacity-100" />
                     </div>
                 </div>
             </Link>

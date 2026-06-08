@@ -16,6 +16,8 @@ export namespace Carousel {
       ratio: number;
     }[];
     projectType?: string;
+    projectTitle?: string;
+    galleryAlt?: string[];
   };
 }
 
@@ -97,7 +99,12 @@ export function Carousel(props: Carousel.Props) {
                   unoptimized={true}
                   src={imageCfg.imageURL}
                   blurDataURL={imageCfg.blurDataURL}
-                  alt={`Carousel image ${index + 1}`}
+                  alt={
+                    props.galleryAlt?.[index]?.trim()
+                    || (props.projectTitle
+                      ? `${props.projectTitle} — screenshot ${index + 1} of ${props.imageCfgs.length}`
+                      : `Project screenshot ${index + 1} of ${props.imageCfgs.length}`)
+                  }
                   className="w-full h-full"
                   imageClassName="carousel-image w-full h-full object-contain"
                   loading="lazy"

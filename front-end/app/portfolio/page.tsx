@@ -6,6 +6,7 @@ import {PageSchema} from "@/content/pages/portfolio/schema";
 import AllProjects from "@/app/portfolio/all-projects";
 import {content} from "@/app/configuration/content";
 import {getOGImageURL} from "@/lib/image";
+import {getTwitterMetadata} from "@/lib/metadata";
 import {environment} from "@/app/configuration/environment";
 import {ensurePathSlash} from "@/lib/utils";
 import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
@@ -33,7 +34,12 @@ export async function generateMetadata(): Promise<Metadata> {
             images: [
                 ogImage
             ]
-        }
+        },
+        twitter: getTwitterMetadata({
+            title: `${frontMatter.title} - ${content.authorName}`,
+            description: frontMatter.description,
+            images: [ogImage],
+        }),
     }
 }
 

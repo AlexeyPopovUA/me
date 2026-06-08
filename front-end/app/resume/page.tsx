@@ -8,6 +8,7 @@ import {content} from "@/app/configuration/content";
 import {environment} from "@/app/configuration/environment";
 import {ensurePathSlash} from "@/lib/utils";
 import {getOGImageURL} from "@/lib/image";
+import {getTwitterMetadata} from "@/lib/metadata";
 import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
 import {ResumeStructuredData} from "@/components/ResumeStructuredData";
 import ResumePageClient from "./resume-page-client";
@@ -34,7 +35,12 @@ export async function generateMetadata(): Promise<Metadata> {
             images: [
                 ogImage
             ]
-        }
+        },
+        twitter: getTwitterMetadata({
+            title: `${frontMatter.title} - ${content.authorName}`,
+            description: frontMatter.description,
+            images: [ogImage],
+        }),
     }
 }
 
