@@ -1,8 +1,8 @@
 ---
-title: "Static hosting for vibe coders: one platform, many demo apps"
+title: "Static hosting for vibe coders: one platform, many apps"
 slug: static-hosting-for-vibe-coders
 date: 2026-06-03
-lastMod: 2026-06-06
+lastMod: 2026-06-08
 draft: false
 description: "How a vague “vibe coding” ask became simple shared static hosting with preview URLs — cheap, agent-friendly, and built for many demo apps, not full-stack apps."
 thumbnail: /articles/static-hosting-for-vibe-coders/static-hosting-platform-hero.png
@@ -28,7 +28,7 @@ keywords:
 
 ![Static hosting platform: one CloudFront gateway, many demo apps, shared S3 bucket](/articles/static-hosting-for-vibe-coders/static-hosting-platform-hero.png)
 
-# Static hosting for vibe coders: one platform, many demo apps
+# Static hosting for vibe coders: one platform, many apps
 
 ## Why I built this
 
@@ -54,7 +54,7 @@ That design stuck in my head. The new question was:
 
 > What if we had the same **preview-by-branch** idea, but for **any number** of small static apps — not just one codebase?
 
-That became this platform: still boring on purpose (S3 + CloudFront + GitHub Actions), but scaled out to **many tenants** with almost no ceremony per app.
+That became this platform: still boring on purpose (S3 + CloudFront + GitHub Actions), but scaled out to **many tenants** with almost no ceremony per app. The [older article’s conclusion](/blog/simple-static-web-hosting-aws-infrastructure-with-protected-dev-environment/#conclusions) already listed “dynamic subdomains” and “proper browser routing” as likely follow-ups — this is that evolution, with public preview URLs instead of a WAF-protected dev distribution.
 
 ### What this is — and is not
 
@@ -85,6 +85,49 @@ Live examples today on `demo.oleksiipopov.com`:
 | `palette` | Bundled with platform CDK | [palette.demo.oleksiipopov.com](https://palette.demo.oleksiipopov.com) |
 | `hosting-demo` | External repo + reusable workflow | [hosting-demo.demo.oleksiipopov.com](https://hosting-demo.demo.oleksiipopov.com) |
 | `hosting-demo` (branch preview) | Same app, PR deploy | [hosting-demo--test-feature-branch-hosting.dev.demo.oleksiipopov.com](https://hosting-demo--test-feature-branch-hosting.dev.demo.oleksiipopov.com) |
+
+## The idea: one platform, many thin app repos
+
+The whole design rests on a simple split:
+
+| Layer | Owns | Where it lives |
+|-------|------|----------------|
+| **Platform** | Shared S3 bucket, one CloudFront distribution, wildcard DNS, subdomain → prefix routing, branch sanitization, cache invalidation, PR preview comments | [static-hosting-for-vibe-coders](https://github.com/AlexeyPopovUA/static-hosting-for-vibe-coders) |
+| **App** | Source code, build (`pnpm build` → `dist/`), deploy triggers | One Git repo per demo (e.g. [static-hosting-demo-app](https://github.com/AlexeyPopovUA/static-hosting-demo-app)) |
+
+An app repo does **not** copy CDK stacks, bucket names, or distribution IDs. It adds a short `deploy.yml` that calls the platform’s reusable `deploy-app.yml` via GitHub Actions `workflow_call`, passes its `app-slug` and build settings, and inherits the shared OIDC role. The platform workflow builds inside the caller’s checkout, syncs to `s3://…/{app}/{branch}/`, invalidates CloudFront, and — on pull requests — comments the preview URL.
+
+That is the same spine as my [older single-app static hosting setup](/blog/simple-static-web-hosting-aws-infrastructure-with-protected-dev-environment/) (GitHub Actions → S3 → CloudFront), evolved for a different shape: **many tenants**, **subdomain URLs per app**, and **deploy logic maintained once** instead of duplicated per repository. Where that article used two distributions and a WAF-gated dev host for one codebase, this platform uses one distribution and public preview subdomains so every new demo is mostly “pick a slug, add YAML, push.”
+
+```mermaid
+flowchart LR
+    subgraph Platform["Platform repo"]
+        CDK[CDK stack]
+        RW[Reusable workflows]
+        VAL[validate-names.ts]
+        CDK --> SSM[(SSM params)]
+        RW --> VAL
+    end
+
+    subgraph AppA["App repo A"]
+        SRC[Source + build]
+        DY[deploy.yml]
+        SRC --> DY
+    end
+
+    subgraph AppB["App repo B"]
+        SRC2[Source + build]
+        DY2[deploy.yml]
+        SRC2 --> DY2
+    end
+
+    DY -->|workflow_call| RW
+    DY2 -->|workflow_call| RW
+    RW -->|OIDC + SSM| S3[(Shared S3)]
+    CDK --> S3
+```
+
+Bundled `hello` and `palette` apps inside the CDK package prove routing after infra changes without any external repo. A real consumer like `hosting-demo` proves the reusable-workflow path — the integration surface every new demo app is meant to copy.
 
 ## What I needed (requirements)
 
@@ -201,6 +244,44 @@ The first existing file is returned with HTTP 404 and the HTML body — no redir
 
 CloudFront **custom error responses** are **not** configured on the distribution. They would fight with the Lambda@Edge resolver.
 
+## Reusable workflows: what app repos actually add
+
+The platform exposes three workflows meant for **external** app repositories:
+
+| Workflow | Trigger in app repo | What it does |
+|----------|---------------------|--------------|
+| `deploy-app.yml` | `push` to `main`, `pull_request` | Build, sanitize branch name, `s3 sync`, invalidate CloudFront, comment preview URL on PRs |
+| `cleanup-branch.yml` | `delete` (remote branch removed) | Remove `/{app}/{branch}/` from S3 and invalidate that prefix |
+| `invalidate-app.yml` | Manual / optional | Cache bust without redeploying |
+
+App repos stay thin. Typical `deploy.yml` is under 25 lines — only permissions, triggers, `app-slug`, build command, output directory, and `base-domain`:
+
+```yaml
+jobs:
+  deploy:
+    uses: AlexeyPopovUA/static-hosting-for-vibe-coders/.github/workflows/deploy-app.yml@main
+    with:
+      app-slug: hosting-demo
+      build-command: pnpm build
+      output-dir: dist
+      base-domain: demo.oleksiipopov.com
+    secrets: inherit
+```
+
+`secrets: inherit` forwards the shared `AWS_AUTH_ROLE` GitHub variable for OIDC. Bucket and distribution IDs are **not** secrets in app repos — `deploy-app.yml` reads `/static-hosting/bucket-name` and `/static-hosting/distribution-id` from SSM at runtime (see [Infra IDs in SSM](#infra-ids-in-ssm)).
+
+Inside each run, the reusable workflow:
+
+1. Checks out the **calling app repo** (your code).
+2. Checks out the **platform repo** into `.platform` (validation scripts only).
+3. Runs `pnpm install` + your `build-command` in the app repo.
+4. Sanitizes the branch via `validate-names.ts` (e.g. `test/feature-branch-hosting` → `test-feature-branch-hosting`).
+5. Assumes the OIDC role, syncs `dist/` to the correct S3 prefix, invalidates CloudFront paths, and posts or updates a PR comment with `https://{app}--{branch}.dev.{base-domain}`.
+
+Optional `cleanup.yml` mirrors the same `app-slug` and calls `cleanup-branch.yml` when GitHub fires `delete` for a branch — so preview folders do not linger after merge or abandoned experiments.
+
+Compared to the [older hosting repo](https://github.com/AlexeyPopovUA/simple-hosting), where infra and app lived together and branch deploys were path-based on one dev hostname, **workflow logic now lives in the platform once**. Each new demo is a new repository with the same two YAML files and a different `app-slug`.
+
 ## Demo apps: inside the platform vs outside
 
 ### Inside the platform (CDK bootstrap)
@@ -312,7 +393,7 @@ flowchart TB
 
 Each app should deploy its own `404.html` at the app root (`/{app}/404.html`) when possible, plus per-branch copies for SPA routing.
 
-## Caching (short version)
+## Caching
 
 - HTML and “extensionless” paths use a **short** CloudFront cache policy (~5 minutes at the edge).
 - Common static extensions (`.js`, `.css`, `.png`, …) use **CachingOptimized** behaviors.
@@ -322,14 +403,18 @@ Each app should deploy its own `404.html` at the app root (`/{app}/404.html`) wh
 
 ## How this compares to my older hosting article
 
+This platform is a direct descendant of [Simple static web hosting AWS infrastructure with protected Dev environment](/blog/simple-static-web-hosting-aws-infrastructure-with-protected-dev-environment/) (2023). Same building blocks — S3 origin, CloudFront, Route53, GitHub Actions — different tenancy and access model.
+
 | Topic | [Older simple hosting](/blog/simple-static-web-hosting-aws-infrastructure-with-protected-dev-environment/) | This platform |
 |-------|-------------------------------------------------------------------------------------------------------------|---------------|
-| Apps | One site, path-based branches on dev host | Many apps, subdomain per app |
-| Dev access | WAF IP allowlist on dev distribution | Public preview URLs on `*.dev...` |
-| Distributions | Two (prod + dev) | One |
-| App repos | Same repo / manual deploy | Separate repos + reusable workflows |
+| Apps | One site, path-based branches on dev host (`dev.example.com/{branch}/`) | Many apps, subdomain per app (`{app}.demo...`, `{app}--{branch}.dev.demo...`) |
+| Dev access | WAF IP allowlist on a separate dev distribution | Public preview URLs on `*.dev...` (shareable demo links) |
+| Distributions | Two (prod + dev) | One (subdomain routing via CloudFront Function) |
+| App repos | Same repo as infra; manual or monolithic CI | Separate repos + reusable `workflow_call` workflows |
+| Browser routing | Hash/query routing only in the original scope; SPA routing listed as a future need | Closest `404.html` resolver + per-branch SPA fallback |
+| Best when | One product, confidential WIP, office/VPN IP ranges | Many small static demos, agents, “here’s your link” iteration |
 
-The older design is still valid when you need a **private** dev environment. This platform optimizes for **many public previews** and **minimal ceremony** per new demo.
+The older design is still the right call when you need a **private** dev environment behind a firewall. This platform trades that for **many public previews** and **minimal ceremony** per new demo — closer to the “additional requirements” I sketched at the end of the 2023 article, without turning every experiment into its own CloudFront distribution.
 
 ## Tech stack
 

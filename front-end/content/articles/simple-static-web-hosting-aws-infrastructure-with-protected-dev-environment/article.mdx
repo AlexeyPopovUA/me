@@ -2,7 +2,7 @@
 title: Simple static web hosting AWS infrastructure with protected Dev environment
 slug: simple-static-web-hosting-aws-infrastructure-with-protected-dev-environment
 date: 2023-04-19
-lastMod: 2025-06-10
+lastMod: 2026-06-08
 draft: false
 description: Step-by-step AWS static hosting setup with public prod and protected dev environments—CloudFront, S3, WAF, Route53, and GitHub Actions for branch deployments.
 thumbnail: /articles/static-web-hosting/dev-and-prod-simple-hosting.png
@@ -174,6 +174,10 @@ Additional requirements usually come later. For instance:
 * Dynamic subdomains and proper browser routing
 * Dynamic localization detection and automatic redirection to the route of given locale
 * Non-cached hidden production clone environment for pre-rendering and automation testing
+
+### Follow-up: many demo apps on one distribution
+
+In 2026 I revisited this pattern for a different constraint: **many small static apps** (demo links for quick experiments and AI-assisted workflows), not one product with a private dev host. The follow-up article [Static hosting for vibe coders: one platform, many apps](/blog/static-hosting-for-vibe-coders/) keeps the same S3 + CloudFront + GitHub Actions spine, but routes **subdomains per app**, uses **one shared distribution**, and ships **reusable GitHub Actions workflows** so each app repo adds only a short `deploy.yml`. Items from the list above — especially dynamic subdomains and proper browser routing — are addressed there. Private WAF-gated dev is deliberately traded for public preview URLs when the goal is “hand someone a link and iterate,” not hide work-in-progress from the internet.
 
 ## Ask me a question
 
