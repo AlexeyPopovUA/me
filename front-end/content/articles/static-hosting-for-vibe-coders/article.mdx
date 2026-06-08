@@ -2,7 +2,7 @@
 title: "Static hosting for vibe coders: one platform, many apps"
 slug: static-hosting-for-vibe-coders
 date: 2026-06-03
-lastMod: 2026-06-08
+lastMod: 2026-06-09
 draft: false
 description: "How a vague “vibe coding” ask became simple shared static hosting with preview URLs — cheap, agent-friendly, and built for many demo apps, not full-stack apps."
 thumbnail: /articles/static-hosting-for-vibe-coders/static-hosting-platform-hero.png
@@ -95,7 +95,7 @@ The whole design rests on a simple split:
 | **Platform** | Shared S3 bucket, one CloudFront distribution, wildcard DNS, subdomain → prefix routing, branch sanitization, cache invalidation, PR preview comments | [static-hosting-for-vibe-coders](https://github.com/AlexeyPopovUA/static-hosting-for-vibe-coders) |
 | **App** | Source code, build (`pnpm build` → `dist/`), deploy triggers | One Git repo per demo (e.g. [static-hosting-demo-app](https://github.com/AlexeyPopovUA/static-hosting-demo-app)) |
 
-An app repo does **not** copy CDK stacks, bucket names, or distribution IDs. It adds a short `deploy.yml` that calls the platform’s reusable `deploy-app.yml` via GitHub Actions `workflow_call`, passes its `app-slug` and build settings, and inherits the shared OIDC role. The platform workflow builds inside the caller’s checkout, syncs to `s3://…/{app}/{branch}/`, invalidates CloudFront, and — on pull requests — comments the preview URL.
+An app repo does **not** copy CDK stacks, bucket names, or distribution IDs. It adds a short `deploy.yml` that calls the platform’s reusable `deploy-app.yml` via GitHub Actions `workflow_call`, passes its `app-slug` and build settings, and inherits the shared OIDC role. Everything after that — build, upload, cache invalidation, preview URL comment — runs inside the platform workflow; app authors never add extra checkout steps or platform code to their repo.
 
 That is the same spine as my [older single-app static hosting setup](/blog/simple-static-web-hosting-aws-infrastructure-with-protected-dev-environment/) (GitHub Actions → S3 → CloudFront), evolved for a different shape: **many tenants**, **subdomain URLs per app**, and **deploy logic maintained once** instead of duplicated per repository. Where that article used two distributions and a WAF-gated dev host for one codebase, this platform uses one distribution and public preview subdomains so every new demo is mostly “pick a slug, add YAML, push.”
 
@@ -104,9 +104,7 @@ flowchart LR
     subgraph Platform["Platform repo"]
         CDK[CDK stack]
         RW[Reusable workflows]
-        VAL[validate-names.ts]
         CDK --> SSM[(SSM params)]
-        RW --> VAL
     end
 
     subgraph AppA["App repo A"]
@@ -246,17 +244,31 @@ CloudFront **custom error responses** are **not** configured on the distribution
 
 ## Reusable workflows: what app repos actually add
 
-The platform exposes three workflows meant for **external** app repositories:
+The integration surface is deliberately boring. Your repo declares **when** to run, **permissions**, and **parameters** — then calls a platform workflow with `uses: …/deploy-app.yml@main`. No extra steps, no platform code in the app tree.
 
-| Workflow | Trigger in app repo | What it does |
-|----------|---------------------|--------------|
-| `deploy-app.yml` | `push` to `main`, `pull_request` | Build, sanitize branch name, `s3 sync`, invalidate CloudFront, comment preview URL on PRs |
-| `cleanup-branch.yml` | `delete` (remote branch removed) | Remove `/{app}/{branch}/` from S3 and invalidate that prefix |
-| `invalidate-app.yml` | Manual / optional | Cache bust without redeploying |
+The platform exposes three callable workflows:
 
-App repos stay thin. Typical `deploy.yml` is under 25 lines — only permissions, triggers, `app-slug`, build command, output directory, and `base-domain`:
+| Platform workflow | Typical trigger in app repo | What you pass |
+|-------------------|----------------------------|---------------|
+| `deploy-app.yml` | `push` to `main`, `pull_request` | `app-slug`, `build-command`, `output-dir`, `base-domain` |
+| `cleanup-branch.yml` | `delete` (remote branch removed) | `app-slug`, `branch` |
+| `invalidate-app.yml` | Manual (optional) | `app`, optional `branch` |
+
+A real consumer looks like [static-hosting-demo-app](https://github.com/AlexeyPopovUA/static-hosting-demo-app). The entire deploy workflow is:
 
 ```yaml
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
 jobs:
   deploy:
     uses: AlexeyPopovUA/static-hosting-for-vibe-coders/.github/workflows/deploy-app.yml@main
@@ -268,17 +280,35 @@ jobs:
     secrets: inherit
 ```
 
-`secrets: inherit` forwards the shared `AWS_AUTH_ROLE` GitHub variable for OIDC. Bucket and distribution IDs are **not** secrets in app repos — `deploy-app.yml` reads `/static-hosting/bucket-name` and `/static-hosting/distribution-id` from SSM at runtime (see [Infra IDs in SSM](#infra-ids-in-ssm)).
+Branch cleanup is the same pattern — one job, parameters only:
 
-Inside each run, the reusable workflow:
+```yaml
+name: Cleanup
 
-1. Checks out the **calling app repo** (your code).
-2. Checks out the **platform repo** into `.platform` (validation scripts only).
-3. Runs `pnpm install` + your `build-command` in the app repo.
-4. Sanitizes the branch via `validate-names.ts` (e.g. `test/feature-branch-hosting` → `test-feature-branch-hosting`).
-5. Assumes the OIDC role, syncs `dist/` to the correct S3 prefix, invalidates CloudFront paths, and posts or updates a PR comment with `https://{app}--{branch}.dev.{base-domain}`.
+on:
+  delete:
 
-Optional `cleanup.yml` mirrors the same `app-slug` and calls `cleanup-branch.yml` when GitHub fires `delete` for a branch — so preview folders do not linger after merge or abandoned experiments.
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  cleanup:
+    if: github.event.ref_type == 'branch'
+    uses: AlexeyPopovUA/static-hosting-for-vibe-coders/.github/workflows/cleanup-branch.yml@main
+    with:
+      app-slug: hosting-demo
+      branch: ${{ github.event.ref }}
+    secrets: inherit
+```
+
+That is the whole contract from an app author’s view:
+
+- **`with:`** — your app identity and build settings (`app-slug` must be unique on the platform; branch names are sanitized inside the platform workflow, e.g. `test/feature-branch-hosting` → `test-feature-branch-hosting`).
+- **`secrets: inherit`** — forwards the shared `AWS_AUTH_ROLE` GitHub variable for OIDC. Bucket and distribution IDs stay out of app repos; the platform workflow reads them from SSM (see [Infra IDs in SSM](#infra-ids-in-ssm)).
+- **`uses: …@main`** — pin a tag or SHA when you want stricter upgrade control.
+
+Build, `s3 sync`, CloudFront invalidation, and the PR preview comment all happen inside `deploy-app.yml`. You do not configure those steps locally.
 
 Compared to the [older hosting repo](https://github.com/AlexeyPopovUA/simple-hosting), where infra and app lived together and branch deploys were path-based on one dev hostname, **workflow logic now lives in the platform once**. Each new demo is a new repository with the same two YAML files and a different `app-slug`.
 
@@ -296,25 +326,9 @@ These prove routing and caching without any GitHub app repo. They are good smoke
 
 ### Outside the platform (real consumer)
 
-[static-hosting-demo-app](https://github.com/AlexeyPopovUA/static-hosting-demo-app) is a minimal SPA in its **own** repository. Its workflow calls the platform’s reusable `deploy-app.yml`:
+[static-hosting-demo-app](https://github.com/AlexeyPopovUA/static-hosting-demo-app) is a minimal SPA in its **own** repository — `public/` assets, `pnpm build` → `dist/`, and the two workflow files shown [above](#reusable-workflows-what-app-repos-actually-add). No CDK, no AWS IDs in GitHub secrets.
 
-```yaml
-jobs:
-  deploy:
-    uses: AlexeyPopovUA/static-hosting-for-vibe-coders/.github/workflows/deploy-app.yml@main
-    with:
-      app-slug: hosting-demo
-      build-command: pnpm build
-      output-dir: dist
-      base-domain: demo.oleksiipopov.com
-    secrets: inherit
-```
-
-`secrets: inherit` passes the shared `AWS_AUTH_ROLE` for OIDC — not bucket or distribution IDs. The reusable workflow [looks those up from SSM](#infra-ids-in-ssm) at runtime.
-
-On every pull request, the workflow builds, syncs to `s3://…/hosting-demo/{sanitized-branch}/`, invalidates CloudFront paths, and comments the preview URL on the PR.
-
-Cleanup is a sibling workflow on `delete` (branch removed), calling `cleanup-branch.yml` with the same `app-slug` and `github.event.ref`.
+On every pull request, the platform workflow builds the app, uploads to `s3://…/hosting-demo/{sanitized-branch}/`, and comments the preview URL on the PR. When a remote branch is deleted, `cleanup.yml` calls `cleanup-branch.yml` with the same `app-slug`.
 
 ### Branch preview in practice (verified)
 
@@ -345,21 +359,18 @@ When the remote branch is deleted, `cleanup.yml` should remove the prefix and th
 ```mermaid
 sequenceDiagram
     participant Dev as Developer
-    participant App as App repo
-    participant GHA as GitHub Actions
-    participant Plat as Platform scripts
+    participant App as App deploy.yml
+    participant Plat as Platform deploy-app.yml
     participant S3 as S3
     participant CF as CloudFront
 
     Dev->>App: Push branch / open PR
-    App->>GHA: deploy.yml (workflow_call)
-    GHA->>App: pnpm install + build
-    GHA->>Plat: checkout platform (validation scripts)
-    Plat-->>GHA: sanitize branch name
-    GHA->>S3: s3 sync to app branch prefix
-    GHA->>CF: CloudFront invalidation
+    App->>Plat: workflow_call (app-slug, build, …)
+    Plat->>Plat: build app + sanitize branch
+    Plat->>S3: s3 sync to app/branch prefix
+    Plat->>CF: CloudFront invalidation
     alt Pull request
-        GHA->>App: Comment preview URL
+        Plat->>App: Comment preview URL
     end
 ```
 
