@@ -5,3 +5,5 @@ package-lock.json
 
 # Per-article scratch (social images, local exports) — not committed
 front-end/content/articles/**/.tmp/
+/.tmp/
+
