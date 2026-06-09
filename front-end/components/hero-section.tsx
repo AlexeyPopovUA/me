@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { imageLoader } from '@/components/image/image-loader';
+import { CurrentProjectBanner } from '@/components/current-project-banner';
+import { ScrollDownArrow } from '@/components/scroll-down-arrow';
 
 const techStack = ['React', 'Node.js', 'TypeScript', 'JavaScript', 'AWS', 'CI/CD'];
 
@@ -57,7 +59,8 @@ export const HeroSection = ({ src, blurDataURL, name, title, description }: Hero
                             <p className="text-xl md:text-2xl text-muted-foreground mb-6">
                                 <span className="gradient-text font-semibold">Front-End Leaning</span> Full-Stack Developer
                             </p>
-                            <p className="text-muted-foreground max-w-xl mb-8 leading-relaxed">{description}</p>
+                            <p className="text-muted-foreground max-w-xl mb-4 leading-relaxed">{description}</p>
+                            <CurrentProjectBanner />
                         </motion.div>
 
                         {/* Tech Stack Badges */}
@@ -102,6 +105,8 @@ export const HeroSection = ({ src, blurDataURL, name, title, description }: Hero
                         </motion.div>
                     </div>
                 </div>
+
+                <ScrollDownArrow />
             </div>
         </section>
     );
