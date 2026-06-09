@@ -2,3 +2,6 @@
 /node_modules/
 package-lock.json
 .pnpm-debug.log
+
+# Per-article scratch (social images, local exports) — not committed
+front-end/content/articles/**/.tmp/
