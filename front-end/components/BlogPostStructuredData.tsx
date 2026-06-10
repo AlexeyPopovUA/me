@@ -1,9 +1,9 @@
 import React from 'react';
-import { BlogPosting, WithContext } from 'schema-dts';
 
 import { environment } from '@/app/configuration/environment';
 import { content } from '@/app/configuration/content';
-import { getBlogReference, getPublisher } from '@/lib/structured-data';
+import type { ContentImageRef } from '@/lib/content-images';
+import { buildBlogPostStructuredDataGraph } from '@/lib/structured-data-graph';
 
 interface BlogPostStructuredDataProps {
     title: string;
@@ -12,31 +12,34 @@ interface BlogPostStructuredDataProps {
     dateModified?: string;
     author?: string;
     url: string;
-    image?: string;
+    imageRefs: ContentImageRef[];
 }
 
-export function BlogPostStructuredData({ title, description, datePublished, dateModified, author, url, image }: BlogPostStructuredDataProps) {
-    const jsonLd: WithContext<BlogPosting> = {
-        '@context': 'https://schema.org',
-        '@type': 'BlogPosting',
-        headline: title,
-        description: description,
-        url: url,
-        datePublished: new Date(datePublished).toISOString(),
-        ...(dateModified ? { dateModified: new Date(dateModified).toISOString() } : {}),
-        author: {
-            '@type': 'Person',
-            name: author || content.authorName,
-            url: environment.url,
-        },
-        publisher: getPublisher(),
-        isPartOf: getBlogReference(),
-        mainEntityOfPage: {
-            '@type': 'WebPage',
-            '@id': url,
-        },
-        ...(image ? { image: [image] } : {}),
-    };
+export function BlogPostStructuredData({
+    title,
+    description,
+    datePublished,
+    dateModified,
+    author,
+    url,
+    imageRefs,
+}: BlogPostStructuredDataProps) {
+    const jsonLd = buildBlogPostStructuredDataGraph({
+        title,
+        description,
+        datePublished,
+        dateModified,
+        author: author || content.authorName,
+        url,
+        siteUrl: environment.url,
+        imageRefs,
+    });
 
-    return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} suppressHydrationWarning />;
+    return (
+        <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            suppressHydrationWarning
+        />
+    );
 }

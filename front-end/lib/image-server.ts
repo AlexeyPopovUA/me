@@ -1,39 +1,10 @@
 import "server-only";
 import sharp from "sharp";
-import { getContainImageURL } from "./image";
+import manifest from "@/lib/image-manifest.json";
+import { getContainImageURL, getFullSizeImageURL } from "./image";
 
-const BASE_URL = "https://images.oleksiipopov.com";
-const BUCKET = "serverless-image-handler-image-source";
-const BASE_PATH = "me";
-
-function getDefaultBucketProps(src: string) {
-  return {
-    bucket: BUCKET,
-    key: `${BASE_PATH}${src}`
-  };
-}
-
-function encodePayloadForUrl(configuration: { [key: string]: unknown }) {
-  return `${BASE_URL}/${btoa(JSON.stringify(configuration))}`;
-}
-
-/**
- * Get the ratio of the image
- * @TODO Has to be replaced by a service call
- */
-async function getImageDimensionsRatio(props: { src: string }) {
-  const url = encodePayloadForUrl({
-    ...getDefaultBucketProps(props.src),
-    edits: {
-      png: {
-        quality: 10,
-      },
-      resize: {
-        // should be relatively big to determine the ratio w/o effect of internal numbers rounding
-        width: 200,
-      },
-    },
-  });
+async function probeImageAspectRatio(src: string) {
+  const url = getFullSizeImageURL({ src });
 
   try {
     const response = await fetch(url);
@@ -50,28 +21,29 @@ async function getImageDimensionsRatio(props: { src: string }) {
     if (!metadata.width || !metadata.height) {
       throw new Error('Could not read image dimensions');
     }
-    
+
     return metadata.width / metadata.height;
   } catch (error) {
-    console.error('Error getting image dimensions ratio:', error);
-    // Return a default aspect ratio (16:9) as fallback
+    console.error('Error probing image dimensions:', error);
     return 16 / 9;
   }
 }
 
+async function getImageDimensionsRatio(props: { src: string }) {
+  const fromManifest = manifest[props.src as keyof typeof manifest];
+  if (fromManifest) {
+    return fromManifest.width / fromManifest.height;
+  }
+
+  return probeImageAspectRatio(props.src);
+}
+
 async function getBlurDataURL({src, width, height}: { src: string, width: number, height: number }) {
-  const payloadURL = encodePayloadForUrl({
-    ...getDefaultBucketProps(src),
-    edits: {
-      png: {
-        quality: 75
-      },
-      resize: {
-        width,
-        height,
-        fit: "outside"
-      }
-    }
+  const payloadURL = getContainImageURL({
+    src,
+    width,
+    height,
+    quality: 75,
   });
 
   try {
@@ -85,17 +57,15 @@ async function getBlurDataURL({src, width, height}: { src: string, width: number
       throw new Error('Empty or invalid image data received');
     }
 
-    // Use sharp to resize and convert to base64
     const base64 = await sharp(Buffer.from(blob))
       .resize(Math.round(width), Math.round(height), { fit: 'outside' })
       .png({ quality: 75 })
       .toBuffer()
       .then(buffer => `data:image/png;base64,${buffer.toString('base64')}`);
-    
+
     return base64;
   } catch (error) {
     console.error('Error generating blur data URL:', error);
-    // Return a default blur data URL (1x1 transparent pixel)
     return 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
   }
 }

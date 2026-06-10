@@ -11,7 +11,9 @@ import {ArticleContainer} from "@/components/ArticleContainer";
 import {environment} from "@/app/configuration/environment";
 import {ensurePathSlash} from "@/lib/utils";
 import {getProjectPathByDirName} from "@/lib/files";
+import {extractProjectImageRefs, THUMBNAIL_ANCHOR_ID} from "@/lib/content-images";
 import {getFrontMatterDataByPath, getProjectMdxDataByPath} from "@/lib/mdx-utils";
+import {readMdxBodyByPath} from "@/lib/mdx-source";
 import {ProjectsSchema} from "@/content/projects/projects-schema";
 import {WebApplicationStructuredData} from "@/components/WebApplicationStructuredData";
 
@@ -57,11 +59,18 @@ export default async function Post(props: StaticProps) {
   const slug = (await props.params).slug;
   const projectPath = getProjectPathByDirName(slug);
 
-  // Get both frontmatter and MDX content
-  const { content: mdxContent, frontmatter } = await getProjectMdxDataByPath({path: projectPath});
+  const [{ content: mdxContent, frontmatter }, body] = await Promise.all([
+    getProjectMdxDataByPath({path: projectPath}),
+    readMdxBodyByPath(projectPath),
+  ]);
   const pageUrl = `${environment.url}${ensurePathSlash(`/portfolio/${slug}`)}`;
-  const ogImage = getOGImageURL({src: frontmatter.thumbnail});
   const sameAs = frontmatter.URL ? [frontmatter.URL] : undefined;
+  const imageRefs = extractProjectImageRefs(body, {
+    thumbnail: frontmatter.thumbnail,
+    gallery: frontmatter.gallery,
+    galleryAlt: frontmatter.galleryAlt,
+    title: frontmatter.title,
+  });
 
   const imageCfgs: Carousel.Props["imageCfgs"] = await Promise.all(frontmatter.gallery.map(async image => {
     const blurredImageSrcPair = await readBlurredImageSrcPair({src: image});
@@ -83,12 +92,15 @@ export default async function Post(props: StaticProps) {
         url={pageUrl}
         authorName={content.authorName}
         authorUrl={environment.url}
-        image={ogImage}
         datePublished={frontmatter.date}
         sameAs={sameAs}
         technologies={frontmatter.technologies}
+        imageRefs={imageRefs}
       />
       <ArticleContainer>
+        {imageRefs.some((image) => image.anchorId === THUMBNAIL_ANCHOR_ID) ? (
+          <span id={THUMBNAIL_ANCHOR_ID} className="sr-only" aria-hidden="true" />
+        ) : null}
         <h1>{frontmatter.title}</h1>
         <Carousel
           imageCfgs={imageCfgs}

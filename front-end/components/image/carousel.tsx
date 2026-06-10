@@ -5,6 +5,7 @@ import type {Slide} from "yet-another-react-lightbox";
 
 import {ThumbnailImage} from "@/components/image/animated-image-loading/thumbnail-image";
 import useLightbox from "@/components/image/useLightBox";
+import {getImageAnchorId} from "@/lib/content-images";
 import {generateLBSlides} from "@/lib/image";
 
 export namespace Carousel {
@@ -92,7 +93,8 @@ export function Carousel(props: Carousel.Props) {
             {props.imageCfgs.map((imageCfg, index) => (
               <div
                 key={imageCfg.src}
-                className="w-full h-full flex-shrink-0 cursor-pointer flex items-center justify-center"
+                id={getImageAnchorId(imageCfg.src)}
+                className="w-full h-full flex-shrink-0 cursor-pointer flex items-center justify-center scroll-mt-24"
                 onClick={() => openImageLightbox(index)}
               >
                 <ThumbnailImage

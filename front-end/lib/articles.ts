@@ -10,17 +10,17 @@ import {
 import {environment} from "@/app/configuration/environment";
 import {ArticlesSchema} from "@/content/articles/articles-schema";
 import {ProjectsSchema} from "@/content/projects/projects-schema";
-import {getOGImageURL} from "@/lib/image";
+import {extractArticleImageRefs, extractProjectImageRefs} from "@/lib/content-images";
+import {isDraftPreviewEnabled} from "@/lib/content-draft";
+import {listPublishedArticles, listPublishedProjects} from "@/lib/content-iteration";
+import {getStructuredDataImageURL} from "@/lib/image";
 import {CommonPostSchema} from "@/lib/posts";
 import {ensurePathSlash} from "@/lib/utils";
 import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
 
-const reverseTimeSorter = <T extends CommonPostSchema>(a: T, b: T) => new Date(b.date).getTime() - new Date(a.date).getTime();
+export { isDraftPreviewEnabled };
 
-/** Draft posts are included in lists and routing only when running `next dev`. */
-export function isDraftPreviewEnabled(): boolean {
-  return process.env.NODE_ENV === 'development';
-}
+const reverseTimeSorter = <T extends CommonPostSchema>(a: T, b: T) => new Date(b.date).getTime() - new Date(a.date).getTime();
 
 function excludeDrafts<T extends { draft?: boolean }>(items: T[]): T[] {
   if (isDraftPreviewEnabled()) {
@@ -131,26 +131,28 @@ export async function getAllArticles() {
 }
 
 export async function getAllArticleSitemapData(): Promise<MetadataRoute.Sitemap> {
-  const postDirs = await listDirNames(getArticlesBasePath());
+  const articles = await listPublishedArticles();
+  articles.sort((a, b) => reverseTimeSorter(a.frontmatter, b.frontmatter));
 
-  // read frontmatter data from all article files
-  const frontMatterList = await Promise.all(postDirs
-    .map(dir => getFrontMatterDataByPath<ArticlesSchema>(getArticlePathByDirName(dir))));
-
-  const result = excludeDrafts(frontMatterList);
-
-  result.sort(reverseTimeSorter);
-
-  return result.map(item => {
-    const ogImage = getOGImageURL({src: item.thumbnail});
-
-    return ({
-      url: ensurePathSlash(`${environment.url}/blog/${item.slug}`),
-      lastModified: new Date(),
-      priority: 0.7,
-      changeFrequency: "weekly",
-      images: item.thumbnail ? [ogImage] : []
+  return articles.map(({ frontmatter, body }) => {
+    const imageRefs = extractArticleImageRefs(body, {
+      thumbnail: frontmatter.thumbnail,
+      thumbnailAlt: frontmatter.title,
     });
+
+    return {
+      url: ensurePathSlash(`${environment.url}/blog/${frontmatter.slug}`),
+      lastModified: new Date(frontmatter.lastMod || frontmatter.date),
+      priority: 0.7,
+      changeFrequency: 'weekly' as const,
+      images: imageRefs.map((image) =>
+        getStructuredDataImageURL({
+          src: image.src,
+          width: image.width,
+          height: image.height,
+        })
+      ),
+    };
   });
 }
 
@@ -172,27 +174,29 @@ export async function getAllProjects() {
 }
 
 export async function getAllProjectSitemapData(): Promise<MetadataRoute.Sitemap> {
-  const postDirs = await listDirNames(getProjectsBasePath());
+  const projects = await listPublishedProjects();
+  projects.sort((a, b) => reverseTimeSorter(a.frontmatter, b.frontmatter));
 
-  // read frontmatter data from all project files
-  const frontMatterList = await Promise.all(postDirs
-    .map(dir => getFrontMatterDataByPath<ArticlesSchema>(getProjectPathByDirName(dir))));
-
-  // filter out drafts
-  const result = frontMatterList.filter((frontMatter) => !frontMatter.draft);
-
-  // sort by date
-  result.sort(reverseTimeSorter);
-
-  return result.map(item => {
-    const ogImage = getOGImageURL({src: item.thumbnail});
-
-    return ({
-      url: ensurePathSlash(`${environment.url}/portfolio/${item.slug}`),
-      lastModified: new Date(),
-      priority: 0.5,
-      changeFrequency: "monthly",
-      images: item.thumbnail ? [ogImage] : []
+  return projects.map(({ frontmatter, body }) => {
+    const imageRefs = extractProjectImageRefs(body, {
+      thumbnail: frontmatter.thumbnail,
+      gallery: frontmatter.gallery,
+      galleryAlt: frontmatter.galleryAlt,
+      title: frontmatter.title,
     });
+
+    return {
+      url: ensurePathSlash(`${environment.url}/portfolio/${frontmatter.slug}`),
+      lastModified: new Date(frontmatter.lastMod || frontmatter.date),
+      priority: 0.5,
+      changeFrequency: 'monthly' as const,
+      images: imageRefs.map((image) =>
+        getStructuredDataImageURL({
+          src: image.src,
+          width: image.width,
+          height: image.height,
+        })
+      ),
+    };
   });
 }

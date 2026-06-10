@@ -4,7 +4,8 @@
   "description": "Personal blog and portfolio website",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky",
+    "test": "pnpm --filter front-end test",
     "install-all": "pnpm install",
     "dev-front": "pnpm --filter front-end dev",
     "update-dependencies-all": "pnpm -r update-dependencies",
@@ -23,6 +24,7 @@
     "front-end"
   ],
   "devDependencies": {
-    "@tsconfig/node24": "^24.0.4"
+    "@tsconfig/node24": "^24.0.4",
+    "husky": "^9.1.7"
   }
 }

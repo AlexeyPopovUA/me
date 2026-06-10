@@ -10,7 +10,9 @@ import { getTwitterMetadata } from '@/lib/metadata';
 import { ArticleContainer } from '@/components/ArticleContainer';
 import { environment } from '@/app/configuration/environment';
 import { ensurePathSlash } from '@/lib/utils';
+import { extractArticleImageRefs, THUMBNAIL_ANCHOR_ID } from '@/lib/content-images';
 import { getArticleMdxDataByPath } from '@/lib/mdx-utils';
+import { readMdxBodyByPath } from '@/lib/mdx-source';
 import { readArticleHeadings } from '@/lib/toc-parser';
 import { getRssMetadataObject } from '@/lib/rss';
 import TableOfContents from '@/components/TableOfContents';
@@ -44,7 +46,19 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
             types: getRssMetadataObject(),
         },
         keywords: post.keywords,
-        robots: post.draft ? { index: false, follow: false } : undefined,
+        robots: post.draft
+            ? { index: false, follow: false }
+            : {
+                  index: true,
+                  follow: true,
+                  googleBot: {
+                      index: true,
+                      follow: true,
+                      'max-image-preview': 'large' as const,
+                      'max-snippet': -1,
+                      'max-video-preview': -1,
+                  },
+              },
         openGraph: {
             title: getSEOTitleName(post.title),
             description: post.description,
@@ -64,13 +78,16 @@ export default async function Post(props: StaticProps) {
     const slug = (await props.params).slug;
     const path = await getArticlePathBySlug(slug);
 
-    // TODO Avoid double file reading
-    const { content, frontmatter } = await getArticleMdxDataByPath({ path });
-    const { hasH1, tocRoot: toc } = await readArticleHeadings({ path });
-    // Build canonical URL
+    const [{ content, frontmatter }, body, { hasH1, tocRoot: toc }] = await Promise.all([
+        getArticleMdxDataByPath({ path }),
+        readMdxBodyByPath(path),
+        readArticleHeadings({ path }),
+    ]);
     const url = ensurePathSlash(`${environment.url}/blog/${slug}`);
-    // Use post.thumbnail for image if available
-    const image = frontmatter.thumbnail ? getOGImageURL({ src: frontmatter.thumbnail }) : undefined;
+    const imageRefs = extractArticleImageRefs(body, {
+        thumbnail: frontmatter.thumbnail,
+        thumbnailAlt: frontmatter.title,
+    });
 
     return (
         <>
@@ -81,9 +98,12 @@ export default async function Post(props: StaticProps) {
                 dateModified={frontmatter.lastMod || frontmatter.date}
                 author={frontmatter.author}
                 url={url}
-                image={image}
+                imageRefs={imageRefs}
             />
             <ArticleContainer>
+                {imageRefs.some((image) => image.anchorId === THUMBNAIL_ANCHOR_ID) ? (
+                    <span id={THUMBNAIL_ANCHOR_ID} className="sr-only" aria-hidden="true" />
+                ) : null}
                 {frontmatter.draft ? <DraftPreviewBanner /> : null}
                 {!hasH1 ? <h1>{frontmatter.title}</h1> : null}
                 {content}

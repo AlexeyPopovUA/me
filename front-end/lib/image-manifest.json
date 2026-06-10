@@ -1,0 +1,326 @@
+{
+  "/articles/environment-configuration/acc.png": {
+    "width": 1334,
+    "height": 750
+  },
+  "/articles/environment-configuration/configuration-service-aws.png": {
+    "width": 2826,
+    "height": 1821
+  },
+  "/articles/environment-configuration/console-error.png": {
+    "width": 1260,
+    "height": 260
+  },
+  "/articles/environment-configuration/default.png": {
+    "width": 1334,
+    "height": 750
+  },
+  "/articles/environment-configuration/load-time-cfg-overview.png": {
+    "width": 2343,
+    "height": 1536
+  },
+  "/articles/environment-configuration/prod.png": {
+    "width": 1334,
+    "height": 750
+  },
+  "/articles/environment-configuration/random.png": {
+    "width": 1334,
+    "height": 750
+  },
+  "/articles/environment-configuration/special.png": {
+    "width": 1334,
+    "height": 750
+  },
+  "/articles/essential-skills-ai-era-software-engineering/hero-human-skills-ai-era.png": {
+    "width": 997,
+    "height": 550
+  },
+  "/articles/feature-branches-npm/feature-branches-for-NPM-modules.png": {
+    "width": 960,
+    "height": 720
+  },
+  "/articles/feature-branches-npm/npm-version-history-all.png": {
+    "width": 1558,
+    "height": 1686
+  },
+  "/articles/feature-branches-npm/npm-version-history.webp": {
+    "width": 1474,
+    "height": 1237
+  },
+  "/articles/nextjs-images/article-hero.png": {
+    "width": 1920,
+    "height": 1080
+  },
+  "/articles/nextjs-images/cropped-thumbnails-loading-frame.png": {
+    "width": 1713,
+    "height": 1521
+  },
+  "/articles/nextjs-images/fill-image-options-thumbnails.png": {
+    "width": 1713,
+    "height": 1138
+  },
+  "/articles/nextjs-images/full-image-thumbnails-loading-frame.png": {
+    "width": 1718,
+    "height": 1695
+  },
+  "/articles/nextjs-images/image-handler-demo.png": {
+    "width": 4594,
+    "height": 1947
+  },
+  "/articles/nextjs-images/landing-page.png": {
+    "width": 1717,
+    "height": 1176
+  },
+  "/articles/nextjs-images/responsive-single-image-resizing-v-frame.png": {
+    "width": 2256,
+    "height": 1133
+  },
+  "/articles/nextjs-images/responsive-single-image-v-frame.png": {
+    "width": 1211,
+    "height": 1064
+  },
+  "/articles/nextjs-images/serverless-image-handler-original.png": {
+    "width": 3678,
+    "height": 2085
+  },
+  "/articles/nextjs-images/serverless-image-handler-with-domain.png": {
+    "width": 5949,
+    "height": 3168
+  },
+  "/articles/nextjs-images/single-responsive-image-blur-transition-frame.png": {
+    "width": 1718,
+    "height": 1350
+  },
+  "/articles/nextjs-images/single-responsive-image-with-blur-frame.png": {
+    "width": 1718,
+    "height": 1350
+  },
+  "/articles/npm-package-managers-comparison/yarn-npm-pnpm-hero.png": {
+    "width": 2816,
+    "height": 1536
+  },
+  "/articles/npm-release-automation/hero-image.png": {
+    "width": 2400,
+    "height": 1309
+  },
+  "/articles/react-performance/react-18-profile-callbacks-1.png": {
+    "width": 1636,
+    "height": 247
+  },
+  "/articles/react-performance/react-18-profile-cmp-props-1.png": {
+    "width": 1636,
+    "height": 247
+  },
+  "/articles/react-performance/react-18-profile-props-1.png": {
+    "width": 1636,
+    "height": 247
+  },
+  "/articles/react-performance/react-18-profile-siblings-1.png": {
+    "width": 1636,
+    "height": 247
+  },
+  "/articles/react-performance/react-18-vs-19-website-thumbnail.png": {
+    "width": 700,
+    "height": 330
+  },
+  "/articles/react-performance/react-19-profile-callbacks-1.png": {
+    "width": 1636,
+    "height": 247
+  },
+  "/articles/react-performance/react-19-profile-cmp-props-1.png": {
+    "width": 1636,
+    "height": 247
+  },
+  "/articles/react-performance/react-19-profile-props-1.png": {
+    "width": 1636,
+    "height": 247
+  },
+  "/articles/react-performance/react-19-profile-siblings-1.png": {
+    "width": 1636,
+    "height": 247
+  },
+  "/articles/react-performance/ui-callbacks-1.png": {
+    "width": 1562,
+    "height": 678
+  },
+  "/articles/react-performance/ui-components-as-properties-1.png": {
+    "width": 1562,
+    "height": 1197
+  },
+  "/articles/react-performance/ui-properties-objects-1.png": {
+    "width": 1562,
+    "height": 788
+  },
+  "/articles/react-performance/ui-siblings-1.png": {
+    "width": 1562,
+    "height": 574
+  },
+  "/articles/static-hosting-for-vibe-coders/hello-demo.png": {
+    "width": 1280,
+    "height": 800
+  },
+  "/articles/static-hosting-for-vibe-coders/hosting-demo-preview.png": {
+    "width": 1280,
+    "height": 800
+  },
+  "/articles/static-hosting-for-vibe-coders/palette-demo.png": {
+    "width": 1280,
+    "height": 800
+  },
+  "/articles/static-hosting-for-vibe-coders/static-hosting-platform-hero.png": {
+    "width": 1672,
+    "height": 941
+  },
+  "/articles/static-web-hosting/dev-and-prod-simple-hosting.png": {
+    "width": 4020,
+    "height": 2284
+  },
+  "/articles/static-web-hosting/external-visitor-main-environment.png": {
+    "width": 1567,
+    "height": 844
+  },
+  "/articles/static-web-hosting/external-visitor-test-environment.png": {
+    "width": 1567,
+    "height": 844
+  },
+  "/articles/static-web-hosting/gha-and-simple-hosting.png": {
+    "width": 2190,
+    "height": 1008
+  },
+  "/articles/static-web-hosting/private-main-development-environment.png": {
+    "width": 1567,
+    "height": 844
+  },
+  "/articles/static-web-hosting/private-test-development-environment.png": {
+    "width": 1567,
+    "height": 844
+  },
+  "/articles/static-web-hosting/public-production-environment.png": {
+    "width": 1567,
+    "height": 844
+  },
+  "/articles/static-web-hosting/simple-hosting-with-hidden-dev.png": {
+    "width": 3024,
+    "height": 2820
+  },
+  "/projects/advanced-logger/advanced-logger-getting-started.png": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/projects/advanced-logger/advanced-logger-home.png": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/projects/advanced-logger/advanced-logger-strategy.png": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/projects/albelli-online-photo-products-editor/photobook.webp": {
+    "width": 2400,
+    "height": 1383
+  },
+  "/projects/coloring-magic/coloring-magic-article.png": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/projects/coloring-magic/coloring-magic-blog.png": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/projects/coloring-magic/coloring-magic-home.png": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/projects/dynatrace-kubernetes-app/DT.webp": {
+    "width": 2148,
+    "height": 1615
+  },
+  "/projects/me/me-article.png": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/projects/me/me-blog.png": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/projects/me/me-home.png": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/projects/tomtom-road-trips-web/explore.png": {
+    "width": 3680,
+    "height": 1806
+  },
+  "/projects/tomtom-road-trips-web/planner.jpg": {
+    "width": 2732,
+    "height": 1536
+  },
+  "/projects/tomtom-road-trips-web/trips-grid.jpeg": {
+    "width": 2732,
+    "height": 2180
+  },
+  "/projects/tomtom-road-trips-web/trips-on-map.jpg": {
+    "width": 2732,
+    "height": 1536
+  },
+  "/projects/tomtom-route-planner-web/route-planner.png": {
+    "width": 2160,
+    "height": 1620
+  },
+  "/projects/tomtom-route-planner-web/route-view.png": {
+    "width": 2160,
+    "height": 1620
+  },
+  "/projects/tomtom-route-planner-web/search.png": {
+    "width": 2160,
+    "height": 1620
+  },
+  "/projects/tomtom-web-sdk-demo-catalog/demo-page.png": {
+    "width": 2160,
+    "height": 1620
+  },
+  "/projects/tomtom-web-sdk-demo-catalog/filter-by-tag.png": {
+    "width": 2160,
+    "height": 1620
+  },
+  "/projects/tomtom-web-sdk-demo-catalog/mobile-demo-page.png": {
+    "width": 1125,
+    "height": 2436
+  },
+  "/projects/tomtom-web-sdk-demo-catalog/mobile-filters.png": {
+    "width": 1125,
+    "height": 2436
+  },
+  "/projects/tomtom-web-sdk-demo-catalog/mobile-list.png": {
+    "width": 1125,
+    "height": 2436
+  },
+  "/projects/tomtom-web-sdk-demo-catalog/mobile-search.png": {
+    "width": 1125,
+    "height": 2436
+  },
+  "/projects/tomtom-web-sdk-demo-catalog/search.png": {
+    "width": 2160,
+    "height": 1620
+  },
+  "/projects/zapiski-mami/zapiski-article-mobile.png": {
+    "width": 1082,
+    "height": 2402
+  },
+  "/projects/zapiski-mami/zapiski-article.png": {
+    "width": 2400,
+    "height": 1451
+  },
+  "/projects/zapiski-mami/zapiski-blog-mobile.png": {
+    "width": 1082,
+    "height": 2402
+  },
+  "/projects/zapiski-mami/zapiski-blog.png": {
+    "width": 2400,
+    "height": 1451
+  },
+  "/projects/zapiski-mami/zapiski-landing.png": {
+    "width": 2400,
+    "height": 1451
+  }
+}

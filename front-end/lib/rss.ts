@@ -1,43 +1,75 @@
-import { getAllArticles } from './articles';
 import { Feed } from 'feed';
+
 import { environment } from '@/app/configuration/environment';
+import { listPublishedArticles } from '@/lib/content-iteration';
+import { getOGImageURL } from '@/lib/image';
+import { stripMarkdownToText } from '@/lib/strip-markdown';
+import type { ArticlesSchema } from '@/content/articles/articles-schema';
+
+const reverseTimeSorter = (a: ArticlesSchema, b: ArticlesSchema) =>
+  new Date(b.lastMod || b.date).getTime() - new Date(a.lastMod || a.date).getTime();
+
+function buildArticleSummary(body: string) {
+  return stripMarkdownToText(body).slice(0, 400);
+}
 
 export async function generateRSSFeed() {
-    const articles = await getAllArticles();
+  const publishedArticles = (await listPublishedArticles())
+    .filter((item) => !item.frontmatter.draft)
+    .sort((a, b) => reverseTimeSorter(a.frontmatter, b.frontmatter));
+  const feedUrl = `${environment.url}/api/rss.xml`;
 
-    const feed = new Feed({
-        title: 'Oleksii Popov\'s Blog',
-        description: 'Stay updated with the latest articles and insights from Oleksii Popov\'s blog.',
-        author: {
-            name: 'Oleksii Popov',
-            email: 'opportunities@oleksiipopov.com',
-            link: 'https://oleksiipopov.com',
-        },
-        favicon: `${environment.url}/favicon.ico`,
-        id: environment.url,
-        link: environment.url,
-        language: 'en',
-        copyright: `All rights reserved ${new Date().getFullYear()}`
+  const feed = new Feed({
+    title: "Oleksii Popov's Blog",
+    description:
+      "Stay updated with the latest articles and insights from Oleksii Popov's blog.",
+    author: {
+      name: 'Oleksii Popov',
+      email: 'opportunities@oleksiipopov.com',
+      link: 'https://oleksiipopov.com',
+    },
+    favicon: `${environment.url}/favicon.ico`,
+    id: environment.url,
+    link: environment.url,
+    language: 'en',
+    copyright: `All rights reserved ${new Date().getFullYear()}`,
+    feedLinks: {
+      rss: feedUrl,
+    },
+    updated: publishedArticles[0]
+      ? new Date(
+          publishedArticles[0].frontmatter.lastMod || publishedArticles[0].frontmatter.date
+        )
+      : new Date(),
+  });
+
+  for (const { frontmatter: article, body } of publishedArticles) {
+    const articleUrl = `${environment.url}/blog/${article.slug}`;
+    const imageUrl = getOGImageURL({ src: article.thumbnail });
+    const summary = buildArticleSummary(body);
+
+    feed.addItem({
+      title: article.title,
+      id: articleUrl,
+      link: articleUrl,
+      description: article.description,
+      content: `<p>${summary}</p>`,
+      date: new Date(article.lastMod || article.date),
+      enclosure: {
+        url: imageUrl,
+        type: 'image/jpeg',
+      },
     });
+  }
 
-    articles.forEach((article) => {
-        feed.addItem({
-            title: article.title,
-            id: `${environment.url}/blog/${article.slug}`,
-            link: `${environment.url}/blog/${article.slug}`,
-            description: article.description,
-            date: new Date(article.date)
-        });
-    });
-
-    return feed.rss2();
+  return feed.rss2();
 }
 
 /**
  * Returns an object with the RSS HTML metadata for the feed autodetection
  */
 export function getRssMetadataObject() {
-    return {
-        'application/rss+xml': '/api/rss.xml'
-    } as const;
+  return {
+    'application/rss+xml': '/api/rss.xml',
+  } as const;
 }

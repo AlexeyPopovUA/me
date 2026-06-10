@@ -1,7 +1,8 @@
-import React from "react";
-import {WebApplication, WithContext} from "schema-dts";
+import React from 'react';
 
-import {getPublisher} from "@/lib/structured-data";
+import { environment } from '@/app/configuration/environment';
+import type { ContentImageRef } from '@/lib/content-images';
+import { buildProjectStructuredDataGraph } from '@/lib/structured-data-graph';
 
 interface WebApplicationStructuredDataProps {
     name: string;
@@ -9,10 +10,10 @@ interface WebApplicationStructuredDataProps {
     url: string;
     authorName: string;
     authorUrl?: string;
-    image?: string;
     datePublished?: string;
     sameAs?: string[];
     technologies?: string[];
+    imageRefs: ContentImageRef[];
 }
 
 export function WebApplicationStructuredData({
@@ -21,31 +22,29 @@ export function WebApplicationStructuredData({
     url,
     authorName,
     authorUrl,
-    image,
     datePublished,
     sameAs,
-    technologies
+    technologies,
+    imageRefs,
 }: WebApplicationStructuredDataProps) {
-    const jsonLd: WithContext<WebApplication> = {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        name: name,
-        description: description,
-        url: url,
-        applicationCategory: "DeveloperApplication",
-        operatingSystem: "Web browser",
-        browserRequirements: "Requires a modern web browser with JavaScript enabled",
-        author: {
-            "@type": "Person",
-            name: authorName,
-            url: authorUrl ?? url
-        },
-        creator: getPublisher(),
-        ...(image ? {image: [image]} : {}),
-        ...(datePublished ? {datePublished: new Date(datePublished).toISOString()} : {}),
-        ...(sameAs && sameAs.length > 0 ? {sameAs: sameAs} : {}),
-        ...(technologies && technologies.length > 0 ? {keywords: technologies.join(", ")} : {})
-    };
+    const jsonLd = buildProjectStructuredDataGraph({
+        name,
+        description,
+        url,
+        siteUrl: environment.url,
+        authorName,
+        authorUrl: authorUrl ?? environment.url,
+        datePublished,
+        sameAs,
+        technologies,
+        imageRefs,
+    });
 
-    return <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}} suppressHydrationWarning />;
+    return (
+        <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            suppressHydrationWarning
+        />
+    );
 }

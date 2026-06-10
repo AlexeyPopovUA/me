@@ -101,11 +101,11 @@ To address some of the limitations, I needed to create a CloudFront distribution
 
 Original architecture of the Serverless Image Handler from AWS Solutions:
 
-![Original architecture](/articles/nextjs-images/serverless-image-handler-original.png "Original architecture (© AWS Solutions)")
+![Original AWS Serverless Image Handler architecture diagram](/articles/nextjs-images/serverless-image-handler-original.png "Original architecture (© AWS Solutions)")
 
 There is also an optional demo app that lets you try out the Serverless Image Handler service with a sample image:
 
-![Image handler demo app](/articles/nextjs-images/image-handler-demo.png "Image handler demo app")
+![Serverless Image Handler demo application screenshot](/articles/nextjs-images/image-handler-demo.png "Image handler demo app")
 
 Custom domain name, cache and viewer policies were the most important missing parts for me. For adding those, I've implemented a CloudFront distribution to delegate all requests to the original distribution.
 
@@ -294,7 +294,7 @@ In order to show the different use cases of images in a static Next.js app and A
 * Full Thumbnails with loading animation
 * Cropped Thumbnails with loading animation
 
-![/articles/nextjs-images/landing-page.png](/articles/nextjs-images/landing-page.png "Home page")
+![Next.js remote images demo landing page screenshot](/articles/nextjs-images/landing-page.png "Home page")
 
 Next, we will go through each example in detail and see how the images are loaded, optimized, cropped and positioned in placeholders. So the AWS Image Handler service is proven to be a good solution for Next.js static websites.
 

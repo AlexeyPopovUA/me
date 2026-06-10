@@ -11,6 +11,7 @@ import {TestFunction} from "hast-util-is-element";
 import MDXImage from "@/components/image/mdx-image";
 import {remarkMermaid} from "@/lib/RemarkMermaidPlugin";
 import {remarkCode} from "@/lib/RemarkCodeHighlightingPlugin";
+import {getImageAnchorId, isContentImagePath} from "@/lib/content-images";
 import {getInsideImageURL} from "@/lib/image";
 import {getOriginalVideoURL} from "@/lib/video";
 import { ArticlesSchema } from '@/content/articles/articles-schema';
@@ -25,14 +26,21 @@ const componentsForArticles: MDXRemoteProps['components'] = {
         </div>
     ),
     ArticleVideo: (props: React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>) => {
-        const poster = props.poster ? getInsideImageURL({ src: props.poster, width: 1000, height: 1000 / 1.736 }) : undefined;
+        const posterSrc = typeof props.poster === 'string' ? props.poster : undefined;
+        const poster = posterSrc
+            ? getInsideImageURL({ src: posterSrc, width: 1000, height: 1000 / 1.736 })
+            : undefined;
         const originalVideoURL = props.src ? getOriginalVideoURL({ src: props.src as string }) : '';
+        const anchorId =
+            posterSrc && isContentImagePath(posterSrc) ? getImageAnchorId(posterSrc) : undefined;
 
         return (
-            <video className="cursor-pointer" width="100%" poster={poster} controls preload="none" loop muted>
-                <source src={originalVideoURL} />
-                Your browser does not support the video tag.
-            </video>
+            <figure id={anchorId} className={anchorId ? 'scroll-mt-24' : undefined}>
+                <video className="cursor-pointer" width="100%" poster={poster} controls preload="none" loop muted>
+                    <source src={originalVideoURL} />
+                    Your browser does not support the video tag.
+                </video>
+            </figure>
         );
     },
 };
@@ -123,16 +131,4 @@ export async function getPageMdxDataByPath({path}: { path: string }) {
   });
 }
 
-export async function getFrontMatterDataByPath<T>(path: string) {
-  const source = await read(path);
-
-  // TODO Think about simply reading the frontmatter instead of compiling the whole MDX
-  const result = await compileMDX<T>({
-    source,
-    options: {
-      parseFrontmatter: true
-    }
-  });
-
-  return result.frontmatter;
-}
+export { getFrontMatterDataByPath } from '@/lib/mdx-frontmatter';

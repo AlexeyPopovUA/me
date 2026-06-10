@@ -1,3 +1,10 @@
+import {
+  IMAGE_PROBE_CONTAIN_WIDTH,
+  IMAGE_PROBE_MAX_DIMENSION,
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_WIDTH,
+} from '@/lib/image-constants';
+
 const BASE_URL = "https://images.oleksiipopov.com";
 const BUCKET = "serverless-image-handler-image-source";
 const BASE_PATH = "me";
@@ -140,10 +147,27 @@ export function getInsideImageURL(props: getInsideImageURL.Props) {
   return encodePayloadForUrl(taskToEncode);
 }
 
+export function getFullSizeImageURL(props: { src: string }) {
+  return encodePayloadForUrl(getDefaultBucketProps(props.src));
+}
+
 export namespace getOGImageURL {
   export type Props = {
     src: string;
   };
+}
+
+export function getStructuredDataImageURL(props: {
+  src: string;
+  width: number;
+  height: number;
+}) {
+  return getInsideImageURL({
+    src: props.src,
+    width: props.width,
+    height: props.height,
+    quality: 85,
+  });
 }
 
 export function getOGImageURL(props: getOGImageURL.Props) {
@@ -154,8 +178,8 @@ export function getOGImageURL(props: getOGImageURL.Props) {
     edits: {
       ...getDefaultImageFormatProps(90),
       resize: {
-        width: 1200,
-        height: 630,
+        width: OG_IMAGE_WIDTH,
+        height: OG_IMAGE_HEIGHT,
         fit: "contain"
       }
     }

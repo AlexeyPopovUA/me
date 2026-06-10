@@ -2,6 +2,7 @@ import React from "react";
 import clsx from "clsx";
 
 import {ContentImage} from "@/components/image/ContentImage";
+import {getImageAnchorId} from "@/lib/content-images";
 import {readBlurredImageSrcPair} from "@/lib/image-server";
 import {ThumbnailImage} from "@/components/image/animated-image-loading/thumbnail-image";
 import {imageLoader} from "@/components/image/image-loader";
@@ -35,7 +36,7 @@ const MDXImage = async (props) => {
   );
 
   return (
-    <figure>
+    <figure id={getImageAnchorId(src)} className="scroll-mt-24">
       <ContentImage
         shouldOpenLightbox={true}
         src={src}
