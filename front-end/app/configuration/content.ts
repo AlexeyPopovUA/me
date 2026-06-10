@@ -15,6 +15,7 @@ export const content = {
         freelancetribes: 'https://freelancetribes.com/en/freelancers/senior-full-stack-developer-senior-front-end-developer-e1bfeb',
         buffer_start_page: 'https://oleksiipopov.start.page/',
         cal_com: 'https://cal.com/oleksii-popov-software-developer',
+        producthunt: 'https://www.producthunt.com/@oleksiipopov',
     },
     services: {
         scheduleCall: {

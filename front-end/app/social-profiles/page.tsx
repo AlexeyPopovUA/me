@@ -26,6 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
       "NPM",
       "GitLab",
       "Gumroad",
+      "Product Hunt",
       "RemoteOK",
       "Dev.to",
       "Braintrust",
@@ -231,6 +232,15 @@ export default function SocialProfilesPage() {
                   >
                     <span className="text-foreground hover:text-primary font-medium">Gumroad</span>
                     <p className="text-sm text-muted-foreground mt-1">Digital Products & Services</p>
+                  </a>
+                  <a
+                    href={content.socialLinks.producthunt}
+                    rel="nofollow noopener noreferrer"
+                    target="_blank"
+                    className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
+                  >
+                    <span className="text-foreground hover:text-primary font-medium">Product Hunt</span>
+                    <p className="text-sm text-muted-foreground mt-1">Product Launches & Profile</p>
                   </a>
                   <a
                     href={content.socialLinks.cal_com}

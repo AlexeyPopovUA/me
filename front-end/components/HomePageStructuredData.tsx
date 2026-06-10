@@ -49,6 +49,7 @@ export function HomePageStructuredData({ title, description, name, jobTitle, url
             content.socialLinks.freelancetribes,
             content.socialLinks.buffer_start_page,
             content.socialLinks.cal_com,
+            content.socialLinks.producthunt,
         ],
         ...(image ? { image: image } : {}),
         mainEntityOfPage: {
