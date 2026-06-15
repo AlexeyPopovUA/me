@@ -17,6 +17,7 @@ import { readArticleHeadings } from '@/lib/toc-parser';
 import { getRssMetadataObject } from '@/lib/rss';
 import TableOfContents from '@/components/TableOfContents';
 import { BlogPostStructuredData } from '@/components/BlogPostStructuredData';
+import { GiscusComments } from '@/components/GiscusComments';
 
 export async function generateStaticParams() {
     const allSlugs = await getArticlesSlugs();
@@ -107,6 +108,13 @@ export default async function Post(props: StaticProps) {
                 {frontmatter.draft ? <DraftPreviewBanner /> : null}
                 {!hasH1 ? <h1>{frontmatter.title}</h1> : null}
                 {content}
+
+                {!frontmatter.draft ? (
+                    <section className="mt-12 border-t border-border pt-8">
+                        <h2 className="mb-4 text-xl font-semibold">Comments</h2>
+                        <GiscusComments />
+                    </section>
+                ) : null}
 
                 <ArticleMobileControls className="fixed xl:hidden" toc={toc} />
 
