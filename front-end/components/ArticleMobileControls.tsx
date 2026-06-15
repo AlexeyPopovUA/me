@@ -8,9 +8,14 @@ import { MobileTOCPanel } from '@/components/TableOfContents';
 interface ArticleMobileControlsProps {
     toc?: TOCHeading;
     className?: string;
+    showCommentsButton?: boolean;
 }
 
-export const ArticleMobileControls: React.FC<ArticleMobileControlsProps> = ({ toc, className }) => {
+export const ArticleMobileControls: React.FC<ArticleMobileControlsProps> = ({
+    toc,
+    className,
+    showCommentsButton = false,
+}) => {
     const [isTocOpen, setIsTocOpen] = useState(false);
 
     const handleTocToggle = useCallback(() => {
@@ -30,10 +35,11 @@ export const ArticleMobileControls: React.FC<ArticleMobileControlsProps> = ({ to
                     onClose={handleTocClose} 
                 />
             )}
-            <GoTop 
-                cls={className} 
-                showTocButton={!!toc} 
-                onTocClick={handleTocToggle} 
+            <GoTop
+                cls={className}
+                showTocButton={!!toc}
+                onTocClick={handleTocToggle}
+                showCommentsButton={showCommentsButton}
             />
         </>
     );

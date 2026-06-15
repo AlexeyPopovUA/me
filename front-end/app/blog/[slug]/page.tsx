@@ -110,13 +110,17 @@ export default async function Post(props: StaticProps) {
                 {content}
 
                 {!frontmatter.draft ? (
-                    <section className="mt-12 border-t border-border pt-8">
+                    <section id="comments" className="mt-12 border-t border-border pt-8 scroll-mt-24">
                         <h2 className="mb-4 text-xl font-semibold">Comments</h2>
                         <GiscusComments />
                     </section>
                 ) : null}
 
-                <ArticleMobileControls className="fixed xl:hidden" toc={toc} />
+                <ArticleMobileControls
+                    className="fixed xl:hidden"
+                    toc={toc}
+                    showCommentsButton={!frontmatter.draft}
+                />
 
                 {/* Fixed sidebar TOC */}
                 {toc ? (
