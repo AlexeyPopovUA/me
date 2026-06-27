@@ -152,6 +152,7 @@ export function buildBlogPostStructuredDataGraph({
   url,
   siteUrl,
   imageRefs,
+  articleBody,
 }: {
   title: string;
   description: string;
@@ -161,6 +162,7 @@ export function buildBlogPostStructuredDataGraph({
   url: string;
   siteUrl: string;
   imageRefs: ContentImageRef[];
+  articleBody?: string;
 }) {
   const imageNodes = buildImageObjectNodes(url, imageRefs, title);
   const primaryImageId = imageNodes[0]?.['@id'] ?? `${url}#${imageRefs[0]?.anchorId ?? 'thumbnail'}`;
@@ -211,6 +213,7 @@ export function buildBlogPostStructuredDataGraph({
       publisher: getPublisher(),
       isPartOf: getBlogReference(),
       articleSection: 'Blog',
+      ...(articleBody ? { articleBody } : {}),
       mainEntityOfPage: {
         '@type': 'WebPage',
         '@id': url,

@@ -13,6 +13,7 @@ interface BlogPostStructuredDataProps {
     author?: string;
     url: string;
     imageRefs: ContentImageRef[];
+    articleBody?: string;
 }
 
 export function BlogPostStructuredData({
@@ -23,6 +24,7 @@ export function BlogPostStructuredData({
     author,
     url,
     imageRefs,
+    articleBody,
 }: BlogPostStructuredDataProps) {
     const jsonLd = buildBlogPostStructuredDataGraph({
         title,
@@ -33,6 +35,7 @@ export function BlogPostStructuredData({
         url,
         siteUrl: environment.url,
         imageRefs,
+        articleBody,
     });
 
     return (

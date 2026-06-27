@@ -15,6 +15,7 @@ import { environment } from '@/app/configuration/environment';
 import { HomePageStructuredData } from '@/components/HomePageStructuredData';
 import { content } from '@/app/configuration/content';
 import { HeroSection } from '@/components/hero-section';
+import { ensurePathSlash } from '@/lib/utils';
 
 const pageSlug = 'home';
 
@@ -27,11 +28,11 @@ export async function generateMetadata(): Promise<Metadata> {
         description: frontMatter.description,
         keywords: frontMatter.keywords,
         metadataBase: new URL(environment.url),
-        alternates: { canonical: '/', types: getRssMetadataObject() },
+        alternates: { canonical: ensurePathSlash('/'), types: getRssMetadataObject() },
         openGraph: {
             title: frontMatter.title,
             description: frontMatter.description,
-            url: "/",
+            url: ensurePathSlash('/'),
             type: "website",
             images: [ogImage],
         },

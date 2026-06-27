@@ -35,6 +35,7 @@ describe('structured data graph', () => {
       url: 'https://oleksiipopov.com/blog/example/',
       siteUrl: 'https://oleksiipopov.com',
       imageRefs,
+      articleBody: 'Plain text article body.',
     });
 
     const nodes = graph['@graph'] as Array<Record<string, unknown>>;
@@ -42,6 +43,8 @@ describe('structured data graph', () => {
     const blogPosting = nodes.find((node) => node['@type'] === 'BlogPosting');
     const imageList = nodes.find((node) => node['@type'] === 'ItemList');
     const imageNodes = nodes.filter((node) => node['@type'] === 'ImageObject');
+
+    expect(blogPosting?.articleBody).toBe('Plain text article body.');
 
     expect(webPage?.primaryImageOfPage).toEqual({
       '@id': 'https://oleksiipopov.com/blog/example/#thumbnail',

@@ -12,6 +12,7 @@ import {getTwitterMetadata} from "@/lib/metadata";
 import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
 import {ResumeStructuredData} from "@/components/ResumeStructuredData";
 import ResumePageClient from "./resume-page-client";
+import {buildContentAlternates} from "@/lib/markdown-alternates";
 
 const pageSlug = "resume";
 
@@ -23,9 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
         title: `${frontMatter.title} - ${content.authorName}`,
         description: frontMatter.description,
         metadataBase: new URL(environment.url),
-        alternates: {
-            canonical: ensurePathSlash(`/${pageSlug}`)
-        },
+        alternates: buildContentAlternates(`/${pageSlug}`),
         keywords: frontMatter.keywords,
         openGraph: {
             title: `${frontMatter.title} - ${content.authorName}`,

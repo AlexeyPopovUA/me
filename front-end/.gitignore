@@ -33,3 +33,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# generated LLM assets
+/public/blog/
+/public/portfolio/
+/public/resume/index.md
+/public/llms.txt
+/public/llms-full.txt

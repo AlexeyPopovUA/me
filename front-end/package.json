@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "predev": "tsx scripts/generate-llm-assets.ts",
     "build": "next build",
+    "prebuild": "tsx scripts/generate-llm-assets.ts",
+    "generate-llm-assets": "tsx scripts/generate-llm-assets.ts",
     "lint": "next lint",
     "test": "vitest run",
     "sync-image-dimensions": "tsx scripts/sync-image-dimensions.ts",

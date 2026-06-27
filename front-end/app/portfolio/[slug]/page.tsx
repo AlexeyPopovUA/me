@@ -16,6 +16,8 @@ import {getFrontMatterDataByPath, getProjectMdxDataByPath} from "@/lib/mdx-utils
 import {readMdxBodyByPath} from "@/lib/mdx-source";
 import {ProjectsSchema} from "@/content/projects/projects-schema";
 import {WebApplicationStructuredData} from "@/components/WebApplicationStructuredData";
+import {ArticleByline} from "@/components/ArticleByline";
+import {buildContentAlternates} from "@/lib/markdown-alternates";
 
 export async function generateStaticParams() {
   const allSlugs = await getProjectSlugs();
@@ -35,9 +37,7 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
     title: `${frontMatter.title} - ${content.authorName}`,
     description: frontMatter.description,
     metadataBase: new URL(environment.url),
-    alternates: {
-      canonical: ensurePathSlash(`/portfolio/${(await props.params).slug}`)
-    },
+    alternates: buildContentAlternates(`/portfolio/${(await props.params).slug}`),
     openGraph: {
       title: `${frontMatter.title} - ${content.authorName}`,
       description: frontMatter.description,
@@ -102,6 +102,7 @@ export default async function Post(props: StaticProps) {
           <span id={THUMBNAIL_ANCHOR_ID} className="sr-only" aria-hidden="true" />
         ) : null}
         <h1>{frontmatter.title}</h1>
+        <ArticleByline date={frontmatter.date} lastMod={frontmatter.lastMod} />
         <Carousel
           imageCfgs={imageCfgs}
           projectType={frontmatter.type}

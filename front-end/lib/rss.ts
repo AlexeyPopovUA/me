@@ -3,15 +3,12 @@ import { Feed } from 'feed';
 import { environment } from '@/app/configuration/environment';
 import { listPublishedArticles } from '@/lib/content-iteration';
 import { getOGImageURL } from '@/lib/image';
-import { stripMarkdownToText } from '@/lib/strip-markdown';
+import { buildMarkdownDocument } from '@/lib/markdown-export';
+import { ensurePathSlash } from '@/lib/utils';
 import type { ArticlesSchema } from '@/content/articles/articles-schema';
 
 const reverseTimeSorter = (a: ArticlesSchema, b: ArticlesSchema) =>
   new Date(b.lastMod || b.date).getTime() - new Date(a.lastMod || a.date).getTime();
-
-function buildArticleSummary(body: string) {
-  return stripMarkdownToText(body).slice(0, 400);
-}
 
 export async function generateRSSFeed() {
   const publishedArticles = (await listPublishedArticles())
@@ -44,16 +41,21 @@ export async function generateRSSFeed() {
   });
 
   for (const { frontmatter: article, body } of publishedArticles) {
-    const articleUrl = `${environment.url}/blog/${article.slug}`;
+    const articleUrl = `${environment.url}${ensurePathSlash(`/blog/${article.slug}`)}`;
     const imageUrl = getOGImageURL({ src: article.thumbnail });
-    const summary = buildArticleSummary(body);
+    const markdownContent = buildMarkdownDocument({
+      frontmatter: article,
+      body,
+      siteUrl: environment.url,
+      canonicalUrl: articleUrl,
+    });
 
     feed.addItem({
       title: article.title,
       id: articleUrl,
       link: articleUrl,
       description: article.description,
-      content: `<p>${summary}</p>`,
+      content: markdownContent,
       date: new Date(article.lastMod || article.date),
       enclosure: {
         url: imageUrl,

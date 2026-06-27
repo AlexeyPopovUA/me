@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { generateRSSFeed } from '@/lib/rss';
 
 describe('generateRSSFeed', () => {
-  it('returns valid rss with enclosures and content summaries', async () => {
+  it('returns valid rss with enclosures and full article content', async () => {
     const rss = await generateRSSFeed();
 
     expect(rss).toContain('<rss version="2.0"');
@@ -12,6 +12,8 @@ describe('generateRSSFeed', () => {
     expect(rss).toContain('type="image/jpeg"');
     expect(rss).not.toContain('type="image//');
     expect((rss.match(/<item>/g) ?? []).length).toBe(9);
+    expect(rss).toContain('canonical_url:');
+    expect(rss.length).toBeGreaterThan(20_000);
   });
 
   it('excludes draft articles even when draft preview is enabled', async () => {

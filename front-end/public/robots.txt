@@ -3,3 +3,4 @@ Allow: /
 Disallow: /resume-print/
 
 Sitemap: https://oleksiipopov.com/sitemap.xml
+# LLM index: https://oleksiipopov.com/llms.txt

@@ -14,10 +14,12 @@ import { extractArticleImageRefs, THUMBNAIL_ANCHOR_ID } from '@/lib/content-imag
 import { getArticleMdxDataByPath } from '@/lib/mdx-utils';
 import { readMdxBodyByPath } from '@/lib/mdx-source';
 import { readArticleHeadings } from '@/lib/toc-parser';
-import { getRssMetadataObject } from '@/lib/rss';
 import TableOfContents from '@/components/TableOfContents';
 import { BlogPostStructuredData } from '@/components/BlogPostStructuredData';
 import { GiscusComments } from '@/components/GiscusComments';
+import { ArticleByline } from '@/components/ArticleByline';
+import { buildContentAlternates } from '@/lib/markdown-alternates';
+import { stripMarkdownToText } from '@/lib/strip-markdown';
 
 export async function generateStaticParams() {
     const allSlugs = await getArticlesSlugs();
@@ -42,10 +44,7 @@ export const generateMetadata = async (props: StaticProps): Promise<Metadata> =>
         title: `${post.title} - ${content.authorName}`,
         description: post.description,
         metadataBase: new URL(environment.url),
-        alternates: {
-            canonical: ensurePathSlash(`/blog/${slug}`),
-            types: getRssMetadataObject(),
-        },
+        alternates: buildContentAlternates(`/blog/${slug}`, { includeRss: true }),
         keywords: post.keywords,
         robots: post.draft
             ? { index: false, follow: false }
@@ -100,6 +99,7 @@ export default async function Post(props: StaticProps) {
                 author={frontmatter.author}
                 url={url}
                 imageRefs={imageRefs}
+                articleBody={stripMarkdownToText(body)}
             />
             <ArticleContainer>
                 {imageRefs.some((image) => image.anchorId === THUMBNAIL_ANCHOR_ID) ? (
@@ -107,6 +107,11 @@ export default async function Post(props: StaticProps) {
                 ) : null}
                 {frontmatter.draft ? <DraftPreviewBanner /> : null}
                 {!hasH1 ? <h1>{frontmatter.title}</h1> : null}
+                <ArticleByline
+                    author={frontmatter.author}
+                    date={frontmatter.date}
+                    lastMod={frontmatter.lastMod}
+                />
                 {content}
 
                 {!frontmatter.draft ? (
