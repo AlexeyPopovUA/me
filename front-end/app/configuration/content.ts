@@ -16,6 +16,7 @@ export const content = {
         buffer_start_page: 'https://oleksiipopov.start.page/',
         cal_com: 'https://cal.com/oleksii-popov-software-developer',
         producthunt: 'https://www.producthunt.com/@oleksiipopov',
+        reddit: 'https://www.reddit.com/user/oleksii-popov/',
     },
     services: {
         scheduleCall: {

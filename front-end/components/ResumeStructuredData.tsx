@@ -46,6 +46,7 @@ export function ResumeStructuredData({
             content.socialLinks.buffer_start_page,
             content.socialLinks.cal_com,
             content.socialLinks.producthunt,
+            content.socialLinks.reddit,
         ],
         ...(image ? { image: image } : {}),
         email: 'opportunities@oleksiipopov.com',

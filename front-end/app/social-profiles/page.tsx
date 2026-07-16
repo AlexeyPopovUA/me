@@ -27,6 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
       "GitLab",
       "Gumroad",
       "Product Hunt",
+      "Reddit",
       "RemoteOK",
       "Dev.to",
       "Braintrust",
@@ -219,6 +220,15 @@ export default function SocialProfilesPage() {
                   >
                     <span className="text-foreground hover:text-primary font-medium">Twitter (X)</span>
                     <p className="text-sm text-muted-foreground mt-1">Updates & Insights</p>
+                  </a>
+                  <a
+                    href={content.socialLinks.reddit}
+                    rel="nofollow noopener noreferrer"
+                    target="_blank"
+                    className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
+                  >
+                    <span className="text-foreground hover:text-primary font-medium">Reddit</span>
+                    <p className="text-sm text-muted-foreground mt-1">Community Profile</p>
                   </a>
                 </div>
 
