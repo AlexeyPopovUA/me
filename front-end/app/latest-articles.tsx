@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { getLastArticles } from '@/lib/articles';
 import { ThumbnailImage } from '@/components/image/animated-image-loading/thumbnail-image';
 import { getInsideImageURL } from '@/lib/image';

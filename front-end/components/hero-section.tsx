@@ -17,7 +17,7 @@ interface HeroSectionProps {
     description: string;
 }
 
-export const HeroSection = ({ src, blurDataURL, name, title, description }: HeroSectionProps) => {
+export const HeroSection = ({ src, blurDataURL, name, description }: HeroSectionProps) => {
     return (
         <section className="min-h-screen flex items-center justify-center pt-20 pb-16 px-6">
             <div className="container mx-auto max-w-5xl">
@@ -54,7 +54,7 @@ export const HeroSection = ({ src, blurDataURL, name, title, description }: Hero
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: 0.2 }}
                         >
-                            <p className="text-primary font-mono text-sm mb-3">Hi, I'm</p>
+                            <p className="text-primary font-mono text-sm mb-3">Hi, I&apos;m</p>
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4">{name}</h1>
                             <p className="text-xl md:text-2xl text-muted-foreground mb-6">
                                 <span className="gradient-text font-semibold">Front-End Leaning</span> Full-Stack Developer

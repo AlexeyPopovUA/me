@@ -28,7 +28,11 @@ export class DemoConstruct extends Construct {
             description: `${props.project}-${props.name}-lambda`,
             bundling: {
                 externalModules: ['@aws-sdk/*'],
-                nodeModules: ['@vendia/serverless-express']
+                nodeModules: ['@vendia/serverless-express'],
+                // Isolated CDK installs don't inherit workspace pnpm config
+                environment: {
+                    pnpm_config_minimum_release_age: '0',
+                },
             },
             environment: {
                 REGION: props.region,

@@ -49,7 +49,7 @@ export default function ContactPageClient() {
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
               If you have any questions, ideas, comments, advises, feedback or job opportunities, 
-              then just drop me a message. I'll be happy to have a chat.
+              then just drop me a message. I&apos;ll be happy to have a chat.
             </p>
           </motion.div>
 

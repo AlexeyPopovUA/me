@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Personal blog and portfolio website",
   "main": "index.js",
+  "packageManager": "pnpm@11.20.0",
   "scripts": {
     "prepare": "husky",
     "test": "pnpm --filter front-end test",
@@ -17,6 +18,13 @@
   "private": "true",
   "engines": {
     "node": ">=24.0.0"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.19.0",
+      "onFail": "download"
+    }
   },
   "workspaces": [
     "./back-end/*",

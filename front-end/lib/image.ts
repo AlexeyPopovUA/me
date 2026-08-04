@@ -1,6 +1,4 @@
 import {
-  IMAGE_PROBE_CONTAIN_WIDTH,
-  IMAGE_PROBE_MAX_DIMENSION,
   OG_IMAGE_HEIGHT,
   OG_IMAGE_WIDTH,
 } from '@/lib/image-constants';
@@ -195,9 +193,11 @@ export function generateLBSlides(images: string[]) {
   return images.map((image) => ({
     src: getContainImageURL({src: image, quality, width}),
     width,
+    height: width,
     srcSet: [width, 1080, 640, 410, 344, 256].map((breakpoint) => ({
+      src: getContainImageURL({src: image, quality, width: breakpoint}),
       width: breakpoint,
-      src: getContainImageURL({src: image, quality, width: breakpoint})
+      height: breakpoint,
     })),
   }));
 }

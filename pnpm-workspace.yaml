@@ -2,3 +2,18 @@ packages:
   - 'front-end'
   - 'cloud'
   - 'back-end/*'
+
+# Migrated from .npmrc for pnpm 11 (auth/registry-only .npmrc)
+autoInstallPeers: true
+hoist: true
+shamefullyHoist: true
+
+# Packages allowed to run install/build scripts (pnpm 11)
+allowBuilds:
+  esbuild: true
+  puppeteer: true
+  sharp: true
+  unrs-resolver: true
+
+# Allow freshly published packages (needed for latest Next.js / AWS SDK upgrades)
+minimumReleaseAge: 0
