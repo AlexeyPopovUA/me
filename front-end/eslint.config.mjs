@@ -14,7 +14,8 @@ const eslintConfig = defineConfig([
         ".next/**",
         "out/**",
         "build/**",
-        "next-env.d.ts"
+        "next-env.d.ts",
+        "scripts/resolve-typescript6.cjs"
     ])
 ]);
 

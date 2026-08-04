@@ -17,8 +17,8 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^24.10.9",
     "aws-cdk": "^2.1135.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "tsx": "^4.23.5",
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.1102.0",

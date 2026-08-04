@@ -8,7 +8,7 @@
     "build": "next build",
     "prebuild": "tsx scripts/generate-llm-assets.ts",
     "generate-llm-assets": "tsx scripts/generate-llm-assets.ts",
-    "lint": "eslint .",
+    "lint": "NODE_OPTIONS=\"--require ./scripts/resolve-typescript6.cjs\" eslint .",
     "test": "vitest run",
     "sync-image-dimensions": "tsx scripts/sync-image-dimensions.ts",
     "update-dependencies": "npx npm-check-updates -u --packageFile package.json"
@@ -54,7 +54,7 @@
     "tailwindcss": "^4.3.3",
     "tailwindcss-animate": "^1.0.7",
     "to-vfile": "^8.0.0",
-    "typescript": "5.9.3",
+    "typescript": "7.0.2",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.1.0",
     "yet-another-react-lightbox": "^3.32.2"
@@ -69,6 +69,7 @@
   },
   "devDependencies": {
     "@types/hast": "^3.0.5",
+    "@typescript/typescript6": "6.0.2",
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.3.0",
     "eslint-config-prettier": "^10.1.8",
