@@ -2,7 +2,7 @@ import {Construct} from 'constructs';
 import {Stack, StackProps} from 'aws-cdk-lib';
 import {Certificate, CertificateValidation} from "aws-cdk-lib/aws-certificatemanager";
 import {AaaaRecord, ARecord, HostedZone, RecordTarget} from "aws-cdk-lib/aws-route53";
-import {HttpLambdaIntegration} from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
+import {HttpLambdaIntegration} from "aws-cdk-lib/aws-apigatewayv2-integrations";
 import {
     DomainName,
     HttpApi,
@@ -10,7 +10,7 @@ import {
     HttpStage,
     MappingValue,
     ParameterMapping
-} from "@aws-cdk/aws-apigatewayv2-alpha";
+} from "aws-cdk-lib/aws-apigatewayv2";
 
 import {ApiGatewayv2DomainProperties} from "aws-cdk-lib/aws-route53-targets";
 

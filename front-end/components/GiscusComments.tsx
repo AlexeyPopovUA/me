@@ -2,19 +2,19 @@
 
 import Giscus from '@giscus/react';
 import { useTheme } from 'next-themes';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 
 import { commentsConfig } from '@/app/configuration/comments';
+
+const subscribe = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 export function GiscusComments() {
     const containerRef = useRef<HTMLDivElement>(null);
     const { resolvedTheme } = useTheme();
-    const [mounted, setMounted] = useState(false);
+    const mounted = useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
     const [visible, setVisible] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     useEffect(() => {
         if (!mounted || !containerRef.current) {

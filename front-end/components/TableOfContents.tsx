@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useMemo, useCallback, useState } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowUp, List } from 'lucide-react';
+import { ArrowLeft, ArrowUp } from 'lucide-react';
 import { TOCHeading, flattenTOC } from '@/lib/toc-types';
 import { clsx } from 'clsx';
 

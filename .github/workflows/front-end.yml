@@ -7,6 +7,9 @@ on:
     paths:
       - 'front-end/**'
       - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'mise.toml'
+      - 'package.json'
       - '.github/workflows/front-end.yml'
 
 env:
@@ -29,15 +32,12 @@ jobs:
       - name: Prepare variables
         run: echo SAFE_SOURCE_NAME=$(echo "${{ github.ref_name }}" | sed -r 's/[/.@_]+/-/g') >> $GITHUB_ENV
 
-      - name: Install runtime
-        uses: actions/setup-node@v4
+      - name: Install mise tools
+        uses: jdx/mise-action@v2
         with:
-          node-version: '24'
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 10
+          version: 2026.8.1
+          install: true
+          cache: true
 
       - name: Get pnpm store directory
         shell: bash
@@ -61,6 +61,12 @@ jobs:
         with:
           chrome-version: stable
           install-dependencies: true
+
+      - name: Lint
+        run: pnpm --filter front-end lint
+
+      - name: Unit tests
+        run: pnpm --filter front-end test
 
       - name: Build
         env:

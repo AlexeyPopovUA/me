@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { generateRSSFeed } from '@/lib/rss';
 
@@ -17,15 +17,14 @@ describe('generateRSSFeed', () => {
   });
 
   it('excludes draft articles even when draft preview is enabled', async () => {
-    const previousNodeEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = 'development';
+    vi.stubEnv('NODE_ENV', 'development');
 
     try {
       const rss = await generateRSSFeed();
       expect((rss.match(/<item>/g) ?? []).length).toBe(9);
       expect(rss).not.toContain('mermaid-diagrams-in-nextjs');
     } finally {
-      process.env.NODE_ENV = previousNodeEnv;
+      vi.unstubAllEnvs();
     }
   });
 });
