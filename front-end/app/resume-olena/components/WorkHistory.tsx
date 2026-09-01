@@ -45,8 +45,8 @@ export function WorkHistory(props: { experience: typeof data.experience }) {
                     {item.stack ? <Stack stack={item.stack} /> : null}
                     {item.positions &&
                         item.positions.map((position) => (
-                            <div key={position.title} className="project print:mt-1">
-                                <h4 className="title">&gt; {position.title}</h4>
+                            <div key={`${item.company}-${position.title || position.description[0]}`} className="project print:mt-1">
+                                {position.title ? <h4 className="title">&gt; {position.title}</h4> : null}
                                 <Description description={position.description} />
                             </div>
                         ))}
