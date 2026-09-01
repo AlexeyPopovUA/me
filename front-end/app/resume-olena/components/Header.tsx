@@ -11,9 +11,9 @@ type Props = {
 
 export default async function Header(props: Props) {
     const insideUrlProps: getInsideImageURL.Props = {
-        width: 500,
-        height: 400,
-        src: '/pages/resume-olena/resume-olena-profile.jpg',
+        width: 400,
+        height: 500,
+        src: '/pages/resume-olena/resume-olena-profile-2026.jpg',
     };
     const insideUrl = getInsideImageURL(insideUrlProps);
 
