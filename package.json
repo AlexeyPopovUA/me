@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Personal blog and portfolio website",
   "main": "index.js",
-  "packageManager": "pnpm@11.20.0",
+  "packageManager": "pnpm@11.25.0",
   "scripts": {
     "prepare": "husky",
     "test": "pnpm --filter front-end test",
@@ -22,7 +22,7 @@
   "devEngines": {
     "runtime": {
       "name": "node",
-      "version": "24.19.0",
+      "version": "24.20.0",
       "onFail": "download"
     }
   },
@@ -32,7 +32,7 @@
     "front-end"
   ],
   "devDependencies": {
-    "@tsconfig/node24": "^24.0.4",
+    "@tsconfig/node24": "^24.0.5",
     "husky": "^9.1.7"
   }
 }
