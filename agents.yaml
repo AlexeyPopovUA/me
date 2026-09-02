@@ -65,8 +65,8 @@ tech_stack:
     language: TypeScript 5.9.3
     
   tooling:
-    package_manager: pnpm 11.20.0
-    node_version: "24.19.0"
+    package_manager: pnpm 11.25.0
+    node_version: "24.20.0"
     version_manager: mise (mise.toml)
     build_tool: Turbopack (Next.js 16)
 
@@ -301,7 +301,7 @@ upgrade_status:
   last_updated: "January 24, 2026"
   outdated_packages: 1
   notes:
-    - "@types/node at 24.10.9 is correct (matches Node.js 24 runtime)"
+    - "@types/node at 24.13.3 is correct (matches Node.js 24 runtime)"
     - "No deprecated packages remaining"
     - "All regular packages on latest stable versions"
     

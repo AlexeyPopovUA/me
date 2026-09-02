@@ -9,7 +9,7 @@ Personal blog and portfolio monorepo (pnpm workspaces). Packages:
 ## Cursor Cloud specific instructions
 
 ### Runtime / toolchain
-- Node is pinned to `24.19.0` and pnpm to `11.20.0` (see `mise.toml` / `.nvmrc` / `package.json#packageManager`). `mise` is not installed here; Node 24 is provided via `nvm` and pnpm via `corepack`. The base image ships a different Node (`/exec-daemon/node`, v22) earlier on `PATH`; a one-time `~/.bashrc` edit prepends the nvm Node 24 bin so interactive agent shells default to Node 24. The startup update script also activates Node 24 + pnpm itself, so it does not rely on that shell config.
+- Node is pinned to `24.20.0` (current Active LTS) and pnpm to `11.25.0` (see `mise.toml` / `.nvmrc` / `package.json#packageManager`). `mise` is not installed here; Node 24 is provided via `nvm` and pnpm via `corepack`. The base image ships a different Node (`/exec-daemon/node`, v22) earlier on `PATH`; a one-time `~/.bashrc` edit prepends the nvm Node 24 bin so interactive agent shells default to Node 24. The startup update script also activates Node 24 + pnpm itself, so it does not rely on that shell config.
 - Always run repo commands with pnpm workspace filters, e.g. `pnpm --filter front-end <script>`.
 
 ### front-end (main app)
