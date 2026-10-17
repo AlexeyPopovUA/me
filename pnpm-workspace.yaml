@@ -3,17 +3,23 @@ packages:
   - 'cloud'
   - 'back-end/*'
 
-# Migrated from .npmrc for pnpm 11 (auth/registry-only .npmrc)
+# Migrated from .npmrc (auth/registry-only .npmrc). Workspace settings stay here on pnpm 12.
 autoInstallPeers: true
 hoist: true
 shamefullyHoist: true
 
-# Packages allowed to run install/build scripts (pnpm 11)
+# Packages allowed to run install/build scripts
 allowBuilds:
   esbuild: true
   puppeteer: true
   sharp: true
   unrs-resolver: true
+
+peerDependencyRules:
+  allowedVersions:
+    # typescript-eslint@8.71 peers typescript <6.1 because TypeScript 7 has no JS API.
+    # The compiler package is 7; ESLint is preloaded onto @typescript/typescript6 (typescript 6.0.3).
+    typescript: '7'
 
 # Allow freshly published packages (needed for latest Next.js / AWS SDK upgrades)
 minimumReleaseAge: 0
