@@ -185,7 +185,7 @@ considerations:
   - Tool versions are pinned in mise.toml and consumed by GitHub Actions via jdx/mise-action
   - Next.js 16 with React 19 - check compatibility for new dependencies
   - TypeScript 7 upgrade is optional; project remains on TypeScript 5.9.x for now
-  - Mermaid rendering currently requires puppeteer ^23 with @mermaid-js/mermaid-cli ^11.6 (newer pair breaks MDX build)
+  - Mermaid rendering uses puppeteer 25 with @mermaid-js/mermaid-cli 12. Next.js must keep both in serverExternalPackages so Turbopack does not bundle mermaid-cli's page.$eval import.
   - Static site generation is preferred over SSR where possible
   - Content is stored in MDX format with frontmatter metadata
   - Use pnpm --filter <workspace> for workspace-specific commands
