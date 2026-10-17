@@ -34,16 +34,16 @@ guidelines:
 # Technology Stack
 tech_stack:
   frontend:
-    framework: Next.js 16.3.0
-    language: TypeScript 5.9.3
+    framework: Next.js 16.4.2
+    language: TypeScript 7.0.2
     styling: Tailwind CSS 4.3.3
-    runtime: React 19.2.8
+    runtime: React 19.3.1
     ui_library: Custom components with tailwindcss-animate
     content: next-mdx-remote, remark, rehype plugins
     features:
       - MDX content rendering
-      - Syntax highlighting (shiki v4.4.1)
-      - Image optimization (sharp v0.35.3)
+      - Syntax highlighting (shiki v4.5.0)
+      - Image optimization (sharp v0.35.5)
       - RSS feed generation
       - Mermaid diagrams support
       - Typography plugin for blog content
@@ -51,22 +51,22 @@ tech_stack:
       
   backend:
     location: back-end/demo
-    framework: Express 5.2.1
+    framework: Express 5.3.0
     runtime: Node.js 24 on AWS Lambda
     adapter: "@vendia/serverless-express"
-    language: TypeScript 5.9.3
+    language: TypeScript 7.0.2
     
   infrastructure:
     provider: AWS
-    iac: AWS CDK 2.263.0
+    iac: AWS CDK 2.273.0
     location: cloud directory
-    sdk: AWS SDK v3.1102.0
+    sdk: AWS SDK v3.1152.0
     runtime: Node.js 24
-    language: TypeScript 5.9.3
+    language: TypeScript 7.0.2
     
   tooling:
-    package_manager: pnpm 11.25.0
-    node_version: "24.20.0"
+    package_manager: pnpm 12.13.0
+    node_version: "24.22.0"
     version_manager: mise (mise.toml)
     build_tool: Turbopack (Next.js 16)
 
@@ -185,7 +185,7 @@ considerations:
   - Tool versions are pinned in mise.toml and consumed by GitHub Actions via jdx/mise-action
   - Next.js 16 with React 19 - check compatibility for new dependencies
   - TypeScript 7 upgrade is optional; project remains on TypeScript 5.9.x for now
-  - Mermaid rendering currently requires puppeteer ^23 with @mermaid-js/mermaid-cli ^11.6 (newer pair breaks MDX build)
+  - Mermaid rendering uses puppeteer 25 with @mermaid-js/mermaid-cli 12. Next.js must keep both in serverExternalPackages so Turbopack does not bundle mermaid-cli's page.$eval import.
   - Static site generation is preferred over SSR where possible
   - Content is stored in MDX format with frontmatter metadata
   - Use pnpm --filter <workspace> for workspace-specific commands
@@ -301,7 +301,7 @@ upgrade_status:
   last_updated: "January 24, 2026"
   outdated_packages: 1
   notes:
-    - "@types/node at 24.13.3 is correct (matches Node.js 24 runtime)"
+    - "@types/node tracks the Node.js 24 runtime (24.x)"
     - "No deprecated packages remaining"
     - "All regular packages on latest stable versions"
     

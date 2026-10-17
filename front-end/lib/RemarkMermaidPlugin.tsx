@@ -37,9 +37,24 @@ async function generateDiagrams(nodes: CodeNode[]) {
       return cache[node.value];
     } else {
       const svg = await renderMermaid(browser!, node.value, 'svg', {
+        // mermaid-cli 12 embeds woff files into every SVG by default.
+        // These pages already load site fonts, and the embedded files multiplied article HTML.
+        fontEmbed: false,
         mermaidConfig: {
+          // Mermaid 12 defaults to the ELK layout and the neo look, which wrap
+          // existing labels mid-word. Keep the dagre layout and classic look
+          // these diagrams were written for.
+          layout: 'dagre',
+          theme: 'default',
+          look: 'classic',
           htmlLabels: false,
-          flowchart: {htmlLabels: false}
+          flowchart: {
+            htmlLabels: false,
+            // Mermaid 12 measures label width more tightly and splits long
+            // tokens such as "/caching-callback" across lines. Keep the width
+            // these diagrams were authored against.
+            wrappingWidth: 400,
+          }
         }
       });
 

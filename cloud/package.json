@@ -2,7 +2,7 @@
   "name": "cloud",
   "version": "0.1.0",
   "engines": {
-    "node": ">=24.0.0"
+    "node": ">=24.22.0"
   },
   "scripts": {
     "clean": "rm -rf ./cdk.out",
@@ -15,15 +15,15 @@
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.13",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.13.3",
-    "aws-cdk": "^2.1135.0",
-    "tsx": "^4.23.5",
+    "@types/node": "^24.19.2",
+    "aws-cdk": "^2.1145.0",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.1102.0",
-    "@aws-sdk/lib-dynamodb": "^3.1102.0",
-    "aws-cdk-lib": "^2.263.0",
+    "@aws-sdk/client-dynamodb": "^3.1152.0",
+    "@aws-sdk/lib-dynamodb": "^3.1152.0",
+    "aws-cdk-lib": "^2.273.0",
     "constructs": "^10.8.1",
     "demo": "workspace:*",
     "source-map-support": "^0.5.21"
