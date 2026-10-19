@@ -2,8 +2,8 @@ import {resolve} from "node:path";
 import {Construct} from 'constructs';
 import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
 import {IFunction, Runtime} from "aws-cdk-lib/aws-lambda";
-import {Duration} from "aws-cdk-lib";
-import {RetentionDays} from "aws-cdk-lib/aws-logs";
+import {Duration, RemovalPolicy} from "aws-cdk-lib";
+import {LogGroup, RetentionDays} from "aws-cdk-lib/aws-logs";
 
 export type CustomProps = {
     region: string;
@@ -18,12 +18,22 @@ export class DemoConstruct extends Construct {
     constructor(scope: Construct, id: string, props: CustomProps) {
         super(scope, id);
 
+        // Replace deprecated logRetention. Do not set logGroupName: the current
+        // group is /aws/lambda/<generated function name> and is not a stack
+        // resource. A generated name creates a new group and leaves that one
+        // in place. RETAIN matches the LogGroup default so a later update
+        // cannot delete the new group either.
+        const logGroup = new LogGroup(this, "LogGroup", {
+            retention: RetentionDays.ONE_DAY,
+            removalPolicy: RemovalPolicy.RETAIN,
+        });
+
         this.lambda = new NodejsFunction(this, `${props.project}-${props.name}-lambda`, {
             handler: "handler",
             runtime: Runtime.NODEJS_24_X,
             entry: resolve(process.cwd(), "../back-end/demo/src/lambda.ts"),
             timeout: Duration.seconds(10),
-            logRetention: RetentionDays.ONE_DAY,
+            logGroup,
             memorySize: 128,
             description: `${props.project}-${props.name}-lambda`,
             bundling: {
