@@ -2,7 +2,8 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { MapPin, Mail, Globe, Github, Linkedin, GraduationCap, Briefcase } from "lucide-react";
+import { MapPin, Mail, Globe, GraduationCap, Briefcase } from "lucide-react";
+import { Github, Linkedin } from "@/components/icons/brand-icons";
 import renderData from "@/app/resume/data/data";
 
 export default function ResumePageClient() {

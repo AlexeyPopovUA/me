@@ -2,7 +2,8 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Mail, Calendar, Linkedin, Globe } from "lucide-react";
+import { Mail, Calendar, Globe } from "lucide-react";
+import { Linkedin } from "@/components/icons/brand-icons";
 
 const contactMethods = [
   {
