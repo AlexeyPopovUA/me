@@ -1,10 +1,16 @@
 import { describe, expect, it } from 'vitest';
 
 import type { ContentImageRef } from '@/lib/content-images';
+import { buildHomeStructuredData } from '@/lib/structured-data';
 import {
   buildBlogPostStructuredDataGraph,
   buildProjectStructuredDataGraph,
 } from '@/lib/structured-data-graph';
+
+function hasType(node: Record<string, unknown> | undefined, type: string) {
+  const value = node?.['@type'];
+  return value === type || (Array.isArray(value) && value.includes(type));
+}
 
 const imageRefs: ContentImageRef[] = [
   {
@@ -40,11 +46,12 @@ describe('structured data graph', () => {
 
     const nodes = graph['@graph'] as Array<Record<string, unknown>>;
     const webPage = nodes.find((node) => node['@type'] === 'WebPage');
-    const blogPosting = nodes.find((node) => node['@type'] === 'BlogPosting');
+    const blogPosting = nodes.find((node) => hasType(node, 'BlogPosting'));
     const imageList = nodes.find((node) => node['@type'] === 'ItemList');
     const imageNodes = nodes.filter((node) => node['@type'] === 'ImageObject');
 
     expect(blogPosting?.articleBody).toBe('Plain text article body.');
+    expect(blogPosting?.['@type']).toEqual(['BlogPosting', 'Article']);
 
     expect(webPage?.primaryImageOfPage).toEqual({
       '@id': 'https://oleksiipopov.com/blog/example/#thumbnail',
@@ -88,9 +95,11 @@ describe('structured data graph', () => {
     });
 
     const nodes = graph['@graph'] as Array<Record<string, unknown>>;
-    const webApplication = nodes.find((node) => node['@type'] === 'WebApplication');
+    const webApplication = nodes.find((node) => hasType(node, 'WebApplication'));
     const breadcrumb = nodes.find((node) => node['@type'] === 'BreadcrumbList');
 
+    expect(webApplication?.['@type']).toEqual(['WebApplication', 'SoftwareApplication']);
+    expect(webApplication).not.toHaveProperty('offers');
     expect(webApplication?.keywords).toBe('Next.js, TypeScript');
     expect(breadcrumb).toMatchObject({
       itemListElement: [
@@ -100,5 +109,33 @@ describe('structured data graph', () => {
       ],
     });
     expect(nodes.some((node) => node['@type'] === 'ItemList')).toBe(false);
+  });
+
+  it('publishes an Organization brand and a Person who works for it', () => {
+    const data = buildHomeStructuredData({
+      title: 'Oleksii Popov',
+      description: 'Software developer',
+      name: 'Oleksii Popov',
+      jobTitle: 'Full-Stack Software Developer',
+      url: 'https://oleksiipopov.com',
+      image: 'https://images.example/logo.jpg',
+      sameAs: ['https://github.com/AlexeyPopovUA'],
+    });
+
+    expect(data.organization).toMatchObject({
+      '@type': 'Organization',
+      '@id': 'https://oleksiipopov.com/#organization',
+      name: 'Oleksii Popov',
+      brand: { '@type': 'Brand', name: 'Oleksii Popov' },
+    });
+    expect(data.person).toMatchObject({
+      '@type': 'Person',
+      worksFor: { '@id': 'https://oleksiipopov.com/#organization' },
+      brand: { '@type': 'Brand', name: 'Oleksii Popov' },
+    });
+    expect(data.website).toMatchObject({
+      '@id': 'https://oleksiipopov.com/#website',
+      publisher: { '@id': 'https://oleksiipopov.com/#organization' },
+    });
   });
 });

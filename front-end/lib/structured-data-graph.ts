@@ -185,7 +185,10 @@ export function buildBlogPostStructuredDataGraph({
       imageList,
     }),
     {
-      '@type': 'BlogPosting',
+      // BlogPosting is a subtype of Article. Both names are set on one entity
+      // so checkers that look for Article and consumers that understand
+      // BlogPosting describe the same post.
+      '@type': ['BlogPosting', 'Article'],
       '@id': blogPostingId,
       headline: title,
       description,
@@ -273,7 +276,13 @@ export function buildProjectStructuredDataGraph({
       imageList,
     }),
     {
-      '@type': 'WebApplication',
+      // Portfolio pages are case studies of software, not goods sold on this
+      // site. WebApplication is a SoftwareApplication and a CreativeWork.
+      // Ahrefs may still call the URL a product page and ask for Product
+      // schema. A Product/Offer node would be the wrong type: there is no
+      // price, priceCurrency, or availability, and Google product rich results
+      // require those. `offers` is omitted on purpose.
+      '@type': ['WebApplication', 'SoftwareApplication'],
       '@id': webApplicationId,
       name,
       description,
