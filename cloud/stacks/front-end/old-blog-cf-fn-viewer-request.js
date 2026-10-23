@@ -2,7 +2,9 @@
 // JavaScript -> ECMAScript 5.1 compliant
 // https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/functions-javascript-runtime-features.html#writing-functions-javascript-features-builtin-objects
 
-var FILE_REGEX = new RegExp("\\/.*[\\w\\d]+\\.[\\w\\d]+$");
+// Same file test as cf-fn-viewer-request.js. Hashes may end in "-" immediately
+// before the extension; that must still count as a file, not a page.
+var FILE_REGEX = new RegExp("\\/[^/]+\\.[A-Za-z0-9]+$");
 
 var oldURLsMapping = {
     "/2023/07/03/serving-environment-specific-configurations-to-web-applications/": "https://oleksiipopov.com/blog/serving-environment-specific-configurations-to-web-applications/",

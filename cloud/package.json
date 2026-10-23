@@ -10,6 +10,7 @@
     "cdk-diff-stacks": "cdk diff",
     "deploy": "cdk deploy me-* --require-approval=never",
     "type-check": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test stacks/front-end/cf-fn-viewer-request.test.js",
     "update-dependencies": "npx npm-check-updates -u --packageFile package.json"
   },
   "devDependencies": {

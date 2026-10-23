@@ -2,7 +2,12 @@
 // JavaScript -> ECMAScript 5.1 compliant
 // https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/functions-javascript-runtime-features.html#writing-functions-javascript-features-builtin-objects
 
-var FILE_REGEX = new RegExp("\\/.*[\\w\\d]+\\.[\\w\\d]+$");
+// Turbopack chunk hashes are base64url, so the character before the extension
+// may be "-". The previous pattern required a word character there, which
+// rewrote "/_next/static/chunks/2lhx5kypfv6w-.js" to "...js/index.html".
+// CloudFront then served the HTML 404 for that asset. Any final path segment
+// with a dotted alphanumeric extension is a file.
+var FILE_REGEX = new RegExp("\\/[^/]+\\.[A-Za-z0-9]+$");
 
 function handler(event) {
     var request = event.request;
