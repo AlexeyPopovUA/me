@@ -14,8 +14,7 @@ import {
     OriginAccessIdentity,
     FunctionCode,
     Function as CFFunction,
-    FunctionEventType,
-    ResponseHeadersPolicy
+    FunctionEventType
 } from "aws-cdk-lib/aws-cloudfront";
 import {S3BucketOrigin} from "aws-cdk-lib/aws-cloudfront-origins";
 import {Certificate, CertificateValidation} from "aws-cdk-lib/aws-certificatemanager";
@@ -66,27 +65,46 @@ export class FrontEndHostingStack extends Stack {
             comment: `Viewer request cloudfront function for redirections and subdomains (${project})`
         });
 
+        // Honor Cache-Control from the publish step. minTtl was 1 day, which kept
+        // HTML (and the custom 404) at the edge even when the viewer header said
+        // max-age=3600. minTtl 0 lets HTML with max-age=0 revalidate immediately.
+        // maxTtl still allows immutable /_next/static objects to be cached a year.
         const cachePolicy = new CachePolicy(this, `${project}-cache-policy`, {
             cachePolicyName: `${project}-cache-policy`,
+            comment: "Default behavior. TTL follows origin Cache-Control, capped at one year.",
             cookieBehavior: CacheCookieBehavior.none(),
             enableAcceptEncodingBrotli: true,
             enableAcceptEncodingGzip: true,
-            minTtl: Duration.days(1),
+            minTtl: Duration.seconds(0),
             maxTtl: Duration.days(365),
-            defaultTtl: Duration.days(30)
+            defaultTtl: Duration.seconds(0)
         });
 
-        const responseHeadersPolicy = new ResponseHeadersPolicy(this, `${project}-response-headers-policy`, {
-            customHeadersBehavior: {
-                customHeaders: [
-                    {
-                        header: "Cache-Control",
-                        value: `max-age=${1 * 60 * 60}`, // 1 hour
-                        override: false
-                    }
-                ]
-            }
+        // Hashed Next.js chunks are immutable. A dedicated behavior keeps them
+        // compressible and long-lived even if an object is missing Cache-Control.
+        // minTtl stays 0 so a missing chunk is not stored as a year-long 404;
+        // successful objects with max-age=31536000 are cached for a year.
+        const staticCachePolicy = new CachePolicy(this, `${project}-static-cache-policy`, {
+            cachePolicyName: `${project}-static-cache-policy`,
+            comment: "Immutable _next/static assets. Gzip and Brotli are part of the cache key.",
+            cookieBehavior: CacheCookieBehavior.none(),
+            enableAcceptEncodingBrotli: true,
+            enableAcceptEncodingGzip: true,
+            minTtl: Duration.seconds(0),
+            maxTtl: Duration.days(365),
+            defaultTtl: Duration.days(365)
         });
+
+        const origin = S3BucketOrigin.withOriginAccessIdentity(s3Bucket, {
+            originAccessIdentity: originAccessIdentity,
+            originShieldRegion: region,
+            originPath: "/main"
+        });
+
+        const viewerRequestAssociation = {
+            function: cf_fn_viewer_request,
+            eventType: FunctionEventType.VIEWER_REQUEST
+        };
 
         const distribution = new Distribution(this, `${project}-api-distribution`, {
             // comment contains the distribution name
@@ -106,35 +124,41 @@ export class FrontEndHostingStack extends Stack {
             defaultBehavior: {
                 allowedMethods: AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
                 cachePolicy,
-                responseHeadersPolicy,
                 cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
                 compress: true,
                 viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-                origin: S3BucketOrigin.withOriginAccessIdentity(s3Bucket, {
-                    originAccessIdentity: originAccessIdentity,
-                    originShieldRegion: region,
-                    originPath: "/main"
-                }),
-                // CloudFront Functions
-                functionAssociations: [
-                    {
-                        function: cf_fn_viewer_request,
-                        eventType: FunctionEventType.VIEWER_REQUEST
-                    }
-                ]
+                origin,
+                functionAssociations: [viewerRequestAssociation]
+            },
+            additionalBehaviors: {
+                // `*` matches across slashes, so chunks and media are included.
+                // compress plus the cache policy's gzip/brotli flags are both set.
+                // CloudFront itself only compresses objects from 1,000 to 10,000,000
+                // bytes; the publisher gzips smaller text assets and sets Content-Encoding.
+                "/_next/static/*": {
+                    allowedMethods: AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+                    cachePolicy: staticCachePolicy,
+                    cachedMethods: CachedMethods.CACHE_GET_HEAD_OPTIONS,
+                    compress: true,
+                    viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                    origin,
+                    functionAssociations: [viewerRequestAssociation]
+                }
             },
             errorResponses: [
                 {
                     httpStatus: 403,
                     responseHttpStatus: 404,
                     responsePagePath: '/404.html',
-                    ttl: Duration.minutes(30)
+                    // Do not keep a missed chunk as the HTML 404. The previous 30 minute
+                    // TTL outlived the publish window that deleted objects before upload.
+                    ttl: Duration.seconds(0)
                 },
                 {
                     httpStatus: 404,
                     responseHttpStatus: 404,
                     responsePagePath: '/404.html',
-                    ttl: Duration.minutes(30)
+                    ttl: Duration.seconds(0)
                 }
             ]
         });

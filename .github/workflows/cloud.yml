@@ -54,10 +54,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install, type-check, lint
+      - name: Install, type-check, test
         run: |
           pnpm install --frozen-lockfile
           pnpm --filter cloud type-check
+          pnpm --filter cloud test
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6
