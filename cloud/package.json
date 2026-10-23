@@ -2,7 +2,7 @@
   "name": "cloud",
   "version": "0.1.0",
   "engines": {
-    "node": ">=24.22.0"
+    "node": ">=24.22.1"
   },
   "scripts": {
     "clean": "rm -rf ./cdk.out",

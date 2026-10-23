@@ -66,7 +66,7 @@ tech_stack:
     
   tooling:
     package_manager: pnpm 12.13.0
-    node_version: "24.22.0"
+    node_version: "24.22.1"
     version_manager: mise (mise.toml)
     build_tool: Turbopack (Next.js 16)
 
