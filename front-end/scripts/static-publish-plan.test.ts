@@ -65,6 +65,8 @@ describe('static publish plan', () => {
     expect(cacheControlForKey('sitemap.xml')).toBe(HTML_CACHE_CONTROL);
     expect(contentTypeForKey('api/rss.xml')).toBe('application/rss+xml');
     expect(contentTypeForKey('favicon.ico')).toBe('image/x-icon');
+    expect(contentTypeForKey('resume/index.md')).toBe('text/markdown');
+    expect(cacheControlForKey('resume/index.md')).toBe(HTML_CACHE_CONTROL);
     expect(planned.find((object) => object.key === 'index.html')?.contentEncoding).toBeUndefined();
   });
 
