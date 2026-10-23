@@ -21,6 +21,7 @@ const GZIP_EXTENSIONS = new Set([
   '.xml',
   '.txt',
   '.svg',
+  '.md',
   '.webmanifest',
 ]);
 
@@ -34,6 +35,7 @@ const CONTENT_TYPES: Record<string, string> = {
   '.map': 'application/json',
   '.xml': 'application/xml',
   '.txt': 'text/plain',
+  '.md': 'text/markdown',
   '.svg': 'image/svg+xml',
   '.webmanifest': 'application/manifest+json',
   '.ico': 'image/x-icon',
@@ -89,7 +91,7 @@ export function cacheControlForKey(key: string): string {
     return IMMUTABLE_CACHE_CONTROL;
   }
   // HTML, sitemaps, RSS, and robots change with the site and must not outlive a deploy.
-  if (/\.(html|htm|xml|txt)$/i.test(key)) {
+  if (/\.(html|htm|xml|txt|md)$/i.test(key)) {
     return HTML_CACHE_CONTROL;
   }
   return MEDIA_CACHE_CONTROL;
