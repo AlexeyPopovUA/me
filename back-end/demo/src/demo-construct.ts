@@ -30,6 +30,8 @@ export class DemoConstruct extends Construct {
 
         this.lambda = new NodejsFunction(this, `${props.project}-${props.name}-lambda`, {
             handler: "handler",
+            // Managed runtime. AWS patches nodejs24.x in the default Auto
+            // update mode; there is no patch-level identifier to pin.
             runtime: Runtime.NODEJS_24_X,
             entry: resolve(process.cwd(), "../back-end/demo/src/lambda.ts"),
             timeout: Duration.seconds(10),
