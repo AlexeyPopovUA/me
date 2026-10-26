@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Personal blog and portfolio website",
   "main": "index.js",
-  "packageManager": "pnpm@12.13.0",
+  "packageManager": "pnpm@12.15.0",
   "scripts": {
     "prepare": "husky",
     "test": "pnpm --filter front-end test",
@@ -18,7 +18,7 @@
   "private": "true",
   "engines": {
     "node": ">=24.22.1",
-    "pnpm": ">=12.13.0"
+    "pnpm": ">=12.15.0"
   },
   "devEngines": {
     "runtime": {
