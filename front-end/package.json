@@ -70,7 +70,7 @@
   "devDependencies": {
     "@types/hast": "^3.0.5",
     "@typescript/typescript6": "6.0.2",
-    "eslint": "^9.39.5",
+    "eslint": "^10.13.0",
     "eslint-config-next": "^16.4.2",
     "eslint-config-prettier": "^10.1.8",
     "gray-matter": "^4.0.3",
