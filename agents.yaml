@@ -42,7 +42,7 @@ tech_stack:
     content: next-mdx-remote, remark, rehype plugins
     features:
       - MDX content rendering
-      - Syntax highlighting (shiki v4.5.0)
+      - Syntax highlighting (shiki v4.6.0)
       - Image optimization (sharp v0.35.5)
       - RSS feed generation
       - Mermaid diagrams support
@@ -58,9 +58,9 @@ tech_stack:
     
   infrastructure:
     provider: AWS
-    iac: AWS CDK 2.274.0
+    iac: AWS CDK 2.275.0
     location: cloud directory
-    sdk: AWS SDK v3.1156.0
+    sdk: AWS SDK v3.1161.0
     runtime: Node.js 24
     language: TypeScript 7.0.2
     
