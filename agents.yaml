@@ -65,8 +65,8 @@ tech_stack:
     language: TypeScript 7.0.2
     
   tooling:
-    package_manager: pnpm 12.15.0
-    node_version: "24.22.1"
+    package_manager: pnpm 12.16.1
+    node_version: "24.22.2"
     version_manager: mise (mise.toml)
     build_tool: Turbopack (Next.js 16)
 
