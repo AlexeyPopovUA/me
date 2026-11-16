@@ -34,9 +34,9 @@ guidelines:
 # Technology Stack
 tech_stack:
   frontend:
-    framework: Next.js 16.4.3
+    framework: Next.js 16.4.5
     language: TypeScript 7.0.2
-    styling: Tailwind CSS 4.3.3
+    styling: Tailwind CSS 4.3.5
     runtime: React 19.3.1
     ui_library: Custom components with tailwindcss-animate
     content: next-mdx-remote, remark, rehype plugins
@@ -60,7 +60,7 @@ tech_stack:
     provider: AWS
     iac: AWS CDK 2.275.0
     location: cloud directory
-    sdk: AWS SDK v3.1161.0
+    sdk: AWS SDK v3.1164.0
     runtime: Node.js 24
     language: TypeScript 7.0.2
     
