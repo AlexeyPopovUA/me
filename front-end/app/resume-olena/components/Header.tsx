@@ -9,7 +9,7 @@ type Props = {
     contacts: typeof data.contacts;
 }
 
-export default async function Header(props: Props) {
+export default function Header(props: Props) {
     const insideUrlProps: getInsideImageURL.Props = {
         width: 400,
         height: 500,

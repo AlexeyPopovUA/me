@@ -18,9 +18,9 @@ function Stack(props: { stack: string }) {
 export function WorkHistory(props: { experience: typeof data.experience }) {
     return (
         <CVSection cls="history" title="Berufserfahrung">
-            {props.experience.map((item) => (
+            {props.experience.map((item, index) => (
                 <section
-                    key={`${item.company}-${item.company}`}
+                    key={`${item.company}-${item.dateStart}-${index}`}
                     className="history-section flex flex-col gap-2 print:gap-1 mt-4 first:mt-0 print:mt-2 print:first:mt-0"
                 >
                     <h3 className="company-name font-bold">

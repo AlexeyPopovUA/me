@@ -14,11 +14,10 @@ import {getOGImageURL} from "@/lib/image";
 import {getFrontMatterDataByPath} from "@/lib/mdx-utils";
 
 const pageSlug = "resume-olena";
-const defaultThumbnail = "/shared/default_thumbnail_o_p.png";
 
 export async function generateMetadata(): Promise<Metadata> {
     const frontMatter = await getFrontMatterDataByPath<PageSchema>(getPagePathByDirName(pageSlug));
-    const ogImage = getOGImageURL({src: frontMatter.thumbnail ?? defaultThumbnail});
+    const ogImage = getOGImageURL({src: frontMatter.thumbnail});
 
     return {
         title: frontMatter.title,

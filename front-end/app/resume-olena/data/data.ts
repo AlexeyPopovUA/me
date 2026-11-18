@@ -140,19 +140,6 @@ const data = Object.seal({
             description: 'Bankwesen',
         },
     ],
-    ownProjects: [
-        {
-            name: 'Mein Hobby-Blog',
-            description: 'Mein Hobby-Blog über interessante Orte in den Niederlanden',
-            links: [
-                {
-                    name: 'Website',
-                    icon: '',
-                    link: 'https://www.zapiskimami.com',
-                },
-            ],
-        },
-    ],
 });
 
 export default data;
