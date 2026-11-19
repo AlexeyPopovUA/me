@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /resume-print/
+Disallow: /resume-olena/
 
 Sitemap: https://oleksiipopov.com/sitemap.xml
 # LLM index: https://oleksiipopov.com/llms.txt
