@@ -112,6 +112,24 @@ describe('structured data graph', () => {
     expect(nodes.some((node) => node['@type'] === 'ItemList')).toBe(false);
   });
 
+  it('uses a custom applicationCategory when provided', () => {
+    const graph = buildProjectStructuredDataGraph({
+      name: 'Multimedia App',
+      description: 'Example multimedia application',
+      url: 'https://oleksiipopov.com/portfolio/multimedia/',
+      siteUrl: 'https://oleksiipopov.com',
+      authorName: 'Oleksii Popov',
+      authorUrl: 'https://oleksiipopov.com',
+      imageRefs: [imageRefs[0]],
+      applicationCategory: 'MultimediaApplication',
+    });
+
+    const nodes = graph['@graph'] as Array<Record<string, unknown>>;
+    const webApplication = nodes.find((node) => hasType(node, 'WebApplication'));
+
+    expect(webApplication?.applicationCategory).toBe('MultimediaApplication');
+  });
+
   it('publishes an Organization brand and a Person who works for it', () => {
     const data = buildHomeStructuredData({
       title: 'Oleksii Popov',

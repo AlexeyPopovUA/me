@@ -244,6 +244,7 @@ export function buildProjectStructuredDataGraph({
   sameAs,
   technologies,
   imageRefs,
+  applicationCategory = 'DeveloperApplication',
 }: {
   name: string;
   description: string;
@@ -255,6 +256,7 @@ export function buildProjectStructuredDataGraph({
   sameAs?: string[];
   technologies?: string[];
   imageRefs: ContentImageRef[];
+  applicationCategory?: string;
 }) {
   const imageNodes = buildImageObjectNodes(url, imageRefs, name);
   const primaryImageId = imageNodes[0]?.['@id'] ?? `${url}#${imageRefs[0]?.anchorId ?? 'thumbnail'}`;
@@ -287,7 +289,7 @@ export function buildProjectStructuredDataGraph({
       name,
       description,
       url,
-      applicationCategory: 'DeveloperApplication',
+      applicationCategory,
       operatingSystem: 'Web browser',
       browserRequirements: 'Requires a modern web browser with JavaScript enabled',
       author: {
