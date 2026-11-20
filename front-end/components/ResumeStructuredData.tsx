@@ -29,6 +29,11 @@ export function ResumeStructuredData({
         jobTitle: jobTitle,
         description: description,
         url: url,
+        worksFor: {
+            '@type': 'Organization',
+            name: content.coloringMagicArt.name,
+            url: content.coloringMagicArt.url,
+        },
         // additionalType: 'https://schema.org/Resume',
         sameAs: [
             content.socialLinks.github,

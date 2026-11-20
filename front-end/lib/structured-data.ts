@@ -80,12 +80,22 @@ export function buildHomeStructuredData(input: HomeStructuredDataInput) {
             url: site,
             sameAs: [...input.sameAs],
             brand,
-            worksFor: {
-                '@type': 'Organization' as const,
-                '@id': organizationId,
-                name: input.name,
-                url: site,
-            },
+            worksFor: [
+                {
+                    '@type': 'Organization' as const,
+                    '@id': organizationId,
+                    name: input.name,
+                    url: site,
+                },
+                {
+                    '@type': 'Organization' as const,
+                    name: content.coloringMagicArt.name,
+                    url: content.coloringMagicArt.url,
+                    founder: {
+                        '@id': personId,
+                    },
+                },
+            ],
             ...(input.image ? { image: input.image } : {}),
             mainEntityOfPage: {
                 '@type': 'WebPage' as const,

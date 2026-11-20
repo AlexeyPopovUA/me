@@ -268,7 +268,7 @@ export default function SocialProfilesPage() {
             <div className="mt-12 p-6 bg-card border border-border rounded-xl">
               <h3 className="text-xl font-semibold text-foreground mb-3">About {content.authorName}</h3>
               <p className="text-muted-foreground">
-                Full-Stack Software Developer specializing in React, TypeScript, AWS, and Node.js.
+                {content.authorHeadline}. Specializing in React, TypeScript, AWS, and Node.js.
                 Based in Klagenfurt am Wörthersee, Austria. Available for consulting, technical interviews,
                 and web development projects.
               </p>

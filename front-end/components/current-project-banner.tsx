@@ -2,13 +2,13 @@
 
 import Link from 'next/link';
 
-const COLORING_MAGIC_URL = 'https://coloringmagic.art';
+import { content } from '@/app/configuration/content';
 
 export function CurrentProjectBanner() {
     return (
         <p className="text-muted-foreground max-w-xl mb-8 text-sm leading-relaxed">
             Currently building{' '}
-            <Link href={COLORING_MAGIC_URL} className="text-primary hover:underline">
+            <Link href={content.coloringMagicArt.url} className="text-primary hover:underline">
                 Coloring Magic Art
             </Link>
             {' '}
