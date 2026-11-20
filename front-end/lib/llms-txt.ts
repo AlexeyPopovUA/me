@@ -35,8 +35,7 @@ export function buildLlmsTxt({
   articles: LlmsContentItem[];
   projects: LlmsContentItem[];
 }) {
-  const summary =
-    'Front-end-leaning full-stack software developer with 14+ years of experience. Blog and portfolio covering React, TypeScript, Node.js, AWS, CI/CD, and static hosting.';
+  const summary = `${content.authorHeadline}. Blog and portfolio covering React, TypeScript, Node.js, AWS, CI/CD, and static hosting.`;
 
   return [
     `# ${content.authorName}`,

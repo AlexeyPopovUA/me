@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { content } from '@/app/configuration/content';
 import type { ContentImageRef } from '@/lib/content-images';
 import { buildHomeStructuredData } from '@/lib/structured-data';
 import {
@@ -130,7 +131,14 @@ describe('structured data graph', () => {
     });
     expect(data.person).toMatchObject({
       '@type': 'Person',
-      worksFor: { '@id': 'https://oleksiipopov.com/#organization' },
+      worksFor: [
+        { '@id': 'https://oleksiipopov.com/#organization' },
+        {
+          name: 'Coloring Magic Art',
+          url: content.coloringMagicArt.url,
+          founder: { '@id': 'https://oleksiipopov.com/#person' },
+        },
+      ],
       brand: { '@type': 'Brand', name: 'Oleksii Popov' },
     });
     expect(data.website).toMatchObject({

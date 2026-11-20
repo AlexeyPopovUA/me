@@ -1,5 +1,11 @@
 export const content = {
     authorName: 'Oleksii Popov',
+    authorHeadline: 'Senior Full-Stack Engineer · Founder of Coloring Magic Art',
+    authorJobTitle: 'Senior Full-Stack Engineer',
+    coloringMagicArt: {
+        name: 'Coloring Magic Art',
+        url: `https://${'coloringmagic'}.${'art'}`,
+    },
     socialLinks: {
         github: 'https://github.com/AlexeyPopovUA',
         gitlab: 'https://gitlab.com/AlexeyPopovUA',

@@ -58,7 +58,7 @@ export default async function Post() {
                 description={frontMatter.description}
                 url={resumeUrl}
                 personName={`${renderData.user.name} ${renderData.user.surname}`}
-                jobTitle={renderData.user.position}
+                jobTitle={content.authorJobTitle}
                 image={ogImage}
             />
             <article className='article-content article-print mx-auto p-4 pt-24 print:p-0 print:pt-1 print:space-y-1 print:leading-tight'>

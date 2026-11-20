@@ -1,9 +1,11 @@
+import { content } from '@/app/configuration/content';
+
 const data = Object.seal({
     user: {
         name: 'Oleksii',
         surname: 'Popov',
         initials: 'O.Y.',
-        position: 'Senior Full-Stack Software Developer (React/TypeScript/AWS/Node.js)',
+        position: content.authorHeadline,
         Website: { title: 'oleksiipopov.com', url: 'https://oleksiipopov.com' },
         LinkedIn: { title: 'linkedin.com/in/oleksii-popov', url: 'https://linkedin.com/in/oleksii-popov' },
         GitHub: { title: 'github.com/AlexeyPopovUA', url: 'https://github.com/AlexeyPopovUA' },
@@ -14,7 +16,7 @@ const data = Object.seal({
     intro: {
         title: 'About Me',
         description: [
-            "I'm a front-end leaning full-stack software developer with 14 years of experience, including 7+ in senior roles.",
+            "I'm a senior full-stack engineer and founder of Coloring Magic Art with 14 years of experience, including 7+ in senior roles.",
             'I build user-centric products, leveraging my expertise across frontend, cloud-native, and backend technologies.',
             'I specialize in architecting and developing high-scale single-page applications, UI libraries, and SDKs, while also implementing CI/CD pipelines, hosting, and distribution solutions.',
             'I excel at optimizing application performance for improved runtime efficiency and faster load speeds.',

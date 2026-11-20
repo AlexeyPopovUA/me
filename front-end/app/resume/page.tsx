@@ -55,7 +55,7 @@ export default async function Post() {
                 description={frontMatter.description}
                 url={resumeUrl}
                 personName={`${renderData.user.name} ${renderData.user.surname}`}
-                jobTitle={renderData.user.position}
+                jobTitle={content.authorJobTitle}
                 image={ogImage}
             />
             <ResumePageClient />

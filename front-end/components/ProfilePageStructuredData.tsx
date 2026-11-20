@@ -1,6 +1,8 @@
 import React from "react";
 import {ProfilePage, WithContext} from "schema-dts";
 
+import {content} from "@/app/configuration/content";
+
 interface ProfilePageStructuredDataProps {
     pageName: string;
     personName: string;
@@ -21,8 +23,14 @@ export function ProfilePageStructuredData({pageName, personName, description, ur
         mainEntity: {
             "@type": "Person",
             name: personName,
+            jobTitle: content.authorJobTitle,
             url: personUrl ?? url,
             sameAs: sameAs,
+            worksFor: {
+                "@type": "Organization",
+                name: content.coloringMagicArt.name,
+                url: content.coloringMagicArt.url,
+            },
             ...(image ? {image: image} : {})
         }
     };

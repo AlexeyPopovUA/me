@@ -54,7 +54,7 @@ export default async function Home() {
                 title={frontMatter.title}
                 description={frontMatter.description}
                 name={content.authorName}
-                jobTitle="Front-End-Heavy Full-Stack Software Developer"
+                jobTitle={content.authorJobTitle}
                 url={environment.url}
                 image={imageUrl}
             />
@@ -63,7 +63,7 @@ export default async function Home() {
                     src={src}
                     blurDataURL={blurDataURL}
                     name="Oleksii Popov"
-                    title="Front-End Leaning Full-Stack Developer"
+                    title={content.authorHeadline}
                     description="With 14 years of experience crafting robust software solutions. I specialize in building scalable web applications with modern technologies."
                 />
                 <FeaturedProjects />
