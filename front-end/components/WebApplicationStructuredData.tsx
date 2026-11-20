@@ -14,6 +14,7 @@ interface WebApplicationStructuredDataProps {
     sameAs?: string[];
     technologies?: string[];
     imageRefs: ContentImageRef[];
+    applicationCategory?: string;
 }
 
 export function WebApplicationStructuredData({
@@ -26,6 +27,7 @@ export function WebApplicationStructuredData({
     sameAs,
     technologies,
     imageRefs,
+    applicationCategory,
 }: WebApplicationStructuredDataProps) {
     const jsonLd = buildProjectStructuredDataGraph({
         name,
@@ -38,6 +40,7 @@ export function WebApplicationStructuredData({
         sameAs,
         technologies,
         imageRefs,
+        applicationCategory,
     });
 
     return (
