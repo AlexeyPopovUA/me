@@ -99,6 +99,26 @@ const data = Object.seal({
             stack: 'React, Typescript, Docker, Datadog, Node.js, AWS, Terraform',
         },
         {
+            company: 'Coloring Magic Art (Remote) 🌍',
+            website: content.coloringMagicArt.url,
+            dateStart: 'January 2026',
+            dateEnd: '',
+            positions: [
+                {
+                    title: 'Founder and developer',
+                    dateStart: 'January 2026',
+                    dateEnd: '',
+                    website: content.coloringMagicArt.url,
+                    positionDescription: '',
+                    description: [
+                        'AI coloring book generator for custom printable books, with Amazon KDP and Lulu print profiles, sold in 7 languages.',
+                    ],
+                },
+            ],
+            description: [],
+            stack: 'TypeScript, Next.js, React, AWS CDK, OpenAI, Stripe',
+        },
+        {
             company: 'Self-employed (Remote) 🌍',
             dateStart: 'April 2025',
             dateEnd: 'November 2025',

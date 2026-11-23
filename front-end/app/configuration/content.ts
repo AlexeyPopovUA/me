@@ -1,7 +1,7 @@
 export const content = {
     authorName: 'Oleksii Popov',
     authorHeadline: 'Senior Full-Stack Engineer · Founder of Coloring Magic Art',
-    authorJobTitle: 'Senior Full-Stack Engineer',
+    authorJobTitle: 'Senior Full-Stack Engineer · Founder of Coloring Magic Art',
     coloringMagicArt: {
         name: 'Coloring Magic Art',
         url: `https://${'coloringmagic'}.${'art'}`,
@@ -23,6 +23,13 @@ export const content = {
         cal_com: 'https://cal.com/oleksii-popov-software-developer',
         producthunt: 'https://www.producthunt.com/@oleksiipopov',
         reddit: 'https://www.reddit.com/user/oleksii-popov/',
+        coloringMagicArt_website: `https://${'coloringmagic'}.${'art'}`,
+        coloringMagicArt_linkedin: 'https://www.linkedin.com/company/coloring-magic-art/',
+        coloringMagicArt_x: 'https://x.com/ColoringMagArt',
+        coloringMagicArt_pinterest: 'https://at.pinterest.com/coloring_magic_art/',
+        coloringMagicArt_producthunt: 'https://www.producthunt.com/products/coloring-magic-art',
+        quora_en: 'https://www.quora.com/profile/Oleksii-Popov-6',
+        quora_de: 'https://de.quora.com/profile/Oleksii-Popov',
     },
     services: {
         scheduleCall: {
