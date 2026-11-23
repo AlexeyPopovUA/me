@@ -58,9 +58,9 @@ tech_stack:
     
   infrastructure:
     provider: AWS
-    iac: AWS CDK 2.277.0
+    iac: AWS CDK 2.278.0
     location: cloud directory
-    sdk: AWS SDK v3.1169.0
+    sdk: AWS SDK v3.1175.0
     runtime: Node.js 24
     language: TypeScript 7.0.2
     
