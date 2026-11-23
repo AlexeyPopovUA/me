@@ -75,13 +75,33 @@ const data = Object.seal({
     ],
     experience: [
         {
+            company: 'Coloring Magic Art (Self-employed, Remote) 🌍',
+            website: content.coloringMagicArt.url,
+            dateStart: 'July 2026',
+            dateEnd: '',
+            positions: [
+                {
+                    title: 'Founder',
+                    dateStart: 'July 2026',
+                    dateEnd: '',
+                    website: content.coloringMagicArt.url,
+                    positionDescription: '',
+                    description: [
+                        'AI coloring book generator for custom printable books, with Amazon KDP and Lulu print profiles, sold in 7 languages.',
+                    ],
+                },
+            ],
+            description: [],
+            stack: 'TypeScript, Next.js, React, AWS CDK, OpenAI, Stripe',
+        },
+        {
             company: 'Synthesia (Remote) 🌍',
             website: 'https://synthesia.io/',
             dateStart: 'November 2025',
             dateEnd: '',
             positions: [
                 {
-                    title: 'Senior Software Developer',
+                    title: 'Senior Software Engineer',
                     dateStart: 'November 2025',
                     dateEnd: '',
                     website: '',
@@ -99,32 +119,12 @@ const data = Object.seal({
             stack: 'React, Typescript, Docker, Datadog, Node.js, AWS, Terraform',
         },
         {
-            company: 'Coloring Magic Art (Remote) 🌍',
-            website: content.coloringMagicArt.url,
-            dateStart: 'January 2026',
-            dateEnd: '',
-            positions: [
-                {
-                    title: 'Founder and developer',
-                    dateStart: 'January 2026',
-                    dateEnd: '',
-                    website: content.coloringMagicArt.url,
-                    positionDescription: '',
-                    description: [
-                        'AI coloring book generator for custom printable books, with Amazon KDP and Lulu print profiles, sold in 7 languages.',
-                    ],
-                },
-            ],
-            description: [],
-            stack: 'TypeScript, Next.js, React, AWS CDK, OpenAI, Stripe',
-        },
-        {
             company: 'Self-employed (Remote) 🌍',
             dateStart: 'April 2025',
             dateEnd: 'November 2025',
             positions: [
                 {
-                    title: 'Senior Software Developer at Innervate (Remote, contract) 🌍',
+                    title: 'Senior Software Engineer at Innervate (Remote, contract) 🌍',
                     dateStart: 'April 2025',
                     dateEnd: 'September 2025',
                     website: 'https://www.innervate.com/',
@@ -144,12 +144,12 @@ const data = Object.seal({
             company: 'Dynatrace (Klagenfurt am Wörthersee, Austria) 🇦🇹',
             website: 'https://www.dynatrace.com/',
             dateStart: 'October 2023',
-            dateEnd: 'March 2025',
+            dateEnd: 'April 2025',
             positions: [
                 {
-                    title: 'Senior Software Developer',
+                    title: 'Senior Software Engineer',
                     dateStart: 'October 2023',
-                    dateEnd: 'March 2025',
+                    dateEnd: 'April 2025',
                     website: '',
                     positionDescription: '',
                     description: [
@@ -169,12 +169,12 @@ const data = Object.seal({
             company: 'TomTom (Amsterdam, Netherlands) 🇳🇱',
             website: 'https://www.tomtom.com/',
             dateStart: 'January 2019',
-            dateEnd: 'September 2023',
+            dateEnd: 'October 2023',
             positions: [
                 {
-                    title: 'Expert Software Developer',
+                    title: 'Expert Software Engineer',
                     dateStart: 'March 2021',
-                    dateEnd: 'September 2023',
+                    dateEnd: 'October 2023',
                     website: '',
                     positionDescription: '',
                     description: [
@@ -187,7 +187,7 @@ const data = Object.seal({
                     ],
                 },
                 {
-                    title: 'Senior Software Developer',
+                    title: 'Senior Software Engineer',
                     dateStart: 'January 2019',
                     dateEnd: 'March 2021',
                     website: '',
@@ -210,12 +210,12 @@ const data = Object.seal({
             company: 'Albelli (Amsterdam, Netherlands) 🇳🇱',
             website: 'https://www.albelli.nl/',
             dateStart: 'April 2016',
-            dateEnd: 'January 2019',
+            dateEnd: 'December 2018',
             positions: [
                 {
-                    title: 'Software developer > Senior software developer',
+                    title: 'Software Developer',
                     dateStart: 'April 2016',
-                    dateEnd: 'January 2019',
+                    dateEnd: 'December 2018',
                     website: '',
                     positionDescription: '',
                     description: [
@@ -231,15 +231,15 @@ const data = Object.seal({
             stack: 'JavaScript, TypeScript, SCSS, Node.js, google-closure-library, Mocha, Java, Selenium',
         },
         {
-            company: 'Various companies (web studios and outsourcing) 🇺🇦',
+            company: 'Insoft Global 🇺🇦',
             website: '',
-            dateStart: 'August 2011',
-            dateEnd: 'April 2016',
+            dateStart: 'March 2013',
+            dateEnd: 'March 2016',
             positions: [
                 {
-                    title: 'QA > Junior PHP > JavaScript Developer',
-                    dateStart: 'August 2011',
-                    dateEnd: 'April 2016',
+                    title: 'JavaScript Developer',
+                    dateStart: 'March 2013',
+                    dateEnd: 'March 2016',
                     website: '',
                     positionDescription: '',
                     description: [
@@ -253,6 +253,58 @@ const data = Object.seal({
             ],
             description: [],
             stack: 'JavaScript, SCSS, Node.js, Java, jQuery, CSS, PHP, MySQL, WordPress',
+        },
+        {
+            company: 'Exadel 🇺🇦',
+            website: '',
+            dateStart: 'July 2012',
+            dateEnd: 'February 2013',
+            positions: [
+                {
+                    title: 'Software Developer',
+                    dateStart: 'September 2012',
+                    dateEnd: 'February 2013',
+                    website: '',
+                    positionDescription: '',
+                    description: [],
+                },
+                {
+                    title: 'Junior Software Developer',
+                    dateStart: 'July 2012',
+                    dateEnd: 'September 2012',
+                    website: '',
+                    positionDescription: '',
+                    description: [],
+                },
+            ],
+            description: [],
+            stack: 'JavaScript, PHP, MySQL',
+        },
+        {
+            company: 'Simple Solutions 🇺🇦',
+            website: '',
+            dateStart: 'August 2011',
+            dateEnd: 'July 2012',
+            positions: [
+                {
+                    title: 'Junior PHP Developer',
+                    dateStart: 'January 2012',
+                    dateEnd: 'July 2012',
+                    website: '',
+                    positionDescription: '',
+                    description: [],
+                },
+                {
+                    title: 'QA Engineer',
+                    dateStart: 'August 2011',
+                    dateEnd: 'January 2012',
+                    website: '',
+                    positionDescription: '',
+                    description: [],
+                },
+            ],
+            description: [],
+            stack: 'PHP, JavaScript, MySQL',
         },
     ],
     education: [
