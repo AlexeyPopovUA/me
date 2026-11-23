@@ -7,7 +7,7 @@ import {getOGImageURL} from "@/lib/image";
 import {ProfilePageStructuredData} from "@/components/ProfilePageStructuredData";
 
 const pageTitle = `Social Profiles - ${content.authorName}`;
-const pageDescription = "Find Oleksii Popov on various social media platforms and professional networks including GitHub, LinkedIn, Twitter, Medium, NPM, and more.";
+const pageDescription = "Find Oleksii Popov on various social media platforms and professional networks including GitHub, LinkedIn, X, Medium, NPM, Quora, Coloring Magic Art, and more.";
 const pageSlug = "social-profiles";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -21,12 +21,14 @@ export async function generateMetadata(): Promise<Metadata> {
       "social profiles",
       "GitHub",
       "LinkedIn",
-      "Twitter",
+      "X",
       "Medium",
       "NPM",
       "GitLab",
       "Gumroad",
       "Product Hunt",
+      "Quora",
+      "Coloring Magic Art",
       "Reddit",
       "RemoteOK",
       "Dev.to",
@@ -98,6 +100,57 @@ export default function SocialProfilesPage() {
                 Connect with {content.authorName} on various social media platforms and professional networks.
               </p>
             </div>
+
+            <section className="space-y-4 mb-10">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">Coloring Magic Art</h2>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <a
+                  href={content.socialLinks.coloringMagicArt_website}
+                  rel="nofollow noopener noreferrer"
+                  target="_blank"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
+                >
+                  <span className="text-foreground hover:text-primary font-medium">Website</span>
+                  <p className="text-sm text-muted-foreground mt-1">coloringmagic.art</p>
+                </a>
+                <a
+                  href={content.socialLinks.coloringMagicArt_linkedin}
+                  rel="nofollow noopener noreferrer"
+                  target="_blank"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
+                >
+                  <span className="text-foreground hover:text-primary font-medium">LinkedIn</span>
+                  <p className="text-sm text-muted-foreground mt-1">Company page</p>
+                </a>
+                <a
+                  href={content.socialLinks.coloringMagicArt_x}
+                  rel="nofollow noopener noreferrer"
+                  target="_blank"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
+                >
+                  <span className="text-foreground hover:text-primary font-medium">X</span>
+                  <p className="text-sm text-muted-foreground mt-1">@ColoringMagArt</p>
+                </a>
+                <a
+                  href={content.socialLinks.coloringMagicArt_pinterest}
+                  rel="nofollow noopener noreferrer"
+                  target="_blank"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
+                >
+                  <span className="text-foreground hover:text-primary font-medium">Pinterest</span>
+                  <p className="text-sm text-muted-foreground mt-1">Sample pages and books</p>
+                </a>
+                <a
+                  href={content.socialLinks.coloringMagicArt_producthunt}
+                  rel="nofollow noopener noreferrer"
+                  target="_blank"
+                  className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
+                >
+                  <span className="text-foreground hover:text-primary font-medium">Product Hunt</span>
+                  <p className="text-sm text-muted-foreground mt-1">Product listing</p>
+                </a>
+              </div>
+            </section>
 
             <div className="grid gap-6 md:grid-cols-2">
               <section className="space-y-4">
@@ -218,8 +271,26 @@ export default function SocialProfilesPage() {
                     target="_blank"
                     className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
                   >
-                    <span className="text-foreground hover:text-primary font-medium">Twitter (X)</span>
+                    <span className="text-foreground hover:text-primary font-medium">X</span>
                     <p className="text-sm text-muted-foreground mt-1">Updates & Insights</p>
+                  </a>
+                  <a
+                    href={content.socialLinks.quora_en}
+                    rel="nofollow noopener noreferrer"
+                    target="_blank"
+                    className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
+                  >
+                    <span className="text-foreground hover:text-primary font-medium">Quora (English)</span>
+                    <p className="text-sm text-muted-foreground mt-1">Q&amp;A profile</p>
+                  </a>
+                  <a
+                    href={content.socialLinks.quora_de}
+                    rel="nofollow noopener noreferrer"
+                    target="_blank"
+                    className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
+                  >
+                    <span className="text-foreground hover:text-primary font-medium">Quora (German)</span>
+                    <p className="text-sm text-muted-foreground mt-1">Q&amp;A profile</p>
                   </a>
                   <a
                     href={content.socialLinks.reddit}
