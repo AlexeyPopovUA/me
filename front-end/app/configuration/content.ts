@@ -30,6 +30,7 @@ export const content = {
         coloringMagicArt_producthunt: 'https://www.producthunt.com/products/coloring-magic-art',
         quora_en: 'https://www.quora.com/profile/Oleksii-Popov-6',
         quora_de: 'https://de.quora.com/profile/Oleksii-Popov',
+        quora_nl: 'https://nl.quora.com/profile/Oleksii-Popov',
     },
     services: {
         scheduleCall: {

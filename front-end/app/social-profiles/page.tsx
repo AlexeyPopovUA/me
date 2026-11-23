@@ -293,6 +293,15 @@ export default function SocialProfilesPage() {
                     <p className="text-sm text-muted-foreground mt-1">Q&amp;A profile</p>
                   </a>
                   <a
+                    href={content.socialLinks.quora_nl}
+                    rel="nofollow noopener noreferrer"
+                    target="_blank"
+                    className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-all hover-lift"
+                  >
+                    <span className="text-foreground hover:text-primary font-medium">Quora (Dutch)</span>
+                    <p className="text-sm text-muted-foreground mt-1">Q&amp;A profile</p>
+                  </a>
+                  <a
                     href={content.socialLinks.reddit}
                     rel="nofollow noopener noreferrer"
                     target="_blank"
