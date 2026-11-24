@@ -9,4 +9,5 @@ export interface ProjectsSchema extends CommonPostSchema {
     URL?: string;
     state?: string;
     featured?: boolean;
+    applicationCategory?: string;
 }

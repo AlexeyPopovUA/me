@@ -8,7 +8,8 @@ URL: https://coloringmagic.art/
 date: 2026-07-01
 draft: false
 featured: true
-description: Generate custom printable coloring book PDFs with AI. Describe a theme, tune complexity, and download print-ready A4 or square PDFs with weekly samples.
+applicationCategory: MultimediaApplication
+description: Create custom coloring books with AI and publish them in print. Start from an idea, a photo or a character, then export a print-ready PDF with built-in Amazon KDP and Lulu printing profiles.
 thumbnail: /projects/coloring-magic/coloring-magic-home.png
 technologies:
     - TypeScript
@@ -30,16 +31,18 @@ technologies:
 gallery:
     - /projects/coloring-magic/coloring-magic-home.png
     - /projects/coloring-magic/coloring-magic-blog.png
-    - /projects/coloring-magic/coloring-magic-article.png
+    - /projects/coloring-magic/coloring-magic-pricing.png
 galleryAlt:
     - Coloring Magic Art homepage with AI coloring book generator
     - Blog listing page with coloring guides and sample downloads
-    - Article page showing printable coloring book design tips
+    - Pricing page with token packs and subscription options
 ---
 
 ## Description
 
-Coloring Magic Art is a production web product for creating custom printable coloring book PDFs with AI. Users describe a theme in plain English, tune age-appropriate complexity, and export a cohesive A4 or square PDF for home printing or a copy shop. The public site includes weekly sample downloads and a blog with practical guides on prompts and printable page design.
+Coloring Magic Art is a production web app for creating custom coloring books with AI, from first idea to printed book. Users describe a theme, upload a photo or attach a recurring character, pick one of nine image models, and generate up to 50 pages per run, with up to 100 pages and a full-color front cover in one book.
+
+Books export as images or print-ready PDFs in portrait, landscape or square formats. Built-in Amazon KDP and Lulu printing profiles set the trim size, bleed and page layout, so a book can go from the editor to a self-publishing platform without manual reformatting. The site is available in seven languages and includes weekly free sample PDFs, a blog with prompt and publishing guides, and an MCP server for using Coloring Magic Art from AI assistants like Cursor and Claude.
 
 ## Links
 
@@ -51,11 +54,14 @@ Coloring Magic Art is a production web product for creating custom printable col
 
 - Marketing site with problem/solution/workflow sections and weekly sample PDF downloads by age group
 - MDX blog with article pages at `/blog` and `/article/[slug]`
-- AI-powered image generation using OpenAI GPT-Image-1.5 via Vercel AI SDK
+- Nine image models (GPT Image 2.5/2.6, Grok Imagine, Gemini, Seedream; default GPT Image 2.5 Sunburst) via Vercel AI SDK
 - AI prompt generation using OpenAI GPT-4o-mini for turning user descriptions into detailed image prompts
-- Bulk generation of 4, 10, or 20 coloring pages in one go
+- Up to 50 pages per wizard run plus covers; up to 100 pages per book
 - Age-appropriate output ranging from simple (kids 2-5) to intricate (adults)
-- Print-ready A4 and square PDF download
+- Vertical, horizontal A4, and square layouts; print-ready PDF export with Amazon KDP and Lulu printing profiles
+- Photo-to-page and character sheet inputs; full-color front covers
+- Seven locales (EN, DE, NL, IT, ES, FR, SV)
+- MCP server (https://coloringmagic.art/mcp, guide https://coloringmagic.art/article/coloring-magic-art-mcp-server)
 - Async image processing pipeline with SQS and Lambda
 - Token-based payment system with Stripe integration
 - Weekly free sample PDF generation via Step Functions orchestration

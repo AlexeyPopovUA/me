@@ -96,6 +96,7 @@ export default async function Post(props: StaticProps) {
         sameAs={sameAs}
         technologies={frontmatter.technologies}
         imageRefs={imageRefs}
+        applicationCategory={frontmatter.applicationCategory}
       />
       <ArticleContainer>
         {imageRefs.some((image) => image.anchorId === THUMBNAIL_ANCHOR_ID) ? (
